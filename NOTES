@@ -1,1 +1,0 @@
-flex --header-file=lex.yy.h scanner.l

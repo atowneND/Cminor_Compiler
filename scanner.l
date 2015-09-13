@@ -1,12 +1,13 @@
 %{
+#include <stdio.h>
 #include "token.h"
 %}
 
-NUMBER = [0-9]
-LETTER = [a-zA-Z]
+NUMBER [0-9]*
+STRING [a-zA-Z]*
 
 %%
-NUMBER {return TOKEN_NUMBER;}
-LETTER {return TOKEN_LETTER;}
+{NUMBER} {printf("TOKEN_NUMBER");}
+{STRING} {printf("TOKEN_STRING");}
 
 %%
