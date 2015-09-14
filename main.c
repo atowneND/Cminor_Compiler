@@ -12,6 +12,7 @@ int main(int argc, char *argv[]){
     char *filename = "scannerTests/test1";
     yyin = fopen(filename,"r");
     yylex();
+    fclose(yyin);
     
     return 0;
 }
