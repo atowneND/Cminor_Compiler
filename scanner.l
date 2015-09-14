@@ -20,7 +20,7 @@ TRUE    true
 VOID    void
 WHILE   while
 IDENT   [a-zA-Z_][a-zA-Z_0-9]*
-INTEGER [0-9]*
+INTEGER [+-]?[0-9]*
 CHAR    '.'
 STRING  \".*\"
 WS      [ \t\n]*
