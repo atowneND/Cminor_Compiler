@@ -4,6 +4,8 @@
 /* function definitions */
 const char *token_string(token_t t){
     switch(t){
+        case 0:
+            return "returned zero";
         case TOKEN_ARRAY:
             return "array";
         case TOKEN_BOOL_T:
@@ -45,6 +47,6 @@ const char *token_string(token_t t){
         case TOKEN_WS:
             return "whitespace";
         otherwise:
-            break;
+            return "other";
     }
 }

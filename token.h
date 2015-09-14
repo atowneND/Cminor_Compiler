@@ -1,6 +1,6 @@
 /* enumerate tokens */
 enum token{
-    TOKEN_ARRAY,
+    TOKEN_ARRAY=1,
     TOKEN_BOOL_T,
     TOKEN_CHAR_T,
     TOKEN_ELSE,
