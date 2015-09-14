@@ -23,6 +23,7 @@ IDENT   [a-zA-Z_][a-zA-Z_0-9]*
 INTEGER [+-]?[0-9]*
 CHAR    '.'
 STRING  \".*\"
+SC      ;
 WS      [ \t\n]*
 
 %%
@@ -46,6 +47,7 @@ WS      [ \t\n]*
 {INTEGER} {return TOKEN_INTEGER;}
 {CHAR}    {return TOKEN_CHAR;}
 {STRING}  {return TOKEN_STRING;}
+{SC}      {return TOKEN_SC;}
 {WS}      {}
 
 %%

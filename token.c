@@ -44,9 +44,13 @@ const char *token_string(token_t t){
             return "character";
         case TOKEN_STRING:
             return "string";
+        case TOKEN_SC:
+            return "semicolon";
         case TOKEN_WS:
             return "whitespace";
         otherwise:
-            return "other";
+            printf("Cannot scan on token: %s\n",yytext);
+            printf("Please review input file. Exiting\n");
+            exit(1);
     }
 }

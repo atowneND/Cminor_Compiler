@@ -34,7 +34,7 @@ int main(int argc, char *argv[]){
     while(1){
         retval = yylex();
 	    if(!retval){
-	        printf("EOF");
+	        printf("EOF\n");
 	        break;
         }
         else{

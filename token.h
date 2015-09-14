@@ -19,6 +19,7 @@ enum token{
     TOKEN_INTEGER,
     TOKEN_CHAR,
     TOKEN_STRING,
+    TOKEN_SC,
     TOKEN_WS,
 };
 typedef enum token token_t;
