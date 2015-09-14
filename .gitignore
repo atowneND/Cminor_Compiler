@@ -2,3 +2,6 @@
 cminor
 *deleteme*
 *foo*
+lex.yy.c
+lex.yy.h
+
