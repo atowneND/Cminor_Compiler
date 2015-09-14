@@ -11,8 +11,18 @@ int main(int argc, char *argv[]){
     // put it into a function
     char *filename = "scannerTests/test1";
     yyin = fopen(filename,"r");
-    yylex();
-    fclose(yyin);
+    int retval;
+    while(1){
+	    retval=yylex();
+	    if(!retval){
+	        printf("EOF\n");
+	        break;
+        }
+        else{
+            printf("yy: %s\n",token_string(retval));
+        }
+    }
+	    fclose(yyin);
     
     return 0;
 }

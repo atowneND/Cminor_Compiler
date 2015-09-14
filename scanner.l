@@ -20,32 +20,32 @@ TRUE    true
 VOID    void
 WHILE   while
 IDENT   [a-zA-Z_][a-zA-Z_0-9]*
-NUMBER  [0-9]*
+INTEGER [0-9]*
 CHAR    '.'
 STRING  \".*\"
-WORD    [a-zA-Z]*
+WS      [ \t\n]*
 
 %%
 
-{ARRAY}   {printf("TOKEN_ARRAY_T");}
-{BOOL_T}  {printf("TOKEN_BOOL_T");}
-{CHAR_T}  {printf("TOKEN_CHAR_T");}
-{ELSE}    {printf("TOKEN_ELSE");}
-{FALSE}   {printf("TOKEN_FALSE");}
-{FOR}     {printf("TOKEN_FOR");}
-{FCALL}   {printf("TOKEN_FUNCTION");}
-{IF}      {printf("TOKEN_IF");}
-{INT_T}   {printf("TOKEN_INT_T");}
-{PRINT}   {printf("TOKEN_PRINT");}
-{RETURN}  {printf("TOKEN_RETURN");}
-{STR_T}   {printf("TOKEN_STRING_T");}
-{TRUE}    {printf("TOKEN_TRUE");}
-{VOID}    {printf("TOKEN_VOID");}
-{WHILE}   {printf("TOKEN_WHILE");}
-{IDENT}   {printf("TOKEN_IDENT");}
-{NUMBER}  {printf("TOKEN_NUMBER");}
-{CHAR}    {printf("TOKEN_CHAR");}
-{STRING}  {printf("TOKEN_STRING");}
-{WORD}    {printf("word");}
+{ARRAY}   {return TOKEN_ARRAY;}
+{BOOL_T}  {return TOKEN_BOOL_T;}
+{CHAR_T}  {return TOKEN_CHAR_T;}
+{ELSE}    {return TOKEN_ELSE;}
+{FALSE}   {return TOKEN_FALSE;}
+{FOR}     {return TOKEN_FOR;}
+{FCALL}   {return TOKEN_FCALL;}
+{IF}      {return TOKEN_IF;}
+{INT_T}   {return TOKEN_INT_T;}
+{PRINT}   {return TOKEN_PRINT;}
+{RETURN}  {return TOKEN_RETURN;}
+{STR_T}   {return TOKEN_STR_T;}
+{TRUE}    {return TOKEN_TRUE;}
+{VOID}    {return TOKEN_VOID;}
+{WHILE}   {return TOKEN_WHILE;}
+{IDENT}   {return TOKEN_IDENT;}
+{INTEGER} {return TOKEN_INTEGER;}
+{CHAR}    {return TOKEN_CHAR;}
+{STRING}  {return TOKEN_STRING;}
+{WS}      {}
 
 %%
