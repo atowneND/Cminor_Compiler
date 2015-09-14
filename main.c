@@ -9,7 +9,7 @@ int main(int argc, char *argv[]){
 
     // TEST CASE
     // put it into a function
-    char *filename = "test_deleteme";
+    char *filename = "scannerTests/test1";
     yyin = fopen(filename,"r");
     yylex();
     
