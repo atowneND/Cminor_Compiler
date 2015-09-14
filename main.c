@@ -30,11 +30,11 @@ int main(int argc, char *argv[]){
     int retval;
     while(1){
         retval = yylex();
+        printf("%i: %s\n",retval,token_string(retval));
         if(!retval){
             printf("End of file\n");
             break;
         }
-        printf("%s\n",token_string(retval));
     }
     
     return 0;
