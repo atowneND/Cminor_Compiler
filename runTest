@@ -1,0 +1,36 @@
+#!/bin/bash
+
+make clean >/dev/null
+make >/dev/null
+
+logfile=results.log
+rm $logfile >/dev/null 2&>/dev/null
+echo $(date) >>$logfile
+echo Results: >>$logfile
+
+incs=(0 1)
+testdir=tests
+outputfile=$testdir/foo
+nfails=0
+nsuccess=0
+
+for i in ${incs[*]}; do
+    testname=good$i.cminor
+    solname=good$i.sol
+    ./cminor -scan $testdir/$testname >>$outputfile
+    x=$(diff $outputfile $testdir/$solname)
+
+    if [ -z $x ]; then
+        echo Test $testname passed >>$logfile
+        let nsuccess=nsuccess+1
+    else
+        echo Test $testname failed
+        echo Test $testname failed >> $logfile
+        let nfails=nfails+1
+    fi
+
+    rm $outputfile >/dev/null 2&>/dev/null
+done
+
+echo Successes: $nsuccess
+echo Failed tests: $nfails
