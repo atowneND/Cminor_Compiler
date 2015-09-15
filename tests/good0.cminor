@@ -22,3 +22,23 @@ _23
 'a'
 "hwe"
 "this is a test \0 the rest of the test"
+;
+-125
+      
+// hi
+/* second \ncomment... */
+[]{}()
+++--
+^*/%
+<
+<=
+>>=
+==
+!=
+&&
+||
+=
+,
+:
+;
+-+

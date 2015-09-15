@@ -13,6 +13,7 @@ testdir=tests
 outputfile=$testdir/foo
 nfails=0
 nsuccess=0
+ntests=0
 
 for i in ${incs[*]}; do
     testname=good$i.cminor
@@ -30,7 +31,8 @@ for i in ${incs[*]}; do
     fi
 
     rm $outputfile >/dev/null 2&>/dev/null
+    let ntests=ntests+1
 done
 
-echo Successes: $nsuccess
-echo Failed tests: $nfails
+echo Successes: $nsuccess/$ntests
+echo Failed tests: $nfails/$ntests

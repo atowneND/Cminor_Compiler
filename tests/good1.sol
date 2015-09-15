@@ -1,31 +1,53 @@
-semicolon
-integer
-comment c++
+string
 comment c
+string
+identifier
+multiplication
+colon
+multiplication
+multiplication
+multiplication
+integer
+less than
+identifier
+greater than
+less than
+identifier
+greater than
+integer type
+identifier
+left parenthesis
+integer type
+identifier
+comma
+character type
+multiplication
+identifier
 left bracket
 right bracket
-left brace
-right brace
-left parenthesis
 right parenthesis
-postfix increment
-postfix decrement
-power
-multiplication
-division
-modulus
-less than
-less than or equal to
-greater than
-greater than or equal to
+left brace
+comment c++
+if
+left parenthesis
+identifier
 equivalence comparison
-nonequivalence comparison
-logical and
-logical or
-assignment
-comma
-colon
+integer
+right parenthesis
+left brace
+identifier
+left parenthesis
+string
+right parenthesis
 semicolon
-minus sign (subtraction or negation)
-addition
+identifier
+left parenthesis
+integer
+right parenthesis
+semicolon
+right brace
+return
+integer
+semicolon
+right brace
 EOF

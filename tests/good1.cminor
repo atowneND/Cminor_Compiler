@@ -1,20 +1,14 @@
-;
--125
-      
-// hi
-/* second \ncomment... */
-[]{}()
-++--
-^*/%
-<
-<=
->>=
-==
-!=
-&&
-||
-=
-,
-:
-;
--+
+"\n\t\0\r\f\\\*"
+/*/*/???awee<F3>74343*/
+"wqeeo;"
+nt*:***
+123546
+<F5><F6>
+int main(int argc, char *argv[]){
+    // parse input
+    if (argc==1){
+        printf("usage: ./cminor -scan <filename>\nPlease enter an option and its arguments\n");
+        exit(1);
+    }
+    return 0;
+}

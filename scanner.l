@@ -21,7 +21,7 @@ VOID    void
 WHILE   while
 
 /* types */
-IDENT   [a-zA-Z_][a-zA-Z_0-9]+
+IDENT   [a-zA-Z_][a-zA-Z_0-9]*
 INTEGER [+-]?[0-9]+
 CHAR    '.'
 STRING  \".*\"
@@ -113,5 +113,6 @@ WS      [ \t\n\r]*
 {COLON}	  {return TOKEN_COLON;}
 {SC}	  {return TOKEN_SC;}
 {WS}	  {}
+.         {return TOKEN_OTHER;}
 
 %%
