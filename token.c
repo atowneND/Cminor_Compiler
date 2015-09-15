@@ -101,12 +101,12 @@ const char *token_string(token_t t){
         case TOKEN_WS:
             return "WHITESPACE";
         case TOKEN_OTHER:
-            printf("TOKEN_OTHER: Cannot scan on token: %s\n",yytext);
-            printf("\tPlease review input file. Exiting\n");
+            fprintf(stderr,"TOKEN_OTHER: Cannot scan on token: %s\n",yytext);
+            fprintf(stderr,"\tPlease review input file. Exiting\n");
             exit(1);
         otherwise:
-            printf("Cannot scan on token: %s\n",yytext);
-            printf("Please review input file. Exiting\n");
+            fprintf(stderr,"Cannot scan on token: %s\n",yytext);
+            fprintf(stderr,"Please review input file. Exiting\n");
             exit(1);
     }
 }
