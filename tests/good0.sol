@@ -1,55 +1,55 @@
-string type
-identifier
-array
-boolean type
-character type
-else
-false
-for
-function call
-if
-integer type
-print
-return
-string type
-true
-void
-while
-identifier
-identifier
-integer
-integer
-character
-string
-string
-semicolon
-integer
-comment c++
-comment c
-left bracket
-right bracket
-left brace
-right brace
-left parenthesis
-right parenthesis
-postfix increment
-postfix decrement
-power
-multiplication
-division
-modulus
-less than
-less than or equal to
-greater than
-greater than or equal to
-equivalence comparison
-nonequivalence comparison
-logical and
-logical or
-assignment
-comma
-colon
-semicolon
-minus sign (subtraction or negation)
-addition
+STRING
+IDENTIFIER
+ARRAY
+BOOLEAN
+CHARACTER
+ELSE
+FALSE
+FOR
+FUNCTION_CALL
+IF
+INTEGER
+PRINT
+RETURN
+STRING
+TRUE
+VOID
+WHILE
+IDENTIFIER
+IDENTIFIER
+INTEGER_LITERAL
+INTEGER_LITERAL
+CHARACTER_LITERAL
+STRING_LITERAL
+STRING_LITERAL
+SEMICOLON
+INTEGER_LITERAL
+COMMENT_C++
+COMMENT_C
+LEFT_BRACKET
+RIGHT_BRACKET
+LEFT_BRACE
+RIGHT_BRACE
+LEFT_PARENTHESIS
+RIGHT_PARENTHESIS
+POSTFIX_INCREMENT
+POSTFIX_DECREMENT
+POWER
+MULTIPLICATION
+DIVISION
+MODULUS
+LT
+LE
+GT
+GE
+EQUIVALENCE_COMPARISON
+NONEQUIVALENCE_COMPARISON
+AND
+OR
+ASSIGNMENT
+COMMA
+COLON
+SEMICOLON
+MINUS
+ADDITION
 EOF

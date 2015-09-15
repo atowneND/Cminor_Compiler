@@ -1,53 +1,53 @@
-string
-comment c
-string
-identifier
-multiplication
-colon
-multiplication
-multiplication
-multiplication
-integer
-less than
-identifier
-greater than
-less than
-identifier
-greater than
-integer type
-identifier
-left parenthesis
-integer type
-identifier
-comma
-character type
-multiplication
-identifier
-left bracket
-right bracket
-right parenthesis
-left brace
-comment c++
-if
-left parenthesis
-identifier
-equivalence comparison
-integer
-right parenthesis
-left brace
-identifier
-left parenthesis
-string
-right parenthesis
-semicolon
-identifier
-left parenthesis
-integer
-right parenthesis
-semicolon
-right brace
-return
-integer
-semicolon
-right brace
+STRING_LITERAL
+COMMENT_C
+STRING_LITERAL
+IDENTIFIER
+MULTIPLICATION
+COLON
+MULTIPLICATION
+MULTIPLICATION
+MULTIPLICATION
+INTEGER_LITERAL
+LT
+IDENTIFIER
+GT
+LT
+IDENTIFIER
+GT
+INTEGER
+IDENTIFIER
+LEFT_PARENTHESIS
+INTEGER
+IDENTIFIER
+COMMA
+CHARACTER
+MULTIPLICATION
+IDENTIFIER
+LEFT_BRACKET
+RIGHT_BRACKET
+RIGHT_PARENTHESIS
+LEFT_BRACE
+COMMENT_C++
+IF
+LEFT_PARENTHESIS
+IDENTIFIER
+EQUIVALENCE_COMPARISON
+INTEGER_LITERAL
+RIGHT_PARENTHESIS
+LEFT_BRACE
+IDENTIFIER
+LEFT_PARENTHESIS
+STRING_LITERAL
+RIGHT_PARENTHESIS
+SEMICOLON
+IDENTIFIER
+LEFT_PARENTHESIS
+INTEGER_LITERAL
+RIGHT_PARENTHESIS
+SEMICOLON
+RIGHT_BRACE
+RETURN
+INTEGER_LITERAL
+SEMICOLON
+RIGHT_BRACE
 EOF

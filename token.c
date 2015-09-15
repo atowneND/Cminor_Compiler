@@ -4,104 +4,102 @@
 /* function definitions */
 const char *token_string(token_t t){
     switch(t){
-        case 0:
-            return "returned zero";
         case TOKEN_ARRAY:
-            return "array";
+            return "ARRAY";
         case TOKEN_BOOL_T:
-            return "boolean type";
+            return "BOOLEAN";
         case TOKEN_CHAR_T:
-            return "character type";
+            return "CHARACTER";
         case TOKEN_ELSE:
-            return "else";
+            return "ELSE";
         case TOKEN_FALSE:
-            return "false";
+            return "FALSE";
         case TOKEN_FOR :
-            return "for";
+            return "FOR";
         case TOKEN_FCALL:
-            return "function call";
+            return "FUNCTION_CALL";
         case TOKEN_IF:
-            return "if";
+            return "IF";
         case TOKEN_INT_T:
-            return "integer type";
+            return "INTEGER";
         case TOKEN_PRINT:
-            return "print";
+            return "PRINT";
         case TOKEN_RETURN:
-            return "return";
+            return "RETURN";
         case TOKEN_STR_T:
-            return "string type";
+            return "STRING";
         case TOKEN_TRUE:
-            return "true";
+            return "TRUE";
         case TOKEN_VOID:
-            return "void";
+            return "VOID";
         case TOKEN_WHILE:
-            return "while";
+            return "WHILE";
         case TOKEN_IDENT:
-            return "identifier";
+            return "IDENTIFIER";
         case TOKEN_INTEGER:
-            return "integer";
+            return "INTEGER_LITERAL";
         case TOKEN_CHAR:
-            return "character";
+            return "CHARACTER_LITERAL";
         case TOKEN_STRING:
-            return "string";
+            return "STRING_LITERAL";
         case TOKEN_LBRACK:
-            return "left bracket";
+            return "LEFT_BRACKET";
         case TOKEN_RBRACK:
-            return "right bracket";
+            return "RIGHT_BRACKET";
         case TOKEN_LBRACE:
-            return "left brace";
+            return "LEFT_BRACE";
         case TOKEN_RBRACE:
-            return "right brace";
+            return "RIGHT_BRACE";
         case TOKEN_LPAREN:
-            return "left parenthesis";
+            return "LEFT_PARENTHESIS";
         case TOKEN_RPAREN:
-            return "right parenthesis";
+            return "RIGHT_PARENTHESIS";
         case TOKEN_INC:
-            return "postfix increment";
+            return "POSTFIX_INCREMENT";
         case TOKEN_DEC:
-            return "postfix decrement";
+            return "POSTFIX_DECREMENT";
         case TOKEN_NEG:
-            return "minus sign (subtraction or negation)";
+            return "MINUS";
         case TOKEN_POW:
-            return "power";
+            return "POWER";
         case TOKEN_MULT:
-            return "multiplication";
+            return "MULTIPLICATION";
         case TOKEN_DIV:
-            return "division";
+            return "DIVISION";
         case TOKEN_MOD:
-            return "modulus";
+            return "MODULUS";
         case TOKEN_ADD:
-            return "addition";
+            return "ADDITION";
         case TOKEN_LT:
-            return "less than";
+            return "LT";
         case TOKEN_LE:
-            return "less than or equal to";
+            return "LE";
         case TOKEN_GT:
-            return "greater than";
+            return "GT";
         case TOKEN_GE:
-            return "greater than or equal to";
+            return "GE";
         case TOKEN_EQ_COMP:
-            return "equivalence comparison";
+            return "EQUIVALENCE_COMPARISON";
         case TOKEN_NE_COMP:
-            return "nonequivalence comparison";
+            return "NONEQUIVALENCE_COMPARISON";
         case TOKEN_AND:
-            return "logical and";
+            return "AND";
         case TOKEN_OR:
-            return "logical or";
+            return "OR";
         case TOKEN_ASSIGN:
-            return "assignment";
+            return "ASSIGNMENT";
         case TOKEN_COM1:
-            return "comment c++";
+            return "COMMENT_C++";
         case TOKEN_COM2:
-            return "comment c";
+            return "COMMENT_C";
         case TOKEN_COMMA:
-            return "comma";
+            return "COMMA";
         case TOKEN_COLON:
-            return "colon";
+            return "COLON";
         case TOKEN_SC:
-            return "semicolon";
+            return "SEMICOLON";
         case TOKEN_WS:
-            return "whitespace";
+            return "WHITESPACE";
         case TOKEN_OTHER:
             printf("TOKEN_OTHER: Cannot scan on token: %s\n",yytext);
             printf("\tPlease review input file. Exiting\n");
