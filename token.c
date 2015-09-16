@@ -3,7 +3,9 @@
 #include <string.h>
 
 /* function definitions */
-const char *token_string(token_t t, char *output_string){
+const char *token_string(token_t t){
+    int output_length = (int)strlen(yytext);
+    char *output_string = malloc(sizeof(char)*output_length);
     switch(t){
         case TOKEN_ARRAY:
             sprintf(output_string,"ARRAY");

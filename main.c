@@ -37,9 +37,7 @@ int main(int argc, char *argv[]){
 	        break;
         }
         else{
-            int output_length = (int)strlen(yytext) + 25;
-            char output_string[output_length];
-            printf("%s\n",token_string(returned_token, output_string));
+            printf("%s\n",token_string(returned_token));
         }
     }
 	fclose(yyin);

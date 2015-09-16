@@ -53,5 +53,5 @@ enum token{
 typedef enum token token_t;
 
 /* function declarations */
-const char *token_string(token_t t, char *output_string);
+const char *token_string(token_t t);
 void strip_first_and_last(void);
