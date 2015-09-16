@@ -150,12 +150,10 @@ const char *token_string(token_t t, char *output_string){
             sprintf(output_string,"WHITESPACE");
             break;
         case TOKEN_OTHER:
-            fprintf(stderr,"TOKEN_OTHER: Cannot scan on token: %s\n",yytext);
-            fprintf(stderr,"\tPlease review input file. Exiting\n");
+            fprintf(stderr,"scan error: %s is not a valid character\n",yytext);
             exit(1);
         otherwise:
-            fprintf(stderr,"Cannot scan on token: %s\n",yytext);
-            fprintf(stderr,"Please review input file. Exiting\n");
+            fprintf(stderr,"scan error: %s is not a valid character\n",yytext);
             exit(1);
     }
     return output_string;
