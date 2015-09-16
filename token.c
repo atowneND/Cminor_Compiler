@@ -1,105 +1,154 @@
 #include "lex.yy.h"
 #include "token.h"
+#include <string.h>
 
 /* function definitions */
-const char *token_string(token_t t){
+const char *token_string(token_t t, char *output_string){
     switch(t){
         case TOKEN_ARRAY:
-            return "ARRAY";
-        case TOKEN_BOOL_T:
-            return "BOOLEAN";
-        case TOKEN_CHAR_T:
-            return "CHARACTER";
+            sprintf(output_string,"ARRAY");
+            break;
+        case TOKEN_BOOLEAN:
+            sprintf(output_string,"BOOLEAN");
+            break;
+        case TOKEN_CHARACTER:
+            sprintf(output_string,"CHARACTER");
+            break;
         case TOKEN_ELSE:
-            return "ELSE";
+            sprintf(output_string,"ELSE");
+            break;
         case TOKEN_FALSE:
-            return "FALSE";
+            sprintf(output_string,"FALSE");
+            break;
         case TOKEN_FOR :
-            return "FOR";
+            sprintf(output_string,"FOR");
+            break;
         case TOKEN_FCALL:
-            return "FUNCTION_CALL";
+            sprintf(output_string,"FUNCTION");
+            break;
         case TOKEN_IF:
-            return "IF";
-        case TOKEN_INT_T:
-            return "INTEGER";
-        case TOKEN_PRINT:
-            return "PRINT";
-        case TOKEN_RETURN:
-            return "RETURN";
-        case TOKEN_STR_T:
-            return "STRING";
-        case TOKEN_TRUE:
-            return "TRUE";
-        case TOKEN_VOID:
-            return "VOID";
-        case TOKEN_WHILE:
-            return "WHILE";
-        case TOKEN_IDENT:
-            return "IDENTIFIER";
+            sprintf(output_string,"IF");
+            break;
         case TOKEN_INTEGER:
-            return "INTEGER_LITERAL";
-        case TOKEN_CHAR:
-            return "CHARACTER_LITERAL";
+            sprintf(output_string,"INTEGER");
+            break;
+        case TOKEN_PRINT:
+            sprintf(output_string,"PRINT");
+            break;
+        case TOKEN_RETURN:
+            sprintf(output_string,"RETURN");
+            break;
         case TOKEN_STRING:
-            return "STRING_LITERAL";
+            sprintf(output_string,"STRING");
+            break;
+        case TOKEN_TRUE:
+            sprintf(output_string,"TRUE");
+            break;
+        case TOKEN_VOID:
+            sprintf(output_string,"VOID");
+            break;
+        case TOKEN_WHILE:
+            sprintf(output_string,"WHILE");
+            break;
+        case TOKEN_IDENT:
+            sprintf(output_string,"IDENTIFIER");
+            break;
+        case TOKEN_INTEGER_LITERAL:
+            sprintf(output_string,"INTEGER_LITERAL");
+            break;
+        case TOKEN_CHARACTER_LITERAL:
+            sprintf(output_string,"CHARACTER_LITERAL %s",yytext);
+            break;
+        case TOKEN_STRING_LITERAL:
+            sprintf(output_string,"STRING_LITERAL %s",yytext);
+            break;
         case TOKEN_LBRACK:
-            return "LEFT_BRACKET";
+            sprintf(output_string,"LEFT_BRACKET");
+            break;
         case TOKEN_RBRACK:
-            return "RIGHT_BRACKET";
+            sprintf(output_string,"RIGHT_BRACKET");
+            break;
         case TOKEN_LBRACE:
-            return "LEFT_BRACE";
+            sprintf(output_string,"LEFT_BRACE");
+            break;
         case TOKEN_RBRACE:
-            return "RIGHT_BRACE";
+            sprintf(output_string,"RIGHT_BRACE");
+            break;
         case TOKEN_LPAREN:
-            return "LEFT_PARENTHESIS";
+            sprintf(output_string,"LEFT_PARENTHESIS");
+            break;
         case TOKEN_RPAREN:
-            return "RIGHT_PARENTHESIS";
+            sprintf(output_string,"RIGHT_PARENTHESIS");
+            break;
         case TOKEN_INC:
-            return "POSTFIX_INCREMENT";
+            sprintf(output_string,"POSTFIX_INCREMENT");
+            break;
         case TOKEN_DEC:
-            return "POSTFIX_DECREMENT";
+            sprintf(output_string,"POSTFIX_DECREMENT");
+            break;
         case TOKEN_NEG:
-            return "MINUS";
+            sprintf(output_string,"MINUS");
+            break;
         case TOKEN_POW:
-            return "POWER";
+            sprintf(output_string,"POWER");
+            break;
         case TOKEN_MULT:
-            return "MULTIPLICATION";
+            sprintf(output_string,"MULTIPLICATION");
+            break;
         case TOKEN_DIV:
-            return "DIVISION";
+            sprintf(output_string,"DIVISION");
+            break;
         case TOKEN_MOD:
-            return "MODULUS";
+            sprintf(output_string,"MODULUS");
+            break;
         case TOKEN_ADD:
-            return "ADDITION";
+            sprintf(output_string,"ADDITION");
+            break;
         case TOKEN_LT:
-            return "LT";
+            sprintf(output_string,"LT");
+            break;
         case TOKEN_LE:
-            return "LE";
+            sprintf(output_string,"LE");
+            break;
         case TOKEN_GT:
-            return "GT";
+            sprintf(output_string,"GT");
+            break;
         case TOKEN_GE:
-            return "GE";
+            sprintf(output_string,"GE");
+            break;
         case TOKEN_EQ_COMP:
-            return "EQUIVALENCE_COMPARISON";
+            sprintf(output_string,"EQUIVALENCE_COMPARISON");
+            break;
         case TOKEN_NE_COMP:
-            return "NONEQUIVALENCE_COMPARISON";
+            sprintf(output_string,"NONEQUIVALENCE_COMPARISON");
+            break;
         case TOKEN_AND:
-            return "AND";
+            sprintf(output_string,"AND");
+            break;
         case TOKEN_OR:
-            return "OR";
+            sprintf(output_string,"OR");
+            break;
         case TOKEN_ASSIGN:
-            return "ASSIGNMENT";
+            sprintf(output_string,"ASSIGNMENT");
+            break;
         case TOKEN_COM1:
-            return "COMMENT_C++";
+            sprintf(output_string,"COMMENT_C++");
+            break;
         case TOKEN_COM2:
-            return "COMMENT_C";
+            sprintf(output_string,"COMMENT_C");
+            break;
         case TOKEN_COMMA:
-            return "COMMA";
+            sprintf(output_string,"COMMA");
+            break;
         case TOKEN_COLON:
-            return "COLON";
+            sprintf(output_string,"COLON");
+            break;
         case TOKEN_SC:
-            return "SEMICOLON";
+            sprintf(output_string,"SEMICOLON");
+            break;
         case TOKEN_WS:
-            return "WHITESPACE";
+            sprintf(output_string,"WHITESPACE");
+            break;
         case TOKEN_OTHER:
             fprintf(stderr,"TOKEN_OTHER: Cannot scan on token: %s\n",yytext);
             fprintf(stderr,"\tPlease review input file. Exiting\n");
@@ -109,4 +158,10 @@ const char *token_string(token_t t){
             fprintf(stderr,"Please review input file. Exiting\n");
             exit(1);
     }
+    return output_string;
+}
+
+void strip_first_and_last(void){
+    int len = (int)strlen(yytext);
+    sprintf(yytext,"%.*s",len-2,&(yytext[1]));
 }

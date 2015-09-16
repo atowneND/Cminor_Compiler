@@ -30,15 +30,16 @@ int main(int argc, char *argv[]){
     }
 
     // Scan
-    int retval;
+    int returned_token;
     while(1){
-        retval = yylex();
-	    if(!retval){
-	        printf("EOF\n");
+        returned_token = yylex();
+	    if(!returned_token){
 	        break;
         }
         else{
-            printf("%s\n",token_string(retval));
+            int output_length = (int)strlen(yytext) + 25;
+            char output_string[output_length];
+            printf("%s\n",token_string(returned_token, output_string));
         }
     }
 	fclose(yyin);

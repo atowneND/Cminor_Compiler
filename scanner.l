@@ -66,24 +66,24 @@ WS      [ \t\n\r]*
 %%
 
 {ARRAY}   {return TOKEN_ARRAY;}
-{BOOL_T}  {return TOKEN_BOOL_T;}
-{CHAR_T}  {return TOKEN_CHAR_T;}
+{BOOL_T}  {return TOKEN_BOOLEAN;}
+{CHAR_T}  {return TOKEN_CHARACTER;}
 {ELSE}    {return TOKEN_ELSE;}
 {FALSE}   {return TOKEN_FALSE;}
 {FOR}     {return TOKEN_FOR;}
 {FCALL}   {return TOKEN_FCALL;}
 {IF}      {return TOKEN_IF;}
-{INT_T}   {return TOKEN_INT_T;}
+{INT_T}   {return TOKEN_INTEGER;}
 {PRINT}   {return TOKEN_PRINT;}
 {RETURN}  {return TOKEN_RETURN;}
-{STR_T}   {return TOKEN_STR_T;}
+{STR_T}   {return TOKEN_STRING;}
 {TRUE}    {return TOKEN_TRUE;}
 {VOID}    {return TOKEN_VOID;}
 {WHILE}   {return TOKEN_WHILE;}
 {IDENT}   {return TOKEN_IDENT;}
-{INTEGER} {return TOKEN_INTEGER;}
-{CHAR}    {return TOKEN_CHAR;}
-{STRING}  {return TOKEN_STRING;}
+{INTEGER} {return TOKEN_INTEGER_LITERAL;}
+{CHAR}    {strip_first_and_last(); return TOKEN_CHARACTER_LITERAL;}
+{STRING}  {strip_first_and_last(); return TOKEN_STRING_LITERAL;}
 {LBRACK}  {return TOKEN_LBRACK;}
 {RBRACK}  {return TOKEN_RBRACK;}
 {LBRACE}  {return TOKEN_LBRACE;}
