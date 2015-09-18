@@ -3,7 +3,7 @@
 - [x] escaped characters
 - [x] shorten output string
 - [ ] check regex's
-- [ ] check length of strings and identifiers
-- [ ] error messages
+- [x] check length of strings and identifiers
+- [x] error messages
 - [ ] rigorously test all regex's
 - [ ] testing suite
