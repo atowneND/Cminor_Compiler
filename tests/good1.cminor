@@ -1,5 +1,5 @@
 "\n\t\0\r\f\\\*"
-/*/*/???awee<F3>74343*/
+/*???awee<F3>74343*/
 "wqeeo;"
 nt*:***
 123546
@@ -16,3 +16,5 @@ int main(int argc, char *argv[]){
 '\\'
 '\r'
 '\a'
+/* testing multiline comment
+For whoo */

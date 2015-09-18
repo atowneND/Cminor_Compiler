@@ -133,10 +133,10 @@ const char *token_string(token_t t){
         case TOKEN_ASSIGN:
             sprintf(output_string,"ASSIGNMENT");
             break;
-        case TOKEN_COM1:
-            sprintf(output_string,"COMMENT_C++");
+        case TOKEN_CPP_COMMENT:
+            sprintf(output_string,"COMMENT_CPP");
             break;
-        case TOKEN_COM2:
+        case TOKEN_C_COMMENT:
             sprintf(output_string,"COMMENT_C");
             break;
         case TOKEN_COMMA:
@@ -164,4 +164,34 @@ const char *token_string(token_t t){
 void strip_first_and_last(void){
     int len = (int)strlen(yytext);
     sprintf(yytext,"%.*s",len-2,&(yytext[1]));
+}
+
+void scan_text(void){
+    int len = (int)strlen(yytext);
+    char *newstring = malloc(sizeof(char)*len);
+    printf("yytext = %s\n",yytext);
+    int i,esc;
+    char yy_c;
+    char yystr[2];
+    for (i=0; i<len; i++){
+        yy_c = yytext[i];
+        if (esc){
+            esc=0;
+        }
+        else{
+            switch (yy_c){
+                case '\"':
+                    printf("here");
+                    break;
+                case '\'':
+                    printf("foo");
+                    break;
+                case '\\':
+                    esc=1;
+                otherwise:
+                    strcat(newstring,yy_c);
+            } 
+        }
+    }
+    free(newstring);
 }

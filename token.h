@@ -42,8 +42,8 @@ enum token{
     TOKEN_AND,
     TOKEN_OR,
     TOKEN_ASSIGN,
-    TOKEN_COM1,
-    TOKEN_COM2,
+    TOKEN_CPP_COMMENT,
+    TOKEN_C_COMMENT,
     TOKEN_COMMA,
     TOKEN_COLON,
     TOKEN_SC,
@@ -55,3 +55,4 @@ typedef enum token token_t;
 /* function declarations */
 const char *token_string(token_t t);
 void strip_first_and_last(void);
+void scan_text(void);
