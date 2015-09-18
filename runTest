@@ -8,7 +8,7 @@ rm $logfile >/dev/null 2&>/dev/null
 echo $(date) >>$logfile
 echo Results: >>$logfile
 
-incs=(0 1 2)
+incs=(0 1 2 3 4 5 6 7 8 9)
 testdir=tests
 outputfile=$testdir/foo
 nfails=0
@@ -34,5 +34,23 @@ for i in ${incs[*]}; do
     let ntests=ntests+1
 done
 
+for i in ${incs[*]}; do
+    testname=bad$i.cminor
+    solname=bad$i.sol
+    ./cminor -scan $testdir/$testname >>$outputfile 2&>1
+    x=$(diff $outputfile $testdir/$solname)
+
+    if [ -z $x ]; then
+        echo Test $testname passed >>$logfile
+        let nsuccess=nsuccess+1
+    else
+        echo Test $testname failed
+        echo Test $testname failed >> $logfile
+        let nfails=nfails+1
+    fi
+
+    rm $outputfile >/dev/null 2&>/dev/null
+    let ntests=ntests+1
+done
 echo Successes: $nsuccess/$ntests
 echo Failed tests: $nfails/$ntests

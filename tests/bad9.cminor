@@ -1,0 +1,3 @@
+gcc -g -c lex.yy.c
+gcc -g -c token.c
+gcc -g main.c lex.yy.o token.o -o cminor -lfl

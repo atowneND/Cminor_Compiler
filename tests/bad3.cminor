@@ -1,0 +1,4 @@
+"Why couldn't the star be escaped?"
+"Because the backwhack didn't reach escape velocity"
+/* This is a comment on two lines
+\*/ but it wasn't supposed to end until now... */

@@ -1,0 +1,7 @@
+IDENTIFIER
+MINUS
+IDENTIFIER
+MINUS
+IDENTIFIER
+IDENTIFIER
+scan error: . is not a valid character

@@ -56,6 +56,9 @@ const char *token_string(token_t t){
             sprintf(output_string,"WHILE");
             break;
         case TOKEN_IDENT:
+            if (output_length>256){
+                error_end(1);
+            }
             sprintf(output_string,"IDENTIFIER");
             break;
         case TOKEN_INTEGER_LITERAL:
@@ -186,15 +189,6 @@ char *scan_text(void){
     for (i=1; i<len-1; i++){
         if (yytext[i]=='\\'){
             switch (yytext[i+1]){
-                case 'a':
-                    my_yy_c = '\a';
-                    break;
-                case 'b':
-                    my_yy_c = '\b';
-                    break;
-                case 'f':
-                    my_yy_c = '\f';
-                    break;
                 case 'n':
                     my_yy_c = '\n';
                     break;
@@ -203,21 +197,6 @@ char *scan_text(void){
                     break;
                 case 't':
                     my_yy_c = '\t';
-                    break;
-                case 'v':
-                    my_yy_c = '\v';
-                    break;
-                case '\\':
-                    my_yy_c = '\\';
-                    break;
-                case '\'':
-                    my_yy_c = '\'';
-                    break;
-                case '"':
-                    my_yy_c = '\"';
-                    break;
-                case '?':
-                    my_yy_c = '?';
                     break;
                 case '0':
                     my_yy_c = '\0';
@@ -233,10 +212,13 @@ char *scan_text(void){
             newstring[i-1] = yytext[i];
             esc = 0;
         }
+        if (((int)yytext[i]<0) || ((int)yytext[i]>177)){
+            error_end(0);
+        }
     }
 
     len = (int)strlen(newstring);
-    if ((yytext[0]=='"') && (len>256)){
+    if (len>256){
         error_end(1);
     }
     return newstring;

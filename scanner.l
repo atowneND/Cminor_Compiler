@@ -24,7 +24,7 @@ WHILE   while
 IDENT   [a-zA-Z_][a-zA-Z_0-9]*
 INTEGER [+-]?[0-9]+
 CHAR    '(\\.|[^\\'])+'
-STRING  \"([^\"]|(\\.))*\"
+STRING  \"([^\"\n]|(\\.))*\"
 
 /* group */
 LBRACK  \[
