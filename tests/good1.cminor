@@ -7,14 +7,12 @@ nt*:***
 int main(int argc, char *argv[]){
     // parse input
     if (argc==1){
-        printf("usage: ./cminor -scan <filename>\nPlease enter an option and its arguments\n");
+        printf("usage: ./cminor -scan <filename>");
         exit(1);
     }
     return 0;
 }
 ""
-'\\'
-'\r'
-'\a'
+'\n'
 /* testing multiline comment
 For whoo */

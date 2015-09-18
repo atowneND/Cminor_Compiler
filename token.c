@@ -182,9 +182,6 @@ char *scan_text(void){
             error_end(0);
         }
     }
-    else if (len>256){
-        error_end(1);
-    }
 
     for (i=1; i<len-1; i++){
         if (yytext[i]=='\\'){
@@ -236,6 +233,11 @@ char *scan_text(void){
             newstring[i-1] = yytext[i];
             esc = 0;
         }
+    }
+
+    len = (int)strlen(newstring);
+    if ((yytext[0]=='"') && (len>256)){
+        error_end(1);
     }
     return newstring;
 }

@@ -23,8 +23,8 @@ WHILE   while
 /* types */
 IDENT   [a-zA-Z_][a-zA-Z_0-9]*
 INTEGER [+-]?[0-9]+
-CHAR    '.'|'\\.'
-STRING  \".*\"
+CHAR    '(\\.|[^\\'])+'
+STRING  \"([^\"]|(\\.))*\"
 
 /* group */
 LBRACK  \[

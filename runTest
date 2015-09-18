@@ -8,7 +8,7 @@ rm $logfile >/dev/null 2&>/dev/null
 echo $(date) >>$logfile
 echo Results: >>$logfile
 
-incs=(0 1)
+incs=(0 1 2)
 testdir=tests
 outputfile=$testdir/foo
 nfails=0
