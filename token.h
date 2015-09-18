@@ -55,3 +55,4 @@ typedef enum token token_t;
 /* function declarations */
 const char *token_string(token_t t);
 char *scan_text(void);
+void error_end(int error_type);

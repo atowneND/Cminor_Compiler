@@ -155,11 +155,11 @@ const char *token_string(token_t t){
             sprintf(output_string,"WHITESPACE");
             break;
         case TOKEN_OTHER:
-            fprintf(stderr,"scan error: %s is not a valid character\n",yytext);
-            exit(1);
+            error_end(0);
+            break;
         otherwise:
-            fprintf(stderr,"scan error: %s is not a valid character\n",yytext);
-            exit(1);
+            error_end(0);
+            break;
     }
     return output_string;
 }
@@ -171,6 +171,14 @@ char *scan_text(void){
     esc = 0;
     char my_yy_c;
 
+    if (yytext[0]=='\''){
+        if ((len!=4) && (yytext[1]=='\\')){
+            error_end(0);
+        }
+        else if ((len!=3) && (yytext[1]!='\\')) {
+            error_end(0);
+        }
+    }
     for (i=1; i<len-1; i++){
         if (yytext[i]=='\\'){
             switch (yytext[i+1]){
@@ -220,4 +228,12 @@ char *scan_text(void){
         }
     }
     return newstring;
+}
+
+void error_end(int error_type){
+    switch (error_type){
+        case 0:
+            fprintf(stderr,"scan error: %s is not a valid character\n",yytext);
+            exit(1);
+    }
 }
