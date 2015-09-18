@@ -1,7 +1,7 @@
 - [x] states
 - [x] comments
 - [x] escaped characters
-- [ ] shorten output string
+- [x] shorten output string
 - [ ] check regex's
 - [ ] check length of strings and identifiers
 - [ ] error messages

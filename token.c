@@ -182,6 +182,10 @@ char *scan_text(void){
             error_end(0);
         }
     }
+    else if (len>256){
+        error_end(1);
+    }
+
     for (i=1; i<len-1; i++){
         if (yytext[i]=='\\'){
             switch (yytext[i+1]){
@@ -222,7 +226,8 @@ char *scan_text(void){
                     my_yy_c = '\0';
                     break;
                 otherwise:
-                    error_end(0);
+                    my_yy_c = yytext[i+1];
+                    break;
             }
             newstring[i-1] = my_yy_c;
             esc = 1;
@@ -239,6 +244,9 @@ void error_end(int error_type){
     switch (error_type){
         case 0:
             fprintf(stderr,"scan error: %s is not a valid character\n",yytext);
+            exit(1);
+        case 1:
+            fprintf(stderr,"scan error: string is longer than 256 characters");
             exit(1);
     }
 }
