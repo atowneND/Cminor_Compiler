@@ -6,6 +6,7 @@
 const char *token_string(token_t t){
     int output_length = (int)strlen(yytext);
     char *output_string = malloc(sizeof(char)*output_length);
+    char *text_string = malloc(sizeof(char)*output_length);
     switch(t){
         case TOKEN_ARRAY:
             sprintf(output_string,"ARRAY");
@@ -59,10 +60,12 @@ const char *token_string(token_t t){
             sprintf(output_string,"INTEGER_LITERAL");
             break;
         case TOKEN_CHARACTER_LITERAL:
-            sprintf(output_string,"CHARACTER_LITERAL %s",yytext);
+            text_string = scan_text();
+            sprintf(output_string,"CHARACTER_LITERAL %s",text_string);
             break;
         case TOKEN_STRING_LITERAL:
-            sprintf(output_string,"STRING_LITERAL %s",yytext);
+            text_string = scan_text();
+            sprintf(output_string,"STRING_LITERAL %s",text_string);
             break;
         case TOKEN_LBRACK:
             sprintf(output_string,"LEFT_BRACKET");
@@ -161,37 +164,60 @@ const char *token_string(token_t t){
     return output_string;
 }
 
-void strip_first_and_last(void){
-    int len = (int)strlen(yytext);
-    sprintf(yytext,"%.*s",len-2,&(yytext[1]));
-}
-
-void scan_text(void){
+char *scan_text(void){
     int len = (int)strlen(yytext);
     char *newstring = malloc(sizeof(char)*len);
-    printf("yytext = %s\n",yytext);
     int i,esc;
-    char yy_c;
-    char yystr[2];
-    for (i=0; i<len; i++){
-        yy_c = yytext[i];
-        if (esc){
-            esc=0;
-        }
-        else{
-            switch (yy_c){
-                case '\"':
-                    printf("here");
+    esc = 0;
+    char my_yy_c;
+
+    for (i=1; i<len-1; i++){
+        if (yytext[i]=='\\'){
+            switch (yytext[i+1]){
+                case 'a':
+                    my_yy_c = '\a';
                     break;
-                case '\'':
-                    printf("foo");
+                case 'b':
+                    my_yy_c = '\b';
+                    break;
+                case 'f':
+                    my_yy_c = '\f';
+                    break;
+                case 'n':
+                    my_yy_c = '\n';
+                    break;
+                case 'r':
+                    my_yy_c = '\r';
+                    break;
+                case 't':
+                    my_yy_c = '\t';
+                    break;
+                case 'v':
+                    my_yy_c = '\v';
                     break;
                 case '\\':
-                    esc=1;
+                    my_yy_c = '\\';
+                    break;
+                case '\'':
+                    my_yy_c = '\'';
+                    break;
+                case '"':
+                    my_yy_c = '\"';
+                    break;
+                case '?':
+                    my_yy_c = '?';
+                    break;
                 otherwise:
-                    strcat(newstring,yy_c);
-            } 
+                    my_yy_c = 'X';
+                    break;
+            }
+            newstring[i-1] = my_yy_c;
+            esc = 1;
+        }
+        else if (!esc){
+            newstring[i-1] = yytext[i];
+            esc = 0;
         }
     }
-    free(newstring);
+    return newstring;
 }

@@ -82,8 +82,8 @@ WS      [ \t\n\r]*
 {WHILE}             {return TOKEN_WHILE;}
 {IDENT}             {return TOKEN_IDENT;}
 {INTEGER}			{return TOKEN_INTEGER_LITERAL;}
-{CHAR}              {scan_text(); return TOKEN_CHARACTER_LITERAL;}
-{STRING}            {scan_text(); return TOKEN_STRING_LITERAL;}
+{CHAR}              {return TOKEN_CHARACTER_LITERAL;}
+{STRING}            {return TOKEN_STRING_LITERAL;}
 {LBRACK}            {return TOKEN_LBRACK;}
 {RBRACK}            {return TOKEN_RBRACK;}
 {LBRACE}            {return TOKEN_LBRACE;}
