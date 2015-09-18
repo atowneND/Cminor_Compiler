@@ -7,6 +7,8 @@ const char *token_string(token_t t){
     int output_length = (int)strlen(yytext);
     char *output_string = malloc(sizeof(char)*output_length);
     char *text_string = malloc(sizeof(char)*output_length);
+    memset(output_string,0,output_length);
+    memset(text_string,0,output_length);
     switch(t){
         case TOKEN_ARRAY:
             sprintf(output_string,"ARRAY");
@@ -167,6 +169,7 @@ const char *token_string(token_t t){
 char *scan_text(void){
     int len = (int)strlen(yytext);
     char *newstring = malloc(sizeof(char)*len);
+    memset(newstring,0,len);
     int i,esc;
     esc = 0;
     char my_yy_c;
@@ -215,9 +218,11 @@ char *scan_text(void){
                 case '?':
                     my_yy_c = '?';
                     break;
-                otherwise:
-                    my_yy_c = 'X';
+                case '0':
+                    my_yy_c = '\0';
                     break;
+                otherwise:
+                    error_end(0);
             }
             newstring[i-1] = my_yy_c;
             esc = 1;
