@@ -4,6 +4,7 @@
 %}
 
 /* reserved words */
+/*<<EOF>>             {return TOKEN_EOF;}*/
 ARRAY   array
 BOOL_T  boolean
 CHAR_T  char
@@ -110,8 +111,9 @@ WS      [ \t\n\r]*
 {CPP_COMMENT}	    {return TOKEN_CPP_COMMENT;}
 "/*"                {BEGIN(C_COMMENT);}
 <C_COMMENT>"*/"     {BEGIN(INITIAL); return TOKEN_C_COMMENT;}
-<C_COMMENT>.|\n     {}
-{COMMA}	            {return TOKEN_COMMA;}
+<C_COMMENT>.|\n     {} /* check for EOF */
+<C_COMMENT><<EOF>>  {return TOKEN_EOF;}
+COMMA}	            {return TOKEN_COMMA;}
 {COLON}	            {return TOKEN_COLON;}
 {SC}	            {return TOKEN_SC;}
 {WS}	            {}

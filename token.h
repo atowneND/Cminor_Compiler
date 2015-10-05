@@ -49,6 +49,7 @@ enum token{
     TOKEN_SC,
     TOKEN_WS,
     TOKEN_OTHER,
+    TOKEN_EOF,
 };
 typedef enum token token_t;
 

@@ -1,1 +1,1 @@
-scan error: string is longer than 256 characters
+scan error: token is longer than 256 characters

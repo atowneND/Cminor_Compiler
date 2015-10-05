@@ -162,6 +162,9 @@ const char *token_string(token_t t){
         case TOKEN_OTHER:
             error_end(0);
             break;
+        case TOKEN_EOF:
+            error_end(2);
+            break;
         otherwise:
             error_end(0);
             break;
@@ -179,10 +182,10 @@ char *scan_text(void){
 
     if (yytext[0]=='\''){
         if ((len!=4) && (yytext[1]=='\\')){
-            error_end(0);
+            error_end(3);
         }
         else if ((len!=3) && (yytext[1]!='\\')) {
-            error_end(0);
+            error_end(3);
         }
     }
 
@@ -213,7 +216,7 @@ char *scan_text(void){
             esc = 0;
         }
         if (((int)yytext[i]<0) || ((int)yytext[i]>177)){
-            error_end(0);
+            error_end(4);
         }
     }
 
@@ -228,9 +231,19 @@ void error_end(int error_type){
     switch (error_type){
         case 0:
             fprintf(stderr,"scan error: %s is not a valid character\n",yytext);
-            exit(1);
+            break;
         case 1:
-            fprintf(stderr,"scan error: string is longer than 256 characters");
-            exit(1);
+            fprintf(stderr,"scan error: token is longer than 256 characters\n");
+            break;
+        case 2:
+            fprintf(stderr,"scan error: end of file reached before token could be matched\n");
+            break;
+        case 3:
+            fprintf(stderr,"scan error: characters literals must contain only one character\n");
+            break;
+        case 4:
+            fprintf(stderr,"scan error: %s contains invalid ascii character(s)\n",yytext);
+            break;
     }
+            exit(1);
 }

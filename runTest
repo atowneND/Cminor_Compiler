@@ -37,7 +37,7 @@ done
 for i in ${incs[*]}; do
     testname=bad$i.cminor
     solname=bad$i.sol
-    ./cminor -scan $testdir/$testname >>$outputfile 2&>1
+    ./cminor -scan $testdir/$testname &>$outputfile
     x=$(diff $outputfile $testdir/$solname)
 
     if [ -z $x ]; then
