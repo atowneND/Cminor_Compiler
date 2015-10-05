@@ -1,9 +1,0 @@
-- [x] states
-- [x] comments
-- [x] escaped characters
-- [x] shorten output string
-- [ ] check regex's
-- [x] check length of strings and identifiers
-- [x] error messages
-- [ ] rigorously test all regex's
-- [ ] testing suite

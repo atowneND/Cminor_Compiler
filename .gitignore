@@ -6,3 +6,4 @@ lex.yy.c
 lex.yy.h
 results.log
 compilers-master
+charles_scanner
