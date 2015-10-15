@@ -1,0 +1,8 @@
+input:
+oijpojawfpafwpojawfpoiawjfpoiawawfeowfowowowfowfoiwjowijowi^%........
+
+correct:
+IDENTIFIER
+EXPONENTIATE
+MODULUS
+scan error: . is not a valid character

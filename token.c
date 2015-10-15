@@ -138,6 +138,9 @@ const char *token_string(token_t t){
         case TOKEN_OR:
             sprintf(output_string,"OR");
             break;
+        case TOKEN_NOT:
+            sprintf(output_string,"NOT");
+            break;
         case TOKEN_ASSIGN:
             sprintf(output_string,"ASSIGNMENT");
             break;

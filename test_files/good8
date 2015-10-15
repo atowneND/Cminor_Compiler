@@ -1,0 +1,9 @@
+input:
+""
+'\\' // comments shouldn't break things
+"this is not the end \" this is the end"
+/* This is a comment for fun */
+// more comments
+"new fun\n \" string"
+" "
+

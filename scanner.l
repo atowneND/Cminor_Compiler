@@ -52,6 +52,7 @@ EQ_COMP ==
 NE_COMP !=
 AND     &&
 OR      \|\|
+NOT     !
 ASSIGN  =
 
 /* comments */
@@ -107,13 +108,14 @@ WS      [ \t\n\r]*
 {NE_COMP}			{return TOKEN_NE_COMP;}
 {AND}	            {return TOKEN_AND;}
 {OR}	            {return TOKEN_OR;}
+{NOT}               {return TOKEN_NOT;}
 {ASSIGN}            {return TOKEN_ASSIGN;}
 {CPP_COMMENT}	    {return TOKEN_CPP_COMMENT;}
 "/*"                {BEGIN(C_COMMENT);}
 <C_COMMENT>"*/"     {BEGIN(INITIAL); return TOKEN_C_COMMENT;}
 <C_COMMENT>.|\n     {} /* check for EOF */
 <C_COMMENT><<EOF>>  {return TOKEN_EOF;}
-COMMA}	            {return TOKEN_COMMA;}
+{COMMA}	            {return TOKEN_COMMA;}
 {COLON}	            {return TOKEN_COLON;}
 {SC}	            {return TOKEN_SC;}
 {WS}	            {}

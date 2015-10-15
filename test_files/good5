@@ -1,0 +1,5 @@
+input:
+f(x>y) { return 4; } // error: x and y are of different types!
+f: integer = 0;
+if(f) { return 3; }     // error: f is not a boolean!
+

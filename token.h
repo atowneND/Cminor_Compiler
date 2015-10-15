@@ -41,6 +41,7 @@ enum token{
     TOKEN_NE_COMP,
     TOKEN_AND,
     TOKEN_OR,
+    TOKEN_NOT,
     TOKEN_ASSIGN,
     TOKEN_CPP_COMMENT,
     TOKEN_C_COMMENT,

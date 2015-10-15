@@ -1,0 +1,21 @@
+input:
+string
+1534
+'a'
+Notre Dame
+"Notre\nDame"
+;
+>=
+@
+
+correct:
+STRING
+INTEGER_LITERAL
+CHARACTER_LITERAL a
+IDENTIFIER
+IDENTIFIER
+STRING_LITERAL Notre
+Dame
+SEMICOLON
+GE
+scan error: @ is not a valid character

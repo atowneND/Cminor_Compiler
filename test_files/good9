@@ -1,0 +1,9 @@
+input:
+"\a\b\f\n\r\t\v\\\'\"\?"
+'a'
+"\\n"
+"\\\\\\\\\\\\\\\\\\\""
+"@#$^&_|~`"
+"abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz abcdefghijklmnopqrstuvwxyz 12345678901" 
+"''"
+

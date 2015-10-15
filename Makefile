@@ -7,6 +7,11 @@ lex.yy.o: scanner.l
 	flex --header-file=lex.yy.h scanner.l
 	gcc -g -c lex.yy.c
 
+#parser.tab.c parser.tab.h: cminor.bison
+#	yacc -d -bparser -v cminor.bison
+parser.tab.c parser.tab.h: grammar.bison
+	yacc -d -bparser -v grammar.bison
+
 token.o: token.c
 	gcc -g -c token.c
 
@@ -15,3 +20,6 @@ clean:
 	rm lex.yy.h
 	rm *.o
 	rm cminor
+	rm results.log
+	rm parser.tab.*
+	rm parser.output
