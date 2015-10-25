@@ -8,4 +8,6 @@ results.log
 compilers-master
 charles_scanner
 parser.tab.*
-parser.output
+flying.tab.*
+*.output
+a.out

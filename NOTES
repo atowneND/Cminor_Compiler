@@ -1,0 +1,7 @@
+expression - cannot be empty for if_stmts and possibly returns
+    - check stmt -> expression TOKEN_SC
+    - check stmt -> for_loop
+    - check stmt -> TOKEN_RETURN expression TOKEN_SC - should this be a parse
+      error or should it happen later down the line?
+    - check stmt -> print_stmt - can we print nothing?
+optional_expression

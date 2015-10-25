@@ -89,13 +89,13 @@ struct expr * parser_result = 0;
 
 /* Here is the grammar: program is the start symbol. */
 program     : decl_list
-	;
+    ;
 
 decl_list   : decl_list decl
     |
     ;
 
-decl        : ident TOKEN_COLON type TOKEN_ASSIGN expression TOKEN_SC
+decl        : ident TOKEN_COLON TOKEN_ASSIGN TOKEN_LBRACE stmt_list TOKEN_RBRACE
     | ident TOKEN_COLON type TOKEN_SC
     | ident TOKEN_COLON type TOKEN_ASSIGN TOKEN_LBRACE stmt_list TOKEN_RBRACE
     ;
@@ -109,16 +109,16 @@ type        : TOKEN_STRING
     | TOKEN_FCALL type TOKEN_LPAREN param_list TOKEN_RPAREN
     ;
 
-stmt_list   : 
+stmt_list   : stmt
     | stmt_list stmt
     ;
 
 stmt        : TOKEN_IF TOKEN_LPAREN expression TOKEN_RPAREN matched_stmt TOKEN_ELSE stmt
     | TOKEN_IF TOKEN_LPAREN expression TOKEN_RPAREN stmt
     | decl
-    | return_stmt
     | print_stmt
     | expression TOKEN_SC
+    | return_stmt
     | TOKEN_FOR TOKEN_LPAREN expression TOKEN_SC expression TOKEN_SC expression TOKEN_RPAREN stmt
     | TOKEN_LBRACE stmt_list TOKEN_RBRACE
     ;
@@ -138,21 +138,6 @@ return_stmt : TOKEN_RETURN expression TOKEN_SC
 print_stmt  : TOKEN_PRINT expression_list TOKEN_SC
     ;
 
-expression_list   : expression
-    | non_empty_expr_list expression
-    ;
-
-optional_expression : expression
-    |
-    ;
-
-/* add expressions */
-expression  : TOKEN_IDENT
-    ;
-
-non_empty_expr_list : expression TOKEN_COMMA
-    ;
-
 param_list  : non_empty_param_list param
     | param
     |
@@ -164,8 +149,18 @@ non_empty_param_list : param TOKEN_COMMA
 param       : ident TOKEN_COLON type
     ;
 
-/* done */
-ident       : TOKEN_IDENT /* need to add to the symbol table, so this token gets its own NT */
+expression_list   : expression
+    | 
+    ;
+
+optional_expression : expression
+    |
+    ;
+
+expression  : TOKEN_IDENT
+    ;
+
+ident       : TOKEN_IDENT
     ;
 
 %%
