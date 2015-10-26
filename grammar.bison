@@ -118,8 +118,8 @@ stmt        : TOKEN_IF TOKEN_LPAREN expression TOKEN_RPAREN matched_stmt TOKEN_E
     | decl
     | return_stmt
     | print_stmt
-    | expression TOKEN_SC
-    | TOKEN_FOR TOKEN_LPAREN expression TOKEN_SC expression TOKEN_SC expression TOKEN_RPAREN stmt
+    | optional_expression TOKEN_SC
+    | TOKEN_FOR TOKEN_LPAREN optional_expression TOKEN_SC optional_expression TOKEN_SC optional_expression TOKEN_RPAREN stmt
     | TOKEN_LBRACE stmt_list TOKEN_RBRACE
     ;
 
@@ -127,18 +127,18 @@ matched_stmt : TOKEN_IF TOKEN_LPAREN expression TOKEN_RPAREN matched_stmt TOKEN_
     | decl
     | return_stmt
     | print_stmt
-    | expression TOKEN_SC
-    | TOKEN_FOR TOKEN_LPAREN expression TOKEN_SC expression TOKEN_SC expression TOKEN_RPAREN matched_stmt
+    | optional_expression TOKEN_SC
+    | TOKEN_FOR TOKEN_LPAREN optional_expression TOKEN_SC optional_expression TOKEN_SC optional_expression TOKEN_RPAREN matched_stmt
     | TOKEN_LBRACE stmt_list TOKEN_RBRACE
     ;
 
-return_stmt : TOKEN_RETURN expression TOKEN_SC
+return_stmt : TOKEN_RETURN optional_expression TOKEN_SC
     ;
 
-print_stmt  : TOKEN_PRINT expression_list TOKEN_SC
+print_stmt  : TOKEN_PRINT optional_expression_list TOKEN_SC
     ;
 
-expression_list   : expression
+optional_expression_list : expression
     | non_empty_expr_list expression
     ;
 
@@ -148,6 +148,7 @@ optional_expression : expression
 
 /* add expressions */
 expression  : TOKEN_IDENT
+    | 
     ;
 
 non_empty_expr_list : expression TOKEN_COMMA
