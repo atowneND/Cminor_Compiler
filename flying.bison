@@ -5,6 +5,7 @@ for use by scanner.c.
 */
 
 %token TOKEN_ARRAY
+%token TOKEN_NOT
 %token TOKEN_BOOLEAN
 %token TOKEN_CHARACTER
 %token TOKEN_ELSE
@@ -88,79 +89,114 @@ struct expr * parser_result = 0;
 %%
 
 /* Here is the grammar: program is the start symbol. */
-program     : decl_list
+program     
+    : expr
     ;
 
-decl_list   : decl_list decl
-    |
+expr
+    : assign_level_expr
+    ;
+    
+assign_level_expr
+    : assign_level_expr TOKEN_ASSIGN or_comparison_expr
+    | or_comparison_expr
+    ;
+    
+or_comparison_expr
+    : or_comparison_expr TOKEN_OR and_comparison_expr
+    | and_comparison_expr
+    ;
+    
+and_comparison_expr
+    : and_comparison_expr TOKEN_AND eq_comparison_expr
+    | eq_comparison_expr
+    ;
+    
+eq_comparison_expr
+    : eq_comparison_expr TOKEN_EQ_COMP value_comparison_expr
+    | eq_comparison_expr TOKEN_NE_COMP value_comparison_expr
+    | value_comparison_expr
     ;
 
-decl        : ident TOKEN_COLON TOKEN_ASSIGN TOKEN_LBRACE stmt_list TOKEN_RBRACE
-    | ident TOKEN_COLON type TOKEN_SC
-    | ident TOKEN_COLON type TOKEN_ASSIGN TOKEN_LBRACE stmt_list TOKEN_RBRACE
+value_comparison_expr
+    : value_comparison_expr TOKEN_LT add_level_expr
+    | value_comparison_expr TOKEN_LE add_level_expr
+    | value_comparison_expr TOKEN_GT add_level_expr
+    | value_comparison_expr TOKEN_GE add_level_expr
+    | add_level_expr
     ;
 
-type        : TOKEN_STRING
-    | TOKEN_CHARACTER
-    | TOKEN_INTEGER
-    | TOKEN_BOOLEAN
-    | TOKEN_VOID
-    | TOKEN_ARRAY TOKEN_LBRACK optional_expression TOKEN_RBRACK type
-    | TOKEN_FCALL type TOKEN_LPAREN param_list TOKEN_RPAREN
+add_level_expr
+    : add_level_expr TOKEN_ADD mult_level_expr
+    | add_level_expr TOKEN_NEG mult_level_expr
+    | mult_level_expr
     ;
 
-stmt_list   : stmt
-    | stmt_list stmt
+mult_level_expr 
+    : mult_level_expr TOKEN_MULT base_level_expr
+    | mult_level_expr TOKEN_DIV base_level_expr
+    | mult_level_expr TOKEN_MOD base_level_expr
+    | exponent_level_expr
     ;
 
-stmt        : TOKEN_IF TOKEN_LPAREN expression TOKEN_RPAREN matched_stmt TOKEN_ELSE stmt
-    | TOKEN_IF TOKEN_LPAREN expression TOKEN_RPAREN stmt
-    | decl
-    | print_stmt
-    | expression TOKEN_SC
-    | return_stmt
-    | TOKEN_FOR TOKEN_LPAREN expression TOKEN_SC expression TOKEN_SC expression TOKEN_RPAREN stmt
-    | TOKEN_LBRACE stmt_list TOKEN_RBRACE
+exponent_level_expr
+    : exponent_level_expr TOKEN_POW unary_level_expr
+    | unary_level_expr
     ;
 
-matched_stmt : TOKEN_IF TOKEN_LPAREN expression TOKEN_RPAREN matched_stmt TOKEN_ELSE matched_stmt
-    | decl
-    | return_stmt
-    | print_stmt
-    | expression TOKEN_SC
-    | TOKEN_FOR TOKEN_LPAREN expression TOKEN_SC expression TOKEN_SC expression TOKEN_RPAREN matched_stmt
-    | TOKEN_LBRACE stmt_list TOKEN_RBRACE
+unary_level_expr
+    : TOKEN_NOT base_level_expr
+    /*| TOKEN_NEG base_level_expr */
+    | base_level_expr
     ;
 
-return_stmt : TOKEN_RETURN expression TOKEN_SC
+base_level_expr
+    : ident
+    | TOKEN_LPAREN expr TOKEN_RPAREN
+    | TOKEN_LBRACK expr TOKEN_RBRACK
+    | ident TOKEN_LPAREN param_list TOKEN_RPAREN
+    /*| expr TOKEN_INC
+    | expr TOKEN_DEC */
     ;
 
-print_stmt  : TOKEN_PRINT expression_list TOKEN_SC
-    ;
+/*top_level_expr*/
+/*    : TOKEN_NEG base_level_expr*/
+/*    | base_level_expr*/
+/*    ;*/
 
-param_list  : non_empty_param_list param
+/*base_level_expr*/
+/*    : ident*/
+/*    | TOKEN_LPAREN expr TOKEN_RPAREN*/
+/*    | TOKEN_LBRACK expr TOKEN_RBRACK*/
+/*    | ident TOKEN_LPAREN param_list TOKEN_RPAREN*/
+/*    | expr TOKEN_INC*/
+/*    | expr TOKEN_DEC*/
+/*    ;*/
+
+param_list  
+    : non_empty_param_list param
     | param
     |
     ;
 
-non_empty_param_list : param TOKEN_COMMA
+non_empty_param_list 
+    : param TOKEN_COMMA
     ;
 
-param       : ident TOKEN_COLON type
+param       
+    : ident TOKEN_COLON type
     ;
 
-expression_list   : expression
-    | 
+type        
+    : TOKEN_STRING
+    | TOKEN_CHARACTER
+    | TOKEN_INTEGER
+    | TOKEN_BOOLEAN
+    | TOKEN_VOID
     ;
 
-optional_expression : expression
-    |
-    ;
-
-expression  : TOKEN_IDENT
-    ;
-
-ident       : TOKEN_IDENT
+ident
+    : TOKEN_IDENT
     ;
 
 %%

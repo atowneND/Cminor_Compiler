@@ -20,6 +20,7 @@ clean:
 	rm lex.yy.h
 	rm *.o
 	rm cminor
-	rm results.log
-	rm parser.tab.*
+	rm parser.tab.h
+	rm parser.tab.c
 	rm parser.output
+	rm results.log
