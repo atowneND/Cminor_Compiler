@@ -49,12 +49,18 @@ for use by scanner.c.
 %token TOKEN_COMMA
 %token TOKEN_COLON
 %token TOKEN_SC
+%token TOKEN_WS
+%token TOKEN_CPP_COMMENT
+%token TOKEN_C_COMMENT
+%token TOKEN_WHILE
+%token TOKEN_EOF
+%token TOKEN_OTHER
 
 %{
 
 #include <math.h>
 #include <stdio.h>
-/*#include "expr.h"*/
+#include "expr.h"
 
 /*
 YYSTYPE is the lexical value returned by each rule in a bison grammar.
@@ -230,8 +236,6 @@ base_level_expr
     | base_level_expr TOKEN_DEC /* is this right? */
     ;
 
-/******************/
-
 non_empty_expr_list 
     : expression TOKEN_COMMA
     ;
@@ -250,7 +254,6 @@ param
     : ident TOKEN_COLON type
     ;
 
-/* done */
 ident       
     : TOKEN_IDENT /* need to add to the symbol table, so this token gets its own NT */
     ;
@@ -266,4 +269,5 @@ useful.  In practice, it often does not.
 int yyerror( char *str )
 {
 	printf("parse error: %s\n",str);
+	return 0;
 }

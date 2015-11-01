@@ -1,19 +1,22 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-#include "token.h"
+//#include "token.h"
 #include "decl.h"
 #include "expr.h"
 #include "stmt.h"
 #include "symbol.h"
 #include "type.h"
 
-#include "lex.yy.h"
 extern int yyparse();
 extern struct expr * parser_result;
+extern int yylex();
+extern FILE * yyin;
+extern char * yytext;
 
 int main(int argc, char *argv[]){
-    // parse input
+    // check input
     if (argc==1){
         fprintf(stderr,"usage: ./cminor <option> <filename>\nPlease enter an option and its arguments\n");
         exit(1);
@@ -28,7 +31,6 @@ int main(int argc, char *argv[]){
     }
 
     int action = 0;
-
     if (!strcmp(argv[1],"-scan")){
         printf("argv[1] = %s : scan\n",argv[1]);
         action = 1;
@@ -39,6 +41,8 @@ int main(int argc, char *argv[]){
         fprintf(stderr,"usage: ./cminor <option> <filename>\n<option> must be -scan or -parse\n");
         exit(1);
     }
+
+    // open file
     char *filename = argv[2];
     yyin = fopen(filename,"r");
     if (yyin==NULL){
@@ -46,24 +50,23 @@ int main(int argc, char *argv[]){
         exit(1);
     }
 
+    // scan, parse, etc.
     int returned_token;
     switch (action){
         case 1:
             // Scan
             while(1){
                 returned_token = yylex();
+                printf("%i\n",returned_token);
                 if(!returned_token){
                     break;
-                }
-                else{
-                    printf("%s\n",token_string(returned_token));
                 }
             }
             break;
         case 2:
             // parse
             if (yyparse()==0){
-                printf("parse successful:\n");
+                printf("parse successful\n");
             }
             break;
         default:

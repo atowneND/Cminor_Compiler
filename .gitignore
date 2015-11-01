@@ -11,3 +11,6 @@ parser.tab.*
 flying.tab.*
 *.output
 a.out
+scanner.c
+oldMakefile
+questions

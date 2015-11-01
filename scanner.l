@@ -1,6 +1,7 @@
 %{
 #include <stdio.h>
-#include "token.h"
+/*#include "token.h"*/
+#include "parser.tab.h"
 %}
 
 /* reserved words */
