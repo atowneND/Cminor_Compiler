@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-//#include "token.h"
+#include "token.h"
 #include "decl.h"
 #include "expr.h"
 #include "stmt.h"
@@ -14,6 +14,8 @@ extern struct expr * parser_result;
 extern int yylex();
 extern FILE * yyin;
 extern char * yytext;
+
+extern const char *token_string(int t);
 
 int main(int argc, char *argv[]){
     // check input
@@ -55,6 +57,7 @@ int main(int argc, char *argv[]){
             // Scan
             while(1){
                 returned_token = yylex();
+                printf("%s\n",token_string(returned_token));
 //                printf("%i\n",returned_token);
                 if(!returned_token){
                     break;

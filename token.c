@@ -1,9 +1,14 @@
-#include "lex.yy.h"
+//#include "lex.yy.h"
+#include "parser.tab.h"
 #include "token.h"
 #include <string.h>
+#include <stdlib.h>
+#include <stdio.h>
+
+extern char * yytext;
 
 /* function definitions */
-const char *token_string(token_t t){
+const char *token_string(int t){
     int output_length = (int)strlen(yytext);
     char *output_string = malloc(sizeof(char)*output_length);
     char *text_string = malloc(sizeof(char)*output_length);
@@ -168,9 +173,9 @@ const char *token_string(token_t t){
         case TOKEN_EOF:
             error_end(2);
             break;
-        otherwise:
-            error_end(0);
-            break;
+//        otherwise:
+//            error_end(0);
+//            break;
     }
     return output_string;
 }
@@ -207,9 +212,9 @@ char *scan_text(void){
                 case '0':
                     my_yy_c = '\0';
                     break;
-                otherwise:
-                    my_yy_c = yytext[i+1];
-                    break;
+//                otherwise:
+//                  my_yy_c = yytext[i+1];
+//                  break;
             }
             newstring[i-1] = my_yy_c;
             esc = 1;
