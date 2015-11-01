@@ -32,10 +32,8 @@ int main(int argc, char *argv[]){
 
     int action = 0;
     if (!strcmp(argv[1],"-scan")){
-        printf("argv[1] = %s : scan\n",argv[1]);
         action = 1;
     }else if (!strcmp(argv[1],"-parse")){
-        printf("argv[1] = %s : parse\n",argv[1]);
         action = 2;
     }else{
         fprintf(stderr,"usage: ./cminor <option> <filename>\n<option> must be -scan or -parse\n");
@@ -57,7 +55,7 @@ int main(int argc, char *argv[]){
             // Scan
             while(1){
                 returned_token = yylex();
-                printf("%i\n",returned_token);
+//                printf("%i\n",returned_token);
                 if(!returned_token){
                     break;
                 }

@@ -4,7 +4,7 @@ nfails=0
 nsuccess=0
 ntests=0
 
-for testfile in ptests/*.cminor
+for testfile in good*.cminor
 do
 	if ./cminor -scan $testfile > $testfile.out
 	then
@@ -15,17 +15,17 @@ do
         nfails=$((nfails+1))
 	fi
     ntests=$((ntests+1))
-#done
+done
 
-#for testfile in bad*.cminor
-#do
-	if ./cminor -parse $testfile > $testfile.out
+for testfile in bad*.cminor
+do
+	if ./cminor -scan $testfile > $testfile.out
 	then
-		echo "$testfile failure (as expected)"
-        nsuccess=$((nsuccess+1))
-	else
 		echo "$testfile success (INCORRECT)"
         nfails=$((nfails+1))
+	else
+		echo "$testfile failure (as expected)"
+        nsuccess=$((nsuccess+1))
 	fi
     ntests=$((ntests+1))
 done

@@ -62,6 +62,13 @@ for use by scanner.c.
 #include <stdio.h>
 #include "expr.h"
 
+/*%}
+
+%union {
+    struct expr *expr;
+};
+%{*/
+
 /*
 YYSTYPE is the lexical value returned by each rule in a bison grammar.
 By default, it is an integer. In this example, we are returning a pointer to an expression.
@@ -269,5 +276,5 @@ useful.  In practice, it often does not.
 int yyerror( char *str )
 {
 	printf("parse error: %s\n",str);
-	return 0;
+	return -1;
 }

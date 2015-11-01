@@ -1,0 +1,5 @@
+b: boolean;
+x: integer = 3;
+y: integer = 5;
+b = x<y;     // ok: the expression x<y is boolean
+

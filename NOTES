@@ -1,1 +1,3 @@
-check stmt -> for_loop - E's or S's???
+Arrays are broken
+    - must be fixed in the grammar
+Need to distinguish between scan and parse errors
