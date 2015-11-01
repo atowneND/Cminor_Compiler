@@ -2,24 +2,41 @@
 #include <stdlib.h>
 
 #include "token.h"
+#include "decl.h"
+#include "expr.h"
+#include "stmt.h"
+#include "symbol.h"
+#include "type.h"
+
 #include "lex.yy.h"
+extern int yyparse();
+extern struct expr * parser_result;
 
 int main(int argc, char *argv[]){
     // parse input
     if (argc==1){
-        fprintf(stderr,"usage: ./cminor -scan <filename>\nPlease enter an option and its arguments\n");
+        fprintf(stderr,"usage: ./cminor <option> <filename>\nPlease enter an option and its arguments\n");
         exit(1);
     }
     else if (argc==2){
-        fprintf(stderr,"usage: ./cminor -scan <filename>\nPlease enter a filename\n");
+        fprintf(stderr,"usage: ./cminor <option> <filename>\nPlease enter a filename\n");
         exit(1);
     }
     else if (argc!=3){
-        fprintf(stderr,"usage: ./cminor -scan <filename>\n");
+        fprintf(stderr,"usage: ./cminor <option> <filename>\n");
         exit(1);
     }
-    if (!strcmp(argv[2],"-scan")){
-        fprintf(stderr,"usage: ./cminor -scan <filename>\nno flags other than -scan allowed at this time\n");
+
+    int action = 0;
+
+    if (!strcmp(argv[1],"-scan")){
+        printf("argv[1] = %s : scan\n",argv[1]);
+        action = 1;
+    }else if (!strcmp(argv[1],"-parse")){
+        printf("argv[1] = %s : parse\n",argv[1]);
+        action = 2;
+    }else{
+        fprintf(stderr,"usage: ./cminor <option> <filename>\n<option> must be -scan or -parse\n");
         exit(1);
     }
     char *filename = argv[2];
@@ -29,16 +46,29 @@ int main(int argc, char *argv[]){
         exit(1);
     }
 
-    // Scan
     int returned_token;
-    while(1){
-        returned_token = yylex();
-	    if(!returned_token){
-	        break;
-        }
-        else{
-            printf("%s\n",token_string(returned_token));
-        }
+    switch (action){
+        case 1:
+            // Scan
+            while(1){
+                returned_token = yylex();
+                if(!returned_token){
+                    break;
+                }
+                else{
+                    printf("%s\n",token_string(returned_token));
+                }
+            }
+            break;
+        case 2:
+            // parse
+            if (yyparse()==0){
+                printf("parse successful:\n");
+            }
+            break;
+        default:
+            fprintf(stderr,"Incorrect option selected\n");
+            break;
     }
 	fclose(yyin);
     

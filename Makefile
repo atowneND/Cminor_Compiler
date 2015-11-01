@@ -1,7 +1,7 @@
 all: cminor
 
-cminor: main.c lex.yy.o token.o
-	gcc -g main.c lex.yy.o token.o -o cminor -lfl
+cminor: main.c lex.yy.o token.o parser.tab.o
+	gcc -g main.c lex.yy.o token.o parser.tab.o -o cminor -lfl
 
 lex.yy.o: scanner.l
 	flex --header-file=lex.yy.h scanner.l
@@ -23,4 +23,4 @@ clean:
 	rm parser.tab.h
 	rm parser.tab.c
 	rm parser.output
-	rm results.log
+#	rm results.log

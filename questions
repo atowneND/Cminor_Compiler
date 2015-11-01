@@ -1,7 +1,0 @@
-Does templating require inheritance?
-If you template a class, are all of its methods templates as well?
-How do you implement a template? Copy and paste?
-Is there any difference between a macro and a template?
-
-Is runtime polymorphism the same as just giving something precedence? Like
-inheritance, but one is more important than the other?

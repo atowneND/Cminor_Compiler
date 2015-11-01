@@ -13,7 +13,7 @@ FALSE   false
 FOR     for
 FCALL   function
 IF      if
-INT_T   int
+INT_T   integer
 PRINT   print
 RETURN  return
 STR_T   string
