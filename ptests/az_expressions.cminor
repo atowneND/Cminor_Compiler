@@ -1,3 +1,4 @@
+main: function integer () = {
 this_is_an_ident=3;
 this_is_an_ident = 5 || 3;
 this_is_an_ident = 5 && 3;
@@ -25,3 +26,4 @@ a = [x-y];
 a = foo(3,false);
 a = x++;
 a = y--;
+}

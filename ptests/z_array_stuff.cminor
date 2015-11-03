@@ -1,8 +1,12 @@
+b: array [5] integer = {3,5,3,4,2};
+b: array [5] integer = {1,2,3,4,5};
+
 main: function void () = {
-    writechar: function void ( c: char );
+    writechar: function void ( char c );
     a: integer = 65;
     writechar(a);  // error: a is not a char!
 
+    b: array [2] boolean = {true,false};
     x: integer = 0;
     x = b[0];      // error: x is not a boolean!
 }

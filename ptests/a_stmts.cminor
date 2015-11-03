@@ -1,9 +1,19 @@
-main: function integer () = {}
+main: function integer () = {
+// ex3
+    if(x>y) print x; // error: x and y are of different types!
+
+    f: integer = 0;
+    if(f) print 0; // error: f is not a boolean!
+
+// ex4
+    writechar: function void ( c: char);
+    a: integer = 65;
+    writechar(a);  // error: a is not a char!
+
+    x: integer = 0;
+    //x = b[0];      // error: x is not a boolean!
+}
+
 b: function integer (x:integer) = {
 print 3;
 }
-
-//if(x>y) print x; // error: x and y are of different types!
-
-f: integer = 0;
-//if(f) print 0; // error: f is not a boolean!

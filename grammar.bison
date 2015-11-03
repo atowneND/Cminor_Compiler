@@ -106,12 +106,11 @@ decl_list
     ;
 
 decl
-    : ident TOKEN_ASSIGN expression TOKEN_SC
-    | ident TOKEN_COLON type TOKEN_ASSIGN expression TOKEN_SC
-    | ident TOKEN_COLON type TOKEN_SC
-/*    | ident TOKEN_COLON type TOKEN_ASSIGN TOKEN_LBRACE argument_list TOKEN_RBRACE TOKEN_SC/**/
-    | ident TOKEN_COLON type TOKEN_ASSIGN TOKEN_LBRACE stmt_list TOKEN_RBRACE
-    | ident TOKEN_COLON type TOKEN_ASSIGN TOKEN_LBRACE stmt_list TOKEN_RBRACE TOKEN_SC
+/*    : ident TOKEN_ASSIGN expression TOKEN_SC /* assignment - done in expression */
+    : ident TOKEN_COLON type TOKEN_ASSIGN expression TOKEN_SC /* other type assingments */
+    | ident TOKEN_COLON type TOKEN_SC /* declarations without assignments */
+/*    | ident TOKEN_COLON type TOKEN_ASSIGN TOKEN_LBRACE expression_list TOKEN_RBRACE TOKEN_SC /* array assignment */
+    | ident TOKEN_COLON type TOKEN_ASSIGN TOKEN_LBRACE stmt_list TOKEN_RBRACE /* function assignments */
     ;
 
 stmt_list
@@ -120,8 +119,20 @@ stmt_list
     ;
 
 stmt
-    : TOKEN_PRINT expression TOKEN_SC
-/*    | argument_list /* takes care of blanks */
+    : decl
+/*    | TOKEN_IF TOKEN_LPAREN expression TOKEN_RPAREN matched_stmt TOKEN_ELSE stmt*/
+    | TOKEN_IF TOKEN_LPAREN expression TOKEN_RPAREN stmt
+    | return_stmt
+    | print_stmt
+    | optional_expression TOKEN_SC;
+    ;
+
+return_stmt 
+    : TOKEN_RETURN optional_expression TOKEN_SC
+    ;
+
+print_stmt  
+    : TOKEN_PRINT optional_expression_list TOKEN_SC
     ;
 
 type
@@ -154,10 +165,14 @@ optional_expression
     | expression
     ;
 
-argument_list
+optional_expression_list
+    :
+    | expression_list
+    ;
+
+expression_list
     : non_empty_expr_prefix expression
     | expression
-    | 
     ;
 
 non_empty_expr_prefix
@@ -232,7 +247,7 @@ base_level_expr
     | TOKEN_FALSE
     | TOKEN_LPAREN expression TOKEN_RPAREN
     | TOKEN_LBRACK expression TOKEN_RBRACK
-    | ident TOKEN_LPAREN argument_list TOKEN_RPAREN
+    | ident TOKEN_LPAREN optional_expression_list TOKEN_RPAREN
     | base_level_expr TOKEN_INC /* is this right? */
     | base_level_expr TOKEN_DEC /* is this right? */
     ;

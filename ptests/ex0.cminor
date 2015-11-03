@@ -1,2 +1,4 @@
-/* A C-style comment */
-a=5; // A C++ style comment
+main: function integer () = {
+    /* A C-style comment */
+    a=5; // A C++ style comment
+}
