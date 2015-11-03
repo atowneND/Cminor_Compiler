@@ -4,7 +4,7 @@ y: integer = 123;
 b: boolean = false;
 c: char    = 'q';
 s: string  = "hello cminor\n";
-b: array [5] integer = {3,5,3,4,2};
+//b: array [5] integer = {3,5,3,4,2};
 x: array [3] boolean;
 foo: function integer (s: boolean);
 bar: function integer (s: boolean,x:integer);

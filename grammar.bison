@@ -109,13 +109,19 @@ decl
     : ident TOKEN_ASSIGN expression TOKEN_SC
     | ident TOKEN_COLON type TOKEN_ASSIGN expression TOKEN_SC
     | ident TOKEN_COLON type TOKEN_SC
-    | ident TOKEN_COLON type TOKEN_ASSIGN TOKEN_LBRACE argument_list TOKEN_RBRACE TOKEN_SC
+/*    | ident TOKEN_COLON type TOKEN_ASSIGN TOKEN_LBRACE argument_list TOKEN_RBRACE TOKEN_SC/**/
     | ident TOKEN_COLON type TOKEN_ASSIGN TOKEN_LBRACE stmt_list TOKEN_RBRACE
+    | ident TOKEN_COLON type TOKEN_ASSIGN TOKEN_LBRACE stmt_list TOKEN_RBRACE TOKEN_SC
     ;
 
 stmt_list
+    : stmt_list stmt
+    |
+    ;
+
+stmt
     : TOKEN_PRINT expression TOKEN_SC
-    /* blanks lead to conflict */
+/*    | argument_list /* takes care of blanks */
     ;
 
 type
