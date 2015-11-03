@@ -17,7 +17,7 @@ scanner.c: scanner.l parser.tab.h
 	flex -oscanner.c scanner.l
 
 parser.tab.c parser.tab.h: grammar.bison
-	yacc -d -bparser -v grammar.bison
+	yacc -d -bparser -v -t grammar.bison
 
 # clean causes all intermediate files to be deleted.
 

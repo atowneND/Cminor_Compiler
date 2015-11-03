@@ -111,15 +111,15 @@ WS      [ \t\n\r]*
 {OR}	            {return TOKEN_OR;}
 {NOT}               {return TOKEN_NOT;}
 {ASSIGN}            {return TOKEN_ASSIGN;}
-{CPP_COMMENT}	    {return TOKEN_CPP_COMMENT;}
+{CPP_COMMENT}	    {}
 "/*"                {BEGIN(C_COMMENT);}
-<C_COMMENT>"*/"     {BEGIN(INITIAL); return TOKEN_C_COMMENT;}
+<C_COMMENT>"*/"     {BEGIN(INITIAL);}
 <C_COMMENT>.|\n     {} /* check for EOF */
 <C_COMMENT><<EOF>>  {return TOKEN_EOF;}
 {COMMA}	            {return TOKEN_COMMA;}
 {COLON}	            {return TOKEN_COLON;}
 {SC}	            {return TOKEN_SC;}
 {WS}	            {}
-.                   {return TOKEN_OTHER;}
+.                   {}
 
 %%

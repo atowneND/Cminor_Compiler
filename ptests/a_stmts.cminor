@@ -1,0 +1,9 @@
+main: function integer () = {}
+b: function integer (x:integer) = {
+print 3;
+}
+
+//if(x>y) print x; // error: x and y are of different types!
+
+f: integer = 0;
+//if(f) print 0; // error: f is not a boolean!
