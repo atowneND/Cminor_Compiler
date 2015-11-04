@@ -1,8 +1,9 @@
+HEADER_FILES=token.o decl.o stmt.o expr.o type.o param_list.o
 
 # The top level rule indicates how to link everything together into calc
 
-all: main.o scanner.o parser.tab.o token.o
-	gcc main.o token.o scanner.o parser.tab.o -o cminor -lm -lfl
+all: main.o scanner.o parser.tab.o $(HEADER_FILES)
+	gcc main.o scanner.o parser.tab.o $(HEADER_FILES) -o cminor -lm -lfl
 
 # This pattern indicates that any .o file depends
 # upon the .c file of the same name, and all of the .h files.

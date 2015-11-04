@@ -60,14 +60,11 @@ for use by scanner.c.
 
 #include <math.h>
 #include <stdio.h>
+#include "decl.h"
+#include "stmt.h"
 #include "expr.h"
-
-/*%}
-
-%union {
-    struct expr *expr;
-};
-%{*/
+#include "type.h"
+#include "param_list.h"
 
 /*
 YYSTYPE is the lexical value returned by each rule in a bison grammar.
@@ -92,6 +89,18 @@ so that it can be retrieved by main().
 struct expr * parser_result = 0;
 
 %}
+
+%union {
+    struct decl *decl;
+    struct stmt *statement_node;
+    struct expr *expression_node;
+    struct type *type_node;
+    struct param_list *param_list_node;
+    struct symbol *symbol_node;
+};
+
+/*%type <decl> program decl_list decl*/
+%token END 0 "end of file"
 
 %%
 
