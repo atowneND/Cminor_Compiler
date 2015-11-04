@@ -2,11 +2,15 @@
 #include <stdlib.h>
 
 struct expr * expr_create( expr_t kind, struct expr *left, struct expr *right ){
+    // create new struct
     struct expr * new_expression = malloc(sizeof(struct expr *));
     new_expression->kind = kind;
     new_expression->left = left;
     new_expression->right = right;
 
+    // recurse to left
+    // recurse to right
+    
     return new_expression;
 }
 

@@ -2,12 +2,15 @@
 #include <stdlib.h>
 
 struct decl * decl_create( char *name, struct type *t, struct expr *v, struct stmt *c, struct decl *next ){
+    // create new struct
     struct decl *new_declaration = malloc(sizeof(struct decl *));
     new_declaration->name = name;
     new_declaration->type = t;
     new_declaration->value = v;
     new_declaration->code = c;
     new_declaration->next = next;
+    
+    // recurse to next
 
     return new_declaration;
 }

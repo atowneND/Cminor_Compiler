@@ -2,10 +2,13 @@
 #include <stdlib.h>
 
 struct param_list * param_list_create( char *name, struct type *type, struct param_list *next ){
+    // create new struct
     struct param_list * new_param_list = malloc(sizeof(struct param_list *));
     new_param_list->name = name;
     new_param_list->type = type;
     new_param_list->next = next;
+
+    // recurse to next
 
     return new_param_list;
 }
