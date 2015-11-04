@@ -96,28 +96,23 @@ struct expr * parser_result = 0;
 %%
 
 /* Here is the grammar: program is the start symbol. */
-Xprogram     
-X    : decl_list
+program     
+    : decl_list
 	;
 
-Xdecl_list   
-X   : decl_list decl
-X   |
+decl_list   
+   : decl_list decl
+   |
     ;
 
-Xdecl        
-X   : ident TOKEN_COLON type TOKEN_ASSIGN expression TOKEN_SC
-X   | ident TOKEN_COLON type TOKEN_SC
-X   | ident TOKEN_COLON type TOKEN_ASSIGN TOKEN_LBRACE stmt_list TOKEN_RBRACE
-X/*    | ident TOKEN_COLON type TOKEN_ASSIGN TOKEN_LBRACE initializer_list TOKEN_RBRACE*/
-    ;
+decl        
+   : ident TOKEN_COLON type TOKEN_ASSIGN expression TOKEN_SC
+   | ident TOKEN_COLON type TOKEN_SC
+   | ident TOKEN_COLON type TOKEN_ASSIGN TOKEN_LBRACE stmt_list TOKEN_RBRACE
+   | ident TOKEN_COLON type TOKEN_ASSIGN TOKEN_LBRACE expression_list TOKEN_RBRACE TOKEN_SC /* array assignment */
+   ;
 
-X/*initializer_list
-    : non_empty_expr_list expression
-    | expression
-    ;*/
-
-Xtype        
+type        
     : TOKEN_STRING
     | TOKEN_CHARACTER
     | TOKEN_INTEGER
@@ -161,43 +156,48 @@ print_stmt
     : TOKEN_PRINT optional_expression_list TOKEN_SC
     ;
 
-Xoptional_expression_list 
+optional_expression_list 
     : 
     | expression
     | non_empty_expr_list expression
     ;
 
-Xoptional_expression 
+optional_expression 
     : 
     | expression
     ;
 
-Xexpression  
+expression_list
+    : expression
+    | non_empty_expr_list expression
+    ;
+
+expression  
     : assign_level_expr
     ;
     
-Xassign_level_expr
+assign_level_expr
     : assign_level_expr TOKEN_ASSIGN or_comparison_expr
     | or_comparison_expr
     ;
     
-Xor_comparison_expr
+or_comparison_expr
     : or_comparison_expr TOKEN_OR and_comparison_expr
     | and_comparison_expr
     ;
     
-Xand_comparison_expr
+and_comparison_expr
     : and_comparison_expr TOKEN_AND eq_comparison_expr
     | eq_comparison_expr
     ;
     
-Xeq_comparison_expr
+eq_comparison_expr
     : eq_comparison_expr TOKEN_EQ_COMP value_comparison_expr
     | eq_comparison_expr TOKEN_NE_COMP value_comparison_expr
     | value_comparison_expr
     ;
 
-Xvalue_comparison_expr
+value_comparison_expr
     : value_comparison_expr TOKEN_LT add_level_expr
     | value_comparison_expr TOKEN_LE add_level_expr
     | value_comparison_expr TOKEN_GT add_level_expr
@@ -205,63 +205,63 @@ Xvalue_comparison_expr
     | add_level_expr
     ;
 
-Xadd_level_expr
+add_level_expr
     : add_level_expr TOKEN_ADD mult_level_expr
     | add_level_expr TOKEN_NEG mult_level_expr
     | mult_level_expr
     ;
 
-Xmult_level_expr 
+mult_level_expr 
     : mult_level_expr TOKEN_MULT base_level_expr
     | mult_level_expr TOKEN_DIV base_level_expr
     | mult_level_expr TOKEN_MOD base_level_expr
     | exponent_level_expr
     ;
 
-Xexponent_level_expr
+exponent_level_expr
     : exponent_level_expr TOKEN_POW unary_level_expr
     | unary_level_expr
     ;
 
-Xunary_level_expr
+unary_level_expr
     : TOKEN_NOT base_level_expr
     | TOKEN_NEG base_level_expr
     | base_level_expr
     ;
 
-Xbase_level_expr
-X   : ident
-X   | TOKEN_INTEGER_LITERAL
-X   | TOKEN_STRING_LITERAL
-X   | TOKEN_CHARACTER_LITERAL
-X   | TOKEN_TRUE
-X   | TOKEN_FALSE
-X   | TOKEN_LPAREN expression TOKEN_RPAREN
-X   | TOKEN_LBRACK expression TOKEN_RBRACK
-X   | ident TOKEN_LPAREN param_list TOKEN_RPAREN
-X   | base_level_expr TOKEN_INC /* is this right? */
-X   | base_level_expr TOKEN_DEC /* is this right? */
-    ;
+base_level_expr
+   : ident
+   | TOKEN_INTEGER_LITERAL
+   | TOKEN_STRING_LITERAL
+   | TOKEN_CHARACTER_LITERAL
+   | TOKEN_TRUE
+   | TOKEN_FALSE
+   | TOKEN_LPAREN expression TOKEN_RPAREN
+   | TOKEN_LBRACK expression TOKEN_RBRACK
+   | ident TOKEN_LPAREN param_list TOKEN_RPAREN
+   | base_level_expr TOKEN_INC /* is this right? */
+   | base_level_expr TOKEN_DEC /* is this right? */
+   ;
 
-Xnon_empty_expr_list 
+non_empty_expr_list 
     : expression TOKEN_COMMA
     ;
 
-Xparam_list  
+param_list  
     : non_empty_param_list param
     | param
     |
     ;
 
-Xnon_empty_param_list 
+non_empty_param_list 
     : param TOKEN_COMMA
     ;
 
-Xparam       
+param       
     : ident TOKEN_COLON type
     ;
 
-Xident       
+ident       
     : TOKEN_IDENT /* need to add to the symbol table, so this token gets its own NT */
     ;
 

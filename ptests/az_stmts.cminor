@@ -11,9 +11,16 @@ main: function integer () = {
     writechar(a);  // error: a is not a char!
 
     x: integer = 0;
-    //x = b[0];      // error: x is not a boolean!
+    x = b[0];      // error: x is not a boolean!
 }
 
 b: function integer (x:integer) = {
-print 3;
+    print 3;
+    if (f) {
+        print 0;
+    } else if (y) {
+        print 1;
+    } else{
+        return -1;
+    }
 }
