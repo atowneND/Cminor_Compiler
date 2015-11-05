@@ -116,16 +116,19 @@ program
 
 decl_list   
     : decl decl_list
+        { $$ = $1; $1->next = $2; }
     |
         { $$ = 0; }
     ;
 
 decl
     : ident TOKEN_COLON type TOKEN_ASSIGN expression TOKEN_SC /* other type assingments */
-    /*    { $$ = decl_create($1, $3, $5, 0, 0); }
+        { $$ = decl_create($1, $3, $5, 0, 0); }
     | ident TOKEN_COLON type TOKEN_SC /* declarations without assignments */
+        { $$ = decl_create($1, $3, 0, 0, 0); }
 /*    | ident TOKEN_COLON type TOKEN_ASSIGN TOKEN_LBRACE expression_list TOKEN_RBRACE TOKEN_SC /* array assignment */
     | ident TOKEN_COLON type TOKEN_ASSIGN TOKEN_LBRACE stmt_list TOKEN_RBRACE /* function assignments */
+        { $$ = decl_create($1, $3, 0, $6, 0); }
     ;
 
 stmt_list
