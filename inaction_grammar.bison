@@ -125,7 +125,7 @@ decl
     ;
 
 stmt_list
-    : stmt_list stmt
+    : stmt stmt_list
     |
     ;
 

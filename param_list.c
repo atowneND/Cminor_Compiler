@@ -13,4 +13,14 @@ struct param_list * param_list_create( char *name, struct type *type, struct par
     return new_param_list;
 }
 
+void param_list_append( struct param_list *original_params, struct param_list *new_param){
+    if (original_params->next != 0) {
+        param_list_append( original_params->next, new_param );
+    } else {
+        original_params->next = new_param;
+        new_param->next = 0;
+        return;
+    }
+}
+
 void param_list_print( struct param_list *a );

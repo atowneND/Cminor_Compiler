@@ -28,6 +28,8 @@ typedef enum {
     EXPR_STRING_LITERAL,
     EXPR_IDENTIFIER,
     EXPR_PARENTHESES,
+    EXPR_FUNCTION_CALL,
+    EXPR_ARRAY_INDEX,
 	/* many more types to add here */
 } expr_t;
 

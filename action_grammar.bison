@@ -100,7 +100,7 @@ struct expr * parser_result = 0;
 };
 
 %type<decl_list> decl_list program
-%type<stmt_list> stmt_list
+%type<stmt_list> stmt_list stmt matched_stmt return_stmt print_stmt
 /*%type<param_list> param_list non_empty_param_list param*/
 %type<expression> optional_expression expression assign_level_expr or_comparison_expr and_comparison_expr eq_comparison_expr value_comparison_expr add_level_expr mult_level_expr exponent_level_expr unary_level_expr base_level_expr ident TOKEN_INTEGER_LITERAL TOKEN_STRING_LITERAL TOKEN_CHARACTER_LITERAL TOKEN_TRUE TOKEN_FALSE
 
@@ -115,62 +115,90 @@ program
     ;
 
 decl_list   
-    : decl_list decl
+    : decl decl_list
+        { $$ = $1; $1->next = $2; }
     |
         { $$ = 0; }
     ;
 
 decl
     : ident TOKEN_COLON type TOKEN_ASSIGN expression TOKEN_SC /* other type assingments */
-    /*    { $$ = decl_create($1, $3, $5, 0, 0); }
+        { $$ = decl_create($1, $3, $5, 0, 0); }
     | ident TOKEN_COLON type TOKEN_SC /* declarations without assignments */
+        { $$ = decl_create($1, $3, 0, 0, 0); }
 /*    | ident TOKEN_COLON type TOKEN_ASSIGN TOKEN_LBRACE expression_list TOKEN_RBRACE TOKEN_SC /* array assignment */
     | ident TOKEN_COLON type TOKEN_ASSIGN TOKEN_LBRACE stmt_list TOKEN_RBRACE /* function assignments */
+        { $$ = decl_create($1, $3, 0, $6, 0); }
     ;
 
 stmt_list
-    : stmt_list stmt
+    : stmt stmt_list
+        { $$ = $1; $1->next = $2; }
     |
         { $$ = 0; }
     ;
 
 stmt
     : decl
+        { $$ = $1; }
     | TOKEN_IF TOKEN_LPAREN expression TOKEN_RPAREN matched_stmt TOKEN_ELSE stmt
+        { $$ = stmt_create(STMT_IF_ELSE, 0, $3, 0, 0, $5, $7, 0); }
     | TOKEN_IF TOKEN_LPAREN expression TOKEN_RPAREN stmt
+        { $$ = stmt_create(STMT_IF_ELSE, 0, $3, 0, 0, $5, 0, 0); }
     | return_stmt
+        { $$ = $1; }
     | print_stmt
-    | optional_expression TOKEN_SC;
+        { $$ = $1; }
+    | optional_expression TOKEN_SC
+        { $$ = stmt_create(STMT_EXPR, 0, $1, 0, 0, 0, 0, 0); }
     | TOKEN_LBRACE stmt_list TOKEN_RBRACE
+        { $$ = stmt_create(STMT_BLOCK, 0, 0, 0, 0, $2, 0, 0); }
     | TOKEN_FOR TOKEN_LPAREN optional_expression TOKEN_SC optional_expression TOKEN_SC optional_expression TOKEN_RPAREN stmt
+        { $$ = stmt_create(STMT_FOR, 0, $3, $5, $7, $9, 0, 0); }
     ;
 
 matched_stmt 
     : decl
+        { $$ = $1; }
     | TOKEN_IF TOKEN_LPAREN expression TOKEN_RPAREN matched_stmt TOKEN_ELSE matched_stmt
+        { $$ = stmt_create(STMT_IF_ELSE, 0, $3, 0, 0, $5, $7, 0); }
     | return_stmt
+        { $$ = $1; }
     | print_stmt
+        { $$ = $1; }
     | optional_expression TOKEN_SC
+        { $$ = stmt_create(STMT_EXPR, 0, $1, 0, 0, 0, 0, 0); }
     | TOKEN_LBRACE stmt_list TOKEN_RBRACE
+        { $$ = stmt_create(STMT_BLOCK, 0, 0, 0, 0, $2, 0, 0); }
     | TOKEN_FOR TOKEN_LPAREN optional_expression TOKEN_SC optional_expression TOKEN_SC optional_expression TOKEN_RPAREN matched_stmt
+        { $$ = stmt_create(STMT_FOR, 0, $3, $5, $7, $9, 0, 0); }
     ;
 
 return_stmt 
     : TOKEN_RETURN optional_expression TOKEN_SC
+        { $$ = stmt_create(STMT_RETURN, 0, $2, 0, 0, 0, 0, 0); }
     ;
 
 print_stmt  
     : TOKEN_PRINT optional_expression_list TOKEN_SC
+        { $$ = stmt_create(STMT_PRINT, 0, $2, 0, 0, 0, 0, 0); }
     ;
 
 type
     : TOKEN_STRING
+        { $$ = type_create(TYPE_STRING, 0, 0); }
     | TOKEN_CHARACTER
+        { $$ = type_create(TYPE_CHARACTER, 0, 0); }
     | TOKEN_INTEGER
+        { $$ = type_create(TYPE_INTEGER, 0, 0); }
     | TOKEN_BOOLEAN
+        { $$ = type_create(TYPE_BOOLEAN, 0, 0); }
     | TOKEN_VOID
+        { $$ = type_create(TYPE_VOID, 0, 0); }
     | TOKEN_ARRAY TOKEN_LBRACK optional_expression TOKEN_RBRACK type
+        { $$ = type_create(TYPE_ARRAY, $3, $5); }
     | TOKEN_FCALL type TOKEN_LPAREN param_list TOKEN_RPAREN
+        { $$ = type_create(TYPE_FUNCTION, $4, 0); }
     ;
 
 param_list
