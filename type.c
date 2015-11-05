@@ -1,4 +1,5 @@
 #include "type.h"
+#include "param_list.h"
 #include <stdlib.h>
 
 struct type * type_create( type_kind_t kind, struct param_list *params, struct type *subtype ){
@@ -9,7 +10,7 @@ struct type * type_create( type_kind_t kind, struct param_list *params, struct t
     new_type->subtype = subtype;
 
     // recurse to param_list
-    // recursse to subtype
+    // recurse to subtype
 
     return new_type;
 }

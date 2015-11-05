@@ -115,7 +115,7 @@ program
     ;
 
 decl_list   
-    : decl decl_list
+    : decl_list decl
     |
         { $$ = 0; }
     ;

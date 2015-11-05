@@ -27,6 +27,7 @@ typedef enum {
     EXPR_CHARACTER_LITERAL,
     EXPR_STRING_LITERAL,
     EXPR_IDENTIFIER,
+    EXPR_PARENTHESES,
 	/* many more types to add here */
 } expr_t;
 

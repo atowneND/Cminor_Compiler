@@ -89,7 +89,7 @@ so that it can be retrieved by main().
 struct expr * parser_result = 0;
 
 %}
-
+/*
 %union {
     struct decl *decl;
     struct stmt *statement_node;
@@ -101,37 +101,32 @@ struct expr * parser_result = 0;
 
 %type<decl_list> decl_list program
 %type<stmt_list> stmt_list
-/*%type<param_list> param_list non_empty_param_list param*/
 %type<expression> optional_expression expression assign_level_expr or_comparison_expr and_comparison_expr eq_comparison_expr value_comparison_expr add_level_expr mult_level_expr exponent_level_expr unary_level_expr base_level_expr ident TOKEN_INTEGER_LITERAL TOKEN_STRING_LITERAL TOKEN_CHARACTER_LITERAL TOKEN_TRUE TOKEN_FALSE
 
 %token END 0 "end of file"
+*/
 
 %%
 
 /* Here is the grammar: program is the start symbol. */
 program     
     : decl_list
-        { $$ = $1; }
     ;
 
 decl_list   
     : decl decl_list
     |
-        { $$ = 0; }
     ;
 
 decl
     : ident TOKEN_COLON type TOKEN_ASSIGN expression TOKEN_SC /* other type assingments */
-    /*    { $$ = decl_create($1, $3, $5, 0, 0); }
     | ident TOKEN_COLON type TOKEN_SC /* declarations without assignments */
-/*    | ident TOKEN_COLON type TOKEN_ASSIGN TOKEN_LBRACE expression_list TOKEN_RBRACE TOKEN_SC /* array assignment */
     | ident TOKEN_COLON type TOKEN_ASSIGN TOKEN_LBRACE stmt_list TOKEN_RBRACE /* function assignments */
     ;
 
 stmt_list
     : stmt_list stmt
     |
-        { $$ = 0; }
     ;
 
 stmt
@@ -177,7 +172,6 @@ param_list
     : non_empty_param_list param
     | param
     |
-/*        { $$ = 0; }*/
     ;
 
 non_empty_param_list
@@ -191,7 +185,6 @@ param
 
 optional_expression
     : 
-        { $$ = 0; }
     | expression
     ;
 
@@ -212,117 +205,79 @@ non_empty_expr_prefix
 
 expression  
     : assign_level_expr
-        { $$ = $1; }
     ;
     
 assign_level_expr
     : assign_level_expr TOKEN_ASSIGN or_comparison_expr
-        { $$ = expr_create(EXPR_ASSIGNMENT, $1, $3); }
     | or_comparison_expr
-        { $$ = $1; }
     ;
     
 or_comparison_expr
     : or_comparison_expr TOKEN_OR and_comparison_expr
-        { $$ = expr_create(EXPR_OR, $1, $3); }
     | and_comparison_expr
-        { $$ = $1; }
     ;
     
 and_comparison_expr
     : and_comparison_expr TOKEN_AND eq_comparison_expr
-        { $$ = expr_create(EXPR_AND, $1, $3); }
     | eq_comparison_expr
-        { $$ = $1; }
     ;
     
 eq_comparison_expr
     : eq_comparison_expr TOKEN_EQ_COMP value_comparison_expr
-        { $$ = expr_create(EXPR_EQUIVALENCE_COMPARISON, $1, $3); }
     | eq_comparison_expr TOKEN_NE_COMP value_comparison_expr
-        { $$ = expr_create(EXPR_NONEQUIVALENCE_COMPARISON, $1, $3); }
     | value_comparison_expr
-        { $$ = $1; }
     ;
 
 value_comparison_expr
     : value_comparison_expr TOKEN_LT add_level_expr
-        { $$ = expr_create(EXPR_LESS_THAN, $1, $3); }
     | value_comparison_expr TOKEN_LE add_level_expr
-        { $$ = expr_create(EXPR_LESS_THAN_OR_EQUAL, $1, $3); }
     | value_comparison_expr TOKEN_GT add_level_expr
-        { $$ = expr_create(EXPR_GREATER_THAN, $1, $3); }
     | value_comparison_expr TOKEN_GE add_level_expr
-        { $$ = expr_create(EXPR_GREATER_THAN_OR_EQUAL, $1, $3); }
     | add_level_expr
-        { $$ = $1; }
     ;
 
 add_level_expr
     : add_level_expr TOKEN_ADD mult_level_expr
-        { $$ = expr_create(EXPR_ADD, $1, $3); }
     | add_level_expr TOKEN_NEG mult_level_expr
-        { $$ = expr_create(EXPR_SUB, $1, $3); }
     | mult_level_expr
-        { $$ = $1; }
     ;
 
 mult_level_expr 
     : mult_level_expr TOKEN_MULT base_level_expr
-        { $$ = expr_create(EXPR_MULTIPLY, $1, $3); }
     | mult_level_expr TOKEN_DIV base_level_expr
-        { $$ = expr_create(EXPR_DIV, $1, $3); }
     | mult_level_expr TOKEN_MOD base_level_expr
-        { $$ = expr_create(EXPR_MODULO, $1, $3); }
     | exponent_level_expr
-        { $$ = $1; }
     ;
 
 exponent_level_expr
     : exponent_level_expr TOKEN_POW unary_level_expr
-        { $$ = expr_create(EXPR_POWER, $1, $3); }
     | unary_level_expr
-        { $$ = $1; }
     ;
 
 unary_level_expr
     : TOKEN_NOT base_level_expr
-        { $$ = expr_create(EXPR_NOT, 0, $2); }
     | TOKEN_NEG base_level_expr
-        { $$ = expr_create(EXPR_SUB, 0, $2); }
     | TOKEN_ADD base_level_expr
-        { $$ = expr_create(EXPR_ADD, 0, $2); }
     | base_level_expr
-        { $$ = $1; }
     ;
 
 base_level_expr
     : ident
-        { $$ = expr_create_name($1); }
     | TOKEN_INTEGER_LITERAL
-        { $$ = expr_create_integer_literal($1); }
     | TOKEN_STRING_LITERAL
-        { $$ = expr_create_string_literal($1); }
     | TOKEN_CHARACTER_LITERAL
-        { $$ = expr_create_character_literal($1); }
     | TOKEN_TRUE
-        { $$ = expr_create_boolean_literal($1); }
     | TOKEN_FALSE
-        { $$ = expr_create_boolean_literal($1); }
     | TOKEN_LPAREN expression TOKEN_RPAREN
-        { $$ = expr_create(EXPR_PARENTHESES, $2, 0); }
     | ident TOKEN_LBRACK expression TOKEN_RBRACK
     | ident TOKEN_LPAREN optional_expression_list TOKEN_RPAREN
     | base_level_expr TOKEN_INC /* is this right? */
-        { $$ = expr_create(EXPR_INCREMENT, $1, 0); }
     | base_level_expr TOKEN_DEC /* is this right? */
-        { $$ = expr_create(EXPR_DECREMENT, $1, 0); }
     ;
 
 ident       
     : TOKEN_IDENT /* need to add to the symbol table, so this token gets its own NT */
         /* this is not right */
-        { $$ = expr_create_name(yytext);}
     ;
 
 %%
