@@ -1,18 +1,19 @@
 #include "param_list.h"
 #include <stdlib.h>
 
-struct param_list * param_list_create( char *name, struct type *type, struct param_list *next ){
+struct param_list * param_list_create(
+        char *name,
+        struct type *type,
+        struct param_list *next 
+    ){
     // create new struct
-    struct param_list new_param_list;
-    ptr_new_param_list = &new_param_list;
     struct param_list *new_param_list = malloc(sizeof(struct param_list));
 
-    new_param_list.name = name;
-    new_param_list.type = type;
-    new_param_list.symbol = 0;
-    new_param_list.next = next;
+    new_param_list->name = name;
+    new_param_list->type = type;
+    new_param_list->next = next;
 
-    return ptr_new_param_list;
+    return new_param_list;
 }
 
 void param_list_append( struct param_list *original_params, struct param_list *new_param){

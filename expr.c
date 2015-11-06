@@ -1,23 +1,21 @@
 #include "expr.h"
 #include <stdlib.h>
 
-struct expr * expr_create( expr_t kind, struct expr *left, struct expr *right, struct expr *next ){
+struct expr * expr_create(
+        expr_t kind,
+        struct expr *left,
+        struct expr *right,
+        struct expr *next 
+    ){
     // create new struct
-    struct expr new_expression;
-    ptr_new_expression = &new_expression;
     struct expr *new_expression = malloc(sizeof(struct expr));
 
-    new_expression.kind = kind;
-    new_expression.left = left;
-    new_expression.right = right;
-    new_expression.next = next;
+    new_expression->kind = kind;
+    new_expression->left = left;
+    new_expression->right = right;
+    new_expression->next = next;
 
-    new_expression.name = 0;
-    new_expression.symbol = 0;
-    new_expression.literal_value = 0;
-    new_expression.string_literal = 0;
-
-    return ptr_new_expression;
+    return new_expression;
 }
 
 void expr_append(struct expr *original_list, struct expr *new_expr){

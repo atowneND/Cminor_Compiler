@@ -4,21 +4,23 @@
 #include "expr.h"
 #include <stdlib.h>
 
-struct decl * decl_create( char *name, struct type *t, struct expr *v, struct stmt *c, struct decl *next ){
+struct decl * decl_create( 
+        char *name,
+        struct type *t,
+        struct expr *v,
+        struct stmt *c,
+        struct decl *next 
+    ){
     // create new struct
-    struct decl new_declaration;
-    ptr_new_declaration = &new_declaration;
     struct decl *new_declaration = malloc(sizeof(struct decl));
 
-    new_declaration.name = name;
-    new_declaration.type = t;
-    new_declaration.value = v;
-    new_declaration.code = c;
-    new_declaration.symbol = 0;
-    new_declaration.next = next;
+    new_declaration->name = name;
+    new_declaration->type = t;
+    new_declaration->value = v;
+    new_declaration->code = c;
+    new_declaration->next = next;
     
-    decl_print(ptr_new_declaration, 0);
-    return ptr_new_declaration;
+    return new_declaration;
 }
 
 void decl_print( struct decl *d, int indent ){
