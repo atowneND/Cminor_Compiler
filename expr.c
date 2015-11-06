@@ -3,9 +3,9 @@
 
 struct expr * expr_create( expr_t kind, struct expr *left, struct expr *right, struct expr *next ){
     // create new struct
-    struct expr *ptr_new_expression = malloc(sizeof(struct expr *));
     struct expr new_expression;
     ptr_new_expression = &new_expression;
+    struct expr *new_expression = malloc(sizeof(struct expr));
 
     new_expression.kind = kind;
     new_expression.left = left;
@@ -31,9 +31,9 @@ void expr_append(struct expr *original_list, struct expr *new_expr){
 }
 
 struct expr * expr_create_name( const char *n ){
-    struct expr *ptr_new_expression = malloc(sizeof(struct expr *));
     struct expr new_expression;
     ptr_new_expression = &new_expression;
+    struct expr *new_expression = malloc(sizeof(struct expr));
 
     new_expression.kind = EXPR_IDENTIFIER;
     new_expression.name = n;
@@ -42,7 +42,6 @@ struct expr * expr_create_name( const char *n ){
 }
 
 struct expr * expr_create_boolean_literal( int c ){
-    struct expr *ptr_new_expression = malloc(sizeof(struct expr *));
     struct expr new_expression;
     ptr_new_expression = &new_expression;
 
@@ -53,9 +52,9 @@ struct expr * expr_create_boolean_literal( int c ){
 }
 
 struct expr * expr_create_integer_literal( int c ){
-    struct expr *ptr_new_expression = malloc(sizeof(struct expr *));
     struct expr new_expression;
     ptr_new_expression = &new_expression;
+    struct expr *new_expression = malloc(sizeof(struct expr));
 
     new_expression.kind = EXPR_INTEGER_LITERAL;
     new_expression.literal_value = c;
@@ -64,9 +63,9 @@ struct expr * expr_create_integer_literal( int c ){
 }
 
 struct expr * expr_create_character_literal( int c ){
-    struct expr *ptr_new_expression = malloc(sizeof(struct expr *));
     struct expr new_expression;
     ptr_new_expression = &new_expression;
+    struct expr *new_expression = malloc(sizeof(struct expr));
     
     new_expression.kind = EXPR_CHARACTER_LITERAL;
     new_expression.literal_value = c;
@@ -75,9 +74,9 @@ struct expr * expr_create_character_literal( int c ){
 }
 
 struct expr * expr_create_string_literal( const char *str ){
-    struct expr *ptr_new_expression = malloc(sizeof(struct expr *));
     struct expr new_expression;
     ptr_new_expression = &new_expression;
+    struct expr *new_expression = malloc(sizeof(struct expr));
     
     new_expression.kind = EXPR_STRING_LITERAL;
     new_expression.string_literal = str;

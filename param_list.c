@@ -3,9 +3,9 @@
 
 struct param_list * param_list_create( char *name, struct type *type, struct param_list *next ){
     // create new struct
-    struct param_list *ptr_new_param_list = malloc(sizeof(struct param_list *));
     struct param_list new_param_list;
     ptr_new_param_list = &new_param_list;
+    struct param_list *new_param_list = malloc(sizeof(struct param_list));
 
     new_param_list.name = name;
     new_param_list.type = type;
