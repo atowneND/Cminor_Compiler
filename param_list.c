@@ -1,6 +1,8 @@
 #include "param_list.h"
 #include <stdlib.h>
 
+extern int indent;
+
 struct param_list * param_list_create(
         char *name,
         struct type *type,

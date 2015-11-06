@@ -1,6 +1,8 @@
 #include "expr.h"
 #include <stdlib.h>
 
+extern int indent;
+
 struct expr * expr_create(
         expr_t kind,
         struct expr *left,
@@ -78,47 +80,47 @@ void expr_print( struct expr *e ){
         switch (e->kind){
             case (EXPR_ADD):
                 if (e->left != 0) expr_print(e->left);
-                printf(" + ");
+                printf("+");
                 if (e->right != 0) expr_print(e->right);
                 break;
             case (EXPR_SUB):
                 if (e->left != 0) expr_print(e->left);
-                printf(" - ");
+                printf("-");
                 if (e->right != 0) expr_print(e->right);
                 break;
             case (EXPR_MUL):
                 if (e->left != 0) expr_print(e->left);
-                printf(" * ");
+                printf("*");
                 if (e->right != 0) expr_print(e->right);
                 break;
             case (EXPR_DIV):
                 if (e->left != 0) expr_print(e->left);
-                printf(" / ");
+                printf("/");
                 if (e->right != 0) expr_print(e->right);
                 break;
             case (EXPR_INCREMENT):
                 if (e->left != 0) expr_print(e->left);
-                printf(" ++ ");
+                printf("++");
                 if (e->right != 0) expr_print(e->right);
                 break;
             case (EXPR_DECREMENT):
                 if (e->left != 0) expr_print(e->left);
-                printf(" -- ");
+                printf("--");
                 if (e->right != 0) expr_print(e->right);
                 break;
             case (EXPR_NOT):
                 if (e->left != 0) expr_print(e->left);
-                printf(" ! ");
+                printf("!");
                 if (e->right != 0) expr_print(e->right);
                 break;
             case (EXPR_POWER):
                 if (e->left != 0) expr_print(e->left);
-                printf(" ^ ");
+                printf("^");
                 if (e->right != 0) expr_print(e->right);
                 break;
             case (EXPR_MODULO):
                 if (e->left != 0) expr_print(e->left);
-                printf(" %% ");
+                printf("%%");
                 if (e->right != 0) expr_print(e->right);
                 break;
             case (EXPR_LESS_THAN):
@@ -168,27 +170,27 @@ void expr_print( struct expr *e ){
                 break;
             case (EXPR_BOOLEAN_LITERAL):
                 if (e->left != 0) expr_print(e->left);
-                if (e->literal_value != 0) printf("%i",e->literal_value);
+                printf("%i",e->literal_value);
                 if (e->right != 0) expr_print(e->right);
                 break;
             case (EXPR_INTEGER_LITERAL):
                 if (e->left != 0) expr_print(e->left);
-                if (e->literal_value != 0) printf("%i",e->literal_value);
+                printf("%i",e->literal_value);
                 if (e->right != 0) expr_print(e->right);
                 break;
             case (EXPR_CHARACTER_LITERAL):
                 if (e->left != 0) expr_print(e->left);
-                if (e->literal_value != 0) printf("%c",e->literal_value);
+                printf("'%c'",e->literal_value);
                 if (e->right != 0) expr_print(e->right);
                 break;
             case (EXPR_STRING_LITERAL):
                 if (e->left != 0) expr_print(e->left);
-                if (e->literal_value != 0) printf("%s",e->string_literal);
+                printf("%s",e->string_literal);
                 if (e->right != 0) expr_print(e->right);
                 break;
             case (EXPR_IDENTIFIER):
                 if (e->left != 0) expr_print(e->left);
-                if (e->literal_value != 0) printf("%s",e->name);
+                printf("%s",e->name);
                 if (e->right != 0) expr_print(e->right);
                 break;
             case (EXPR_PARENTHESES):
@@ -209,7 +211,7 @@ void expr_print( struct expr *e ){
                 printf("]");
                 break;
         }
-        if (e->next != 0){
+        if (e->next != NULL){
             printf(", "); 
             expr_print(e->next);
         }

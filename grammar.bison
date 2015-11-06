@@ -119,7 +119,7 @@ struct expr * parser_result = 0;
 program     
     : decl_list
         { $$ = $1;
-          decl_print($1, 0);
+          decl_print($1);
         }
     ;
 
@@ -387,7 +387,7 @@ string_literal
 
 character_literal
     : TOKEN_CHARACTER_LITERAL
-        { $$ = atoi(yytext); }
+        { $$ = (int)yytext[1]; }
     ;
 
 true_literal

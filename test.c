@@ -10,23 +10,29 @@ void append(struct alpha_list *old_list, struct alpha_list *new_element);
 void print_all(struct alpha_list *old_list);
 
 int main(){
-    struct alpha_list *x = malloc(sizeof(struct alpha_list *));
-    struct alpha_list *y = malloc(sizeof(struct alpha_list *));
-    struct alpha_list *z = malloc(sizeof(struct alpha_list *));
-    x->c = 'a';
-    x->next = y;
-    y->c = 'b';
-    y->next = z;
-    z->c = 'c';
-    z->next = 0;
-
-    struct alpha_list *w = malloc(sizeof(struct alpha_list *));
-    w->c = 'd';
-    append(x, w);
-    struct alpha_list *u = malloc(sizeof(struct alpha_list *));
-    append(x, u);
-    u->c = 'e';
-    print_all(x);
+    char c = 'a';
+    char test[] = "abcd";
+    int x = atoi(test);
+    x = atoi(test);
+    printf("%i\n",x);
+    printf("%c\n",(char)x);
+//    struct alpha_list *x = malloc(sizeof(struct alpha_list *));
+//    struct alpha_list *y = malloc(sizeof(struct alpha_list *));
+//    struct alpha_list *z = malloc(sizeof(struct alpha_list *));
+//    x->c = 'a';
+//    x->next = y;
+//    y->c = 'b';
+//    y->next = z;
+//    z->c = 'c';
+//    z->next = 0;
+//
+//    struct alpha_list *w = malloc(sizeof(struct alpha_list *));
+//    w->c = 'd';
+//    append(x, w);
+//    struct alpha_list *u = malloc(sizeof(struct alpha_list *));
+//    append(x, u);
+//    u->c = 'e';
+//    print_all(x);
 }
 
 void append(struct alpha_list *old_list, struct alpha_list *new_element){

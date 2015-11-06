@@ -1,6 +1,8 @@
 #include "stmt.h"
 #include <stdlib.h>
 
+extern int indent;
+
 struct stmt * stmt_create(
         stmt_kind_t kind,
         struct decl *d,
@@ -26,83 +28,81 @@ struct stmt * stmt_create(
     return new_stmt;
 }
 
-void stmt_print( struct stmt *s, int indent ) {
+void stmt_print( struct stmt *s ) {
     if (s != NULL) {
         switch (s->kind){
             case STMT_DECL:
-                decl_print(s->decl, indent);
+                decl_print(s->decl);
                 break;
             case STMT_EXPR:
+                print_indents();
                 expr_print(s->init_expr);
+                printf(";\n");
                 break;
             case STMT_IF_ELSE:
-                print_indents(indent);
+                print_indents();
                 printf("if (");
                 expr_print(s->init_expr);
                 printf(") {\n");
 
                 indent += 1;
-                stmt_print(s->body, indent);
-                indent = indent - 1;
+                stmt_print(s->body);
+                indent -= 1;
 
                 if (s->else_body != 0) {
-                    print_indents(indent);
+                    print_indents();
                     printf("} else {\n");
 
-                    indent = indent + 1;
-                    stmt_print(s->else_body, indent);
+                    indent += 1;
+                    stmt_print(s->else_body);
 
-                    indent = indent - 1;
-                    print_indents(indent);
+                    indent -= 1;
+                    print_indents();
                     printf("}\n");
 
                 } else {
-                    print_indents(indent);
+                    print_indents();
                     printf("}\n");
                 }
 
                 break;
             case STMT_FOR:
-                print_indents(indent);
+                print_indents();
                 printf("for (");
                 expr_print(s->init_expr);
                 printf("; ");
                 expr_print(s->expr);
                 printf("; ");
                 expr_print(s->next_expr);
-                printf(") {\n");
+                printf(")\n");
                 
-                indent = indent + 1;
-                stmt_print(s->body, indent);
-
-                indent = indent - 1;
-                print_indents(indent);
-                printf("}\n");
+                stmt_print(s->body);
+                printf("\n");
 
                 break;
             case STMT_PRINT:
-                print_indents(indent);
+                print_indents();
                 printf("print ");
                 expr_print(s->init_expr);
                 printf(";\n");
 
                 break;
             case STMT_RETURN:
-                print_indents(indent);
+                print_indents();
                 printf("return ");
                 expr_print(s->init_expr);
                 printf(";\n");
 
                 break;
             case STMT_BLOCK:
-                print_indents(indent);
+                print_indents();
                 printf("{\n");
 
-                indent = indent + 1;
-                stmt_print(s->body, indent);
+                indent += 1;
+                stmt_print(s->body);
 
-                indent = indent - 1;
-                print_indents(indent);
+                indent -= 1;
+                print_indents();
                 printf("}\n");
                 break;
 
@@ -110,10 +110,13 @@ void stmt_print( struct stmt *s, int indent ) {
                 fprintf(stderr,"While loops not accepted.\n");
                 break;
         }
+        if (s->next != NULL){
+            stmt_print(s->next);
+        }
     }
 }
 
-void print_indents(int indent){
+void print_indents(void){
     int i;
     for (i=0; i<indent; i++){
         printf("    ");

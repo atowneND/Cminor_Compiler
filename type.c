@@ -2,6 +2,8 @@
 #include "param_list.h"
 #include <stdlib.h>
 
+extern int indent;
+
 struct type * type_create( type_kind_t kind, struct param_list *params, struct type *subtype, struct expr *expression){
     // create new struct
     struct type *new_type = malloc(sizeof(struct type));
@@ -48,6 +50,7 @@ void type_print( struct type *t ) {
                         param_list_print(t->params);
                     }
                     printf(")");
+                    indent += 1;
                     break;
                 case (TYPE_VOID):
                     printf("void");

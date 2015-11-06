@@ -17,6 +17,8 @@ extern char * yytext;
 
 extern const char *token_string(int t);
 
+int indent = 0;
+
 int main(int argc, char *argv[]){
     // check input
     if (argc==1){
