@@ -29,9 +29,11 @@ struct stmt * stmt_create(
 }
 
 void stmt_print( struct stmt *s ) {
+//    printf("%i, idents=%i\n",s->kind,indent);
     if (s != NULL) {
         switch (s->kind){
             case STMT_DECL:
+                print_indents();
                 decl_print(s->decl);
                 break;
             case STMT_EXPR:
@@ -43,22 +45,26 @@ void stmt_print( struct stmt *s ) {
                 print_indents();
                 printf("if (");
                 expr_print(s->init_expr);
-                printf(") {\n");
-
-                indent += 1;
-                stmt_print(s->body);
-                indent -= 1;
+                if (s->body->kind== STMT_BLOCK) {
+                    printf(") \n");
+                    stmt_print(s->body);
+                }else{
+                    printf(")\n");
+                    print_indents();
+                    printf("{\n");
+                    indent += 1;
+                    stmt_print(s->body);
+                    indent -= 1;
+                }
 
                 if (s->else_body != 0) {
                     print_indents();
-                    printf("} else {\n");
+                    printf("else\n");
 
-                    indent += 1;
                     stmt_print(s->else_body);
 
-                    indent -= 1;
                     print_indents();
-                    printf("}\n");
+                    printf("\n");
 
                 } else {
                     print_indents();

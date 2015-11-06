@@ -37,7 +37,7 @@ void type_print( struct type *t ) {
                     if (t->expr != 0){
                         expr_print(t->expr);
                     }
-                    printf("]");
+                    printf("] ");
                     if (t->subtype != 0){ 
                         type_print(t->subtype);
                     }
@@ -50,7 +50,7 @@ void type_print( struct type *t ) {
                         param_list_print(t->params);
                     }
                     printf(")");
-                    indent += 1;
+                    //indent += 1;
                     break;
                 case (TYPE_VOID):
                     printf("void");

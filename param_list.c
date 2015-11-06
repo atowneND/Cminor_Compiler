@@ -29,10 +29,12 @@ void param_list_append( struct param_list *original_params, struct param_list *n
 }
 
 void param_list_print( struct param_list *a ){
-/*    printf("%s: ",a->name);
-    type_print(a->type);
-    if (a->next != 0){
-        printf(", "); 
-        param_list_print(a->next);
-    }*/
+    if (a != NULL){
+        printf("%s: ",a->name);
+        type_print(a->type);
+        if (a->next != 0){
+            printf(", "); 
+            param_list_print(a->next);
+        }
+    }
 }
