@@ -1,0 +1,16 @@
+x: integer;
+y: integer = 123;
+b: boolean = false;
+c: char    = 'q';
+s: string  = "hello cminor\n";
+d: array [3] boolean;
+foo: function integer (s: boolean);
+bar: function integer (s: boolean,x:integer);
+
+main: function void()={
+f: integer = 0;
+if(f==0) print f; // ok: f==0 is a boolean expression
+
+c: char = 'a';
+if(c=='a') print c; // ok: c and 'a' are both chars
+}

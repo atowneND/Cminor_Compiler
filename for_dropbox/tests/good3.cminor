@@ -1,0 +1,10 @@
+f: integer = 0;
+
+a: array [5] integer;
+x: integer = 65;
+y: char = 'A';
+
+main: function void () = {
+    if(x>y) print x; // error: x and y are of different types!
+    if(f) print 0; // error: f is not a boolean!
+}
