@@ -60,6 +60,8 @@ for use by scanner.c.
 
 #include <math.h>
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
 #include "decl.h"
 #include "stmt.h"
 #include "expr.h"
@@ -97,15 +99,17 @@ struct expr * parser_result = 0;
     struct type *type;
     struct param_list *param_list;
     struct symbol *symbol;
-    char *name;
+    char *str_literal;
+    int int_literal;
 };
 
 %type <decl> program decl_list decl
 %type <stmt> stmt_list stmt matched_stmt return_stmt print_stmt
 %type <param_list> param_list non_empty_param_list param
-%type <expr> optional_expression optional_expression_list non_empty_expr_prefix expression_list expression assign_level_expr or_comparison_expr and_comparison_expr eq_comparison_expr value_comparison_expr add_level_expr mult_level_expr exponent_level_expr unary_level_expr base_level_expr TOKEN_INTEGER_LITERAL TOKEN_STRING_LITERAL TOKEN_CHARACTER_LITERAL TOKEN_TRUE TOKEN_FALSE TOKEN_COMMA
+%type <expr> optional_expression optional_expression_list non_empty_expr_prefix expression_list expression assign_level_expr or_comparison_expr and_comparison_expr eq_comparison_expr value_comparison_expr add_level_expr mult_level_expr exponent_level_expr unary_level_expr base_level_expr
 %type <type> type
-%type <name> ident
+%type <str_literal> ident string_literal
+%type <int_literal> integer_literal character_literal true_literal false_literal
 
 %token END 0 "end of file"
 
@@ -119,7 +123,7 @@ program
 
 decl_list   
     : decl decl_list
-        { $$ = $1; $1->next = $2; }
+        { $$->next = $1; $1->next = $2; }
     |
         { $$ = 0; }
     ;
@@ -189,19 +193,19 @@ print_stmt
 
 type
     : TOKEN_STRING
-        { $$ = type_create(TYPE_STRING, 0, 0); }
+        { $$ = type_create(TYPE_STRING, 0, 0, 0); }
     | TOKEN_CHARACTER
-        { $$ = type_create(TYPE_CHARACTER, 0, 0); }
+        { $$ = type_create(TYPE_CHARACTER, 0, 0, 0); }
     | TOKEN_INTEGER
-        { $$ = type_create(TYPE_INTEGER, 0, 0); }
+        { $$ = type_create(TYPE_INTEGER, 0, 0, 0); }
     | TOKEN_BOOLEAN
-        { $$ = type_create(TYPE_BOOLEAN, 0, 0); }
+        { $$ = type_create(TYPE_BOOLEAN, 0, 0, 0); }
     | TOKEN_VOID
-        { $$ = type_create(TYPE_VOID, 0, 0); }
+        { $$ = type_create(TYPE_VOID, 0, 0, 0); }
     | TOKEN_ARRAY TOKEN_LBRACK optional_expression TOKEN_RBRACK type
-        { $$ = type_create(TYPE_ARRAY, $3, $5); }
+        { $$ = type_create(TYPE_ARRAY, 0, $5, $3); }
     | TOKEN_FCALL type TOKEN_LPAREN param_list TOKEN_RPAREN
-        { $$ = type_create(TYPE_FUNCTION, $4, 0); }
+        { $$ = type_create(TYPE_FUNCTION, $4, 0, 0); }
     ;
 
 param_list
@@ -241,16 +245,16 @@ optional_expression_list
 
 expression_list
     : non_empty_expr_prefix expression
-        { $$ = $1; param_list_append($1, $2); }
+        { $$ = $1; expr_append($1, $2); }
     | expression
         { $$ = $1; }
     ;
 
 non_empty_expr_prefix
     : expression TOKEN_COMMA
-        { $$ = $2; } 
+        { $$ = $1; } 
     | non_empty_expr_prefix expression TOKEN_COMMA
-        { $$ = $1; param_list_append($1, $2); }
+        { $$ = $1; expr_append($1, $2); }
     ;
 
 expression  
@@ -260,81 +264,81 @@ expression
     
 assign_level_expr
     : assign_level_expr TOKEN_ASSIGN or_comparison_expr
-        { $$ = expr_create(EXPR_ASSIGNMENT, $1, $3); }
+        { $$ = expr_create(EXPR_ASSIGNMENT, $1, $3, 0); }
     | or_comparison_expr
         { $$ = $1; }
     ;
     
 or_comparison_expr
     : or_comparison_expr TOKEN_OR and_comparison_expr
-        { $$ = expr_create(EXPR_OR, $1, $3); }
+        { $$ = expr_create(EXPR_OR, $1, $3, 0); }
     | and_comparison_expr
         { $$ = $1; }
     ;
     
 and_comparison_expr
     : and_comparison_expr TOKEN_AND eq_comparison_expr
-        { $$ = expr_create(EXPR_AND, $1, $3); }
+        { $$ = expr_create(EXPR_AND, $1, $3, 0); }
     | eq_comparison_expr
         { $$ = $1; }
     ;
     
 eq_comparison_expr
     : eq_comparison_expr TOKEN_EQ_COMP value_comparison_expr
-        { $$ = expr_create(EXPR_EQUIVALENCE_COMPARISON, $1, $3); }
+        { $$ = expr_create(EXPR_EQUIVALENCE_COMPARISON, $1, $3, 0); }
     | eq_comparison_expr TOKEN_NE_COMP value_comparison_expr
-        { $$ = expr_create(EXPR_NONEQUIVALENCE_COMPARISON, $1, $3); }
+        { $$ = expr_create(EXPR_NONEQUIVALENCE_COMPARISON, $1, $3, 0); }
     | value_comparison_expr
         { $$ = $1; }
     ;
 
 value_comparison_expr
     : value_comparison_expr TOKEN_LT add_level_expr
-        { $$ = expr_create(EXPR_LESS_THAN, $1, $3); }
+        { $$ = expr_create(EXPR_LESS_THAN, $1, $3, 0); }
     | value_comparison_expr TOKEN_LE add_level_expr
-        { $$ = expr_create(EXPR_LESS_THAN_OR_EQUAL, $1, $3); }
+        { $$ = expr_create(EXPR_LESS_THAN_OR_EQUAL, $1, $3, 0); }
     | value_comparison_expr TOKEN_GT add_level_expr
-        { $$ = expr_create(EXPR_GREATER_THAN, $1, $3); }
+        { $$ = expr_create(EXPR_GREATER_THAN, $1, $3, 0); }
     | value_comparison_expr TOKEN_GE add_level_expr
-        { $$ = expr_create(EXPR_GREATER_THAN_OR_EQUAL, $1, $3); }
+        { $$ = expr_create(EXPR_GREATER_THAN_OR_EQUAL, $1, $3, 0); }
     | add_level_expr
         { $$ = $1; }
     ;
 
 add_level_expr
     : add_level_expr TOKEN_ADD mult_level_expr
-        { $$ = expr_create(EXPR_ADD, $1, $3); }
+        { $$ = expr_create(EXPR_ADD, $1, $3, 0); }
     | add_level_expr TOKEN_NEG mult_level_expr
-        { $$ = expr_create(EXPR_SUB, $1, $3); }
+        { $$ = expr_create(EXPR_SUB, $1, $3, 0); }
     | mult_level_expr
         { $$ = $1; }
     ;
 
 mult_level_expr 
     : mult_level_expr TOKEN_MULT base_level_expr
-        { $$ = expr_create(EXPR_MULTIPLY, $1, $3); }
+        { $$ = expr_create(EXPR_MUL, $1, $3, 0); }
     | mult_level_expr TOKEN_DIV base_level_expr
-        { $$ = expr_create(EXPR_DIV, $1, $3); }
+        { $$ = expr_create(EXPR_DIV, $1, $3, 0); }
     | mult_level_expr TOKEN_MOD base_level_expr
-        { $$ = expr_create(EXPR_MODULO, $1, $3); }
+        { $$ = expr_create(EXPR_MODULO, $1, $3, 0); }
     | exponent_level_expr
         { $$ = $1; }
     ;
 
 exponent_level_expr
     : exponent_level_expr TOKEN_POW unary_level_expr
-        { $$ = expr_create(EXPR_POWER, $1, $3); }
+        { $$ = expr_create(EXPR_POWER, $1, $3, 0); }
     | unary_level_expr
         { $$ = $1; }
     ;
 
 unary_level_expr
     : TOKEN_NOT base_level_expr
-        { $$ = expr_create(EXPR_NOT, 0, $2); }
+        { $$ = expr_create(EXPR_NOT, 0, $2, 0); }
     | TOKEN_NEG base_level_expr
-        { $$ = expr_create(EXPR_SUB, 0, $2); }
+        { $$ = expr_create(EXPR_SUB, 0, $2, 0); }
     | TOKEN_ADD base_level_expr
-        { $$ = expr_create(EXPR_ADD, 0, $2); }
+        { $$ = expr_create(EXPR_ADD, 0, $2, 0); }
     | base_level_expr
         { $$ = $1; }
     ;
@@ -342,32 +346,56 @@ unary_level_expr
 base_level_expr
     : ident
         { $$ = expr_create_name($1); }
-    | TOKEN_INTEGER_LITERAL
+    | integer_literal 
         { $$ = expr_create_integer_literal($1); }
-    | TOKEN_STRING_LITERAL
+    | string_literal
         { $$ = expr_create_string_literal($1); }
-    | TOKEN_CHARACTER_LITERAL
+    | character_literal
         { $$ = expr_create_character_literal($1); }
-    | TOKEN_TRUE
+    | true_literal
         { $$ = expr_create_boolean_literal($1); }
-    | TOKEN_FALSE
+    | false_literal
         { $$ = expr_create_boolean_literal($1); }
     | TOKEN_LPAREN expression TOKEN_RPAREN
-        { $$ = expr_create(EXPR_PARENTHESES, $2, 0); }
+        { $$ = expr_create(EXPR_PARENTHESES, $2, 0, 0); }
     | ident TOKEN_LBRACK expression TOKEN_RBRACK
-        { $$ = expr_create(EXPR_ARRAY_INDEX, $1, $3); }
+        { $$ = expr_create(EXPR_ARRAY_INDEX, expr_create_name($1), $3, 0); }
     | ident TOKEN_LPAREN optional_expression_list TOKEN_RPAREN
-        { $$ = expr_create(EXPR_FUNCTION_CALL, $1, $3); }
+        { $$ = expr_create(EXPR_FUNCTION_CALL, expr_create_name($1), $3, 0); }
     | base_level_expr TOKEN_INC /* is this right? */
-        { $$ = expr_create(EXPR_INCREMENT, $1, 0); }
+        { $$ = expr_create(EXPR_INCREMENT, $1, 0, 0); }
     | base_level_expr TOKEN_DEC /* is this right? */
-        { $$ = expr_create(EXPR_DECREMENT, $1, 0); }
+        { $$ = expr_create(EXPR_DECREMENT, $1, 0, 0); }
     ;
 
 ident       
     : TOKEN_IDENT /* need to add to the symbol table, so this token gets its own NT */
-        /* this is not right */
-        { $$ = expr_create_name(yytext);}
+        { $$ = strdup(yytext);}
+    ;
+
+integer_literal
+    : TOKEN_INTEGER_LITERAL
+        { $$ = atoi(yytext); }
+    ;
+
+string_literal
+    : TOKEN_STRING_LITERAL
+        { $$ = strdup(yytext); }
+    ;
+
+character_literal
+    : TOKEN_CHARACTER_LITERAL
+        { $$ = atoi(yytext); }
+    ;
+
+true_literal
+    : TOKEN_TRUE
+        { $$ = 1; } 
+    ;
+
+false_literal
+    : TOKEN_FALSE
+        { $$ = 0; }
     ;
 
 %%

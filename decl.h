@@ -1,7 +1,7 @@
-
 #ifndef DECL_H
 #define DECL_H
 
+#include "decl.h"
 #include "type.h"
 #include "stmt.h"
 #include "expr.h"
@@ -20,5 +20,3 @@ struct decl * decl_create( char *name, struct type *t, struct expr *v, struct st
 void decl_print( struct decl *d, int indent );
 
 #endif
-
-

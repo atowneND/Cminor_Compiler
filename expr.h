@@ -38,6 +38,7 @@ struct expr {
 	expr_t kind;
 	struct expr *left;
 	struct expr *right;
+	struct expr *next; // for expression lists
 
 	/* used by leaf expr types */
 	const char *name;
@@ -46,7 +47,8 @@ struct expr {
 	const char * string_literal;
 };
 
-struct expr * expr_create( expr_t kind, struct expr *left, struct expr *right );
+struct expr * expr_create( expr_t kind, struct expr *left, struct expr *right, struct expr *next );
+void expr_append( struct expr *original_params, struct expr *new_param);
 
 struct expr * expr_create_name( const char *n );
 struct expr * expr_create_boolean_literal( int c );

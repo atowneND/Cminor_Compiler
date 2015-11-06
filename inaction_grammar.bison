@@ -164,7 +164,7 @@ type
     | TOKEN_INTEGER
     | TOKEN_BOOLEAN
     | TOKEN_VOID
-    | TOKEN_ARRAY TOKEN_LBRACK optional_expression TOKEN_RBRACK type
+    | TOKEN_ARRAY TOKEN_LBRACK param_list TOKEN_RBRACK type
     | TOKEN_FCALL type TOKEN_LPAREN param_list TOKEN_RPAREN
     ;
 
@@ -181,6 +181,7 @@ non_empty_param_list
 
 param
     : ident TOKEN_COLON type
+    | expression
     ;
 
 optional_expression

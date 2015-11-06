@@ -3,14 +3,16 @@
 
 struct param_list * param_list_create( char *name, struct type *type, struct param_list *next ){
     // create new struct
-    struct param_list * new_param_list = malloc(sizeof(struct param_list *));
-    new_param_list->name = name;
-    new_param_list->type = type;
-    new_param_list->next = next;
+    struct param_list *ptr_new_param_list = malloc(sizeof(struct param_list *));
+    struct param_list new_param_list;
+    ptr_new_param_list = &new_param_list;
 
-    // recurse to next
+    new_param_list.name = name;
+    new_param_list.type = type;
+    new_param_list.symbol = 0;
+    new_param_list.next = next;
 
-    return new_param_list;
+    return ptr_new_param_list;
 }
 
 void param_list_append( struct param_list *original_params, struct param_list *new_param){
@@ -23,4 +25,11 @@ void param_list_append( struct param_list *original_params, struct param_list *n
     }
 }
 
-void param_list_print( struct param_list *a );
+void param_list_print( struct param_list *a ){
+/*    printf("%s: ",a->name);
+    type_print(a->type);
+    if (a->next != 0){
+        printf(", "); 
+        param_list_print(a->next);
+    }*/
+}
