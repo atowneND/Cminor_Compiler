@@ -411,5 +411,5 @@ useful.  In practice, it often does not.
 int yyerror( char *str )
 {
 	printf("parse error: %s\n",str);
-	return -1;
+	exit(1);
 }

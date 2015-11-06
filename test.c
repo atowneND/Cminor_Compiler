@@ -10,12 +10,9 @@ void append(struct alpha_list *old_list, struct alpha_list *new_element);
 void print_all(struct alpha_list *old_list);
 
 int main(){
-    char c = 'a';
-    char test[] = "abcd";
-    int x = atoi(test);
-    x = atoi(test);
-    printf("%i\n",x);
-    printf("%c\n",(char)x);
+    printf("success = %i\n",EXIT_SUCCESS);
+    exit(1);
+//    exit(1);
 //    struct alpha_list *x = malloc(sizeof(struct alpha_list *));
 //    struct alpha_list *y = malloc(sizeof(struct alpha_list *));
 //    struct alpha_list *z = malloc(sizeof(struct alpha_list *));

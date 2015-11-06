@@ -1,0 +1,9 @@
+x: integer;
+y: integer = 123;
+b: boolean = 0;
+c: char = 'q';
+s: string = "hello cminor\n";
+main: function integer () = {
+    a = 5;
+}
+parse successful

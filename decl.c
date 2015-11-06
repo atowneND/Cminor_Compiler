@@ -26,8 +26,6 @@ struct decl * decl_create(
 }
 
 void decl_print( struct decl *d ){
-    int i;
-    
     if (d != NULL) {
         // print ident and colon
         printf("%s: ",d->name);

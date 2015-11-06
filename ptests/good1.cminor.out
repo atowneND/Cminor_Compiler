@@ -1,0 +1,6 @@
+x: array [1] integer = 1;
+y: integer = 3;
+main: function void () = {
+    x: integer = 3;
+}
+parse successful

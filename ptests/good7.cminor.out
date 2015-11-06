@@ -1,0 +1,7 @@
+main: function integer () = {
+    print "The temperature is: ", temp, " degrees\n";
+}
+square: function integer (x: integer) = {
+    return x^2;
+}
+parse successful

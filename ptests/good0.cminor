@@ -3,3 +3,8 @@ y: integer = 123;
 b: boolean = false;
 c: char    = 'q';
 s: string  = "hello cminor\n";
+
+main: function integer () = {
+    /* A C-style comment */
+    a=5; // A C++ style comment
+}
