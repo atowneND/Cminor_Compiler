@@ -4,38 +4,55 @@
 
 struct type * type_create( type_kind_t kind, struct param_list *params, struct type *subtype, struct expr *expression){
     // create new struct
-    struct type *ptr_new_type = malloc(sizeof(struct type *));
-    struct type new_type;
-    ptr_new_type = &new_type;
+    struct type *new_type = malloc(sizeof(struct type));
 
-    new_type.kind = kind;
-    new_type.params = params;
-    new_type.subtype = subtype;
-    new_type.expr = expression;
+    new_type->kind = kind;
+    new_type->params = params;
+    new_type->subtype = subtype;
+    new_type->expr = expression;
 
-    return ptr_new_type;
+    return new_type;
 }
 
 void type_print( struct type *t ) {
-/*    switch (t->kind){
-        case (TYPE_BOOLEAN):
-            printf("boolean");
-        case (TYPE_CHARACTER):
-            printf("character");
-        case (TYPE_INTEGER):
-            printf("integer");
-        case (TYPE_STRING):
-            printf("string");
-        case (TYPE_ARRAY):
-            printf("array [");
-            expr_print(t->expr);
-            printf("]");
-            type_print(t->subtype);
-        case (TYPE_FUNCTION):
-            printf("function(");
-            param_list_print(t->params);
-            printf(")");
-        case (TYPE_VOID):
-            printf("void");
-    }*/
+    if (t != NULL) {
+        if (t->kind != 0) {
+            switch (t->kind){
+                case (TYPE_BOOLEAN):
+                    printf("boolean");
+                    break;
+                case (TYPE_CHARACTER):
+                    printf("character");
+                    break;
+                case (TYPE_INTEGER):
+                    printf("integer");
+                    break;
+                case (TYPE_STRING):
+                    printf("string");
+                    break;
+                case (TYPE_ARRAY):
+                    printf("array [");
+                    if (t->expr != 0){
+                        expr_print(t->expr);
+                    }
+                    printf("]");
+                    if (t->subtype != 0){ 
+                        type_print(t->subtype);
+                    }
+                    break;
+                case (TYPE_FUNCTION):
+                    printf("function ");
+                    type_print(t->subtype);
+                    printf(" (");
+                    if (t->params){ 
+                        param_list_print(t->params);
+                    }
+                    printf(")");
+                    break;
+                case (TYPE_VOID):
+                    printf("void");
+                    break;
+            }
+        }
+    }
 }

@@ -118,7 +118,9 @@ struct expr * parser_result = 0;
 /* Here is the grammar: program is the start symbol. */
 program     
     : decl_list
-        { $$ = $1; }
+        { $$ = $1;
+          decl_print($1, 0);
+        }
     ;
 
 decl_list   
@@ -205,7 +207,7 @@ type
     | TOKEN_ARRAY TOKEN_LBRACK optional_expression TOKEN_RBRACK type
         { $$ = type_create(TYPE_ARRAY, 0, $5, $3); }
     | TOKEN_FCALL type TOKEN_LPAREN param_list TOKEN_RPAREN
-        { $$ = type_create(TYPE_FUNCTION, $4, 0, 0); }
+        { $$ = type_create(TYPE_FUNCTION, $4, $2, 0); }
     ;
 
 param_list

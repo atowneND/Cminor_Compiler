@@ -27,12 +27,12 @@ void decl_print( struct decl *d, int indent ){
     int i;
     
     // print blank space
-    for (i=0; i<indent; i++){
-        printf("\t");
-    }
+/*    for (i=0; i<indent; i++){
+        printf("    ");
+    }*/
 
     // print ident and colon
-    printf("%s, %p: ",d->name, &(d->name));
+    printf("%s: ",d->name);
 
     type_print(d->type);
     if (d->value != 0) {
@@ -43,9 +43,9 @@ void decl_print( struct decl *d, int indent ){
         printf(" = {\n");
         stmt_print(d->code, indent + 1);
         for (i=0; i<indent; i++){
-            printf("\t");
+            printf("    ");
         }
-        printf("}");
+        printf("}\n");
     } else {
         printf(";\n");
     }

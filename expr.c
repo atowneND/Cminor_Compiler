@@ -29,171 +29,190 @@ void expr_append(struct expr *original_list, struct expr *new_expr){
 }
 
 struct expr * expr_create_name( const char *n ){
-    struct expr new_expression;
-    ptr_new_expression = &new_expression;
     struct expr *new_expression = malloc(sizeof(struct expr));
 
-    new_expression.kind = EXPR_IDENTIFIER;
-    new_expression.name = n;
+    new_expression->kind = EXPR_IDENTIFIER;
+    new_expression->name = n;
     
-    return ptr_new_expression;
+    return new_expression;
 }
 
 struct expr * expr_create_boolean_literal( int c ){
-    struct expr new_expression;
-    ptr_new_expression = &new_expression;
+    struct expr *new_expression = malloc(sizeof(struct expr));
 
-    new_expression.kind = EXPR_BOOLEAN_LITERAL;
-    new_expression.literal_value = c;
+    new_expression->kind = EXPR_BOOLEAN_LITERAL;
+    new_expression->literal_value = c;
 
-    return ptr_new_expression;
+    return new_expression;
 }
 
 struct expr * expr_create_integer_literal( int c ){
-    struct expr new_expression;
-    ptr_new_expression = &new_expression;
     struct expr *new_expression = malloc(sizeof(struct expr));
 
-    new_expression.kind = EXPR_INTEGER_LITERAL;
-    new_expression.literal_value = c;
+    new_expression->kind = EXPR_INTEGER_LITERAL;
+    new_expression->literal_value = c;
 
-    return ptr_new_expression;
+    return new_expression;
 }
 
 struct expr * expr_create_character_literal( int c ){
-    struct expr new_expression;
-    ptr_new_expression = &new_expression;
     struct expr *new_expression = malloc(sizeof(struct expr));
     
-    new_expression.kind = EXPR_CHARACTER_LITERAL;
-    new_expression.literal_value = c;
+    new_expression->kind = EXPR_CHARACTER_LITERAL;
+    new_expression->literal_value = c;
 
-    return ptr_new_expression;
+    return new_expression;
 }
 
 struct expr * expr_create_string_literal( const char *str ){
-    struct expr new_expression;
-    ptr_new_expression = &new_expression;
     struct expr *new_expression = malloc(sizeof(struct expr));
     
-    new_expression.kind = EXPR_STRING_LITERAL;
-    new_expression.string_literal = str;
+    new_expression->kind = EXPR_STRING_LITERAL;
+    new_expression->string_literal = str;
 
-    return ptr_new_expression;
+    return new_expression;
 }
 
 void expr_print( struct expr *e ){
-/*    switch (e->kind){
-        case (EXPR_ADD):
-            expr_print(e->left);
-            printf(" + ");
-            expr_print(e->right);
-        case (EXPR_SUB):
-            expr_print(e->left);
-            printf(" - ");
-            expr_print(e->right);
-        case (EXPR_MUL):
-            expr_print(e->left);
-            printf(" * ");
-            expr_print(e->right);
-        case (EXPR_DIV):
-            expr_print(e->left);
-            printf(" / ");
-            expr_print(e->right);
-        case (EXPR_INCREMENT):
-            expr_print(e->left);
-            printf(" ++ ");
-            expr_print(e->right);
-        case (EXPR_DECREMENT):
-            expr_print(e->left);
-            printf(" -- ");
-            expr_print(e->right);
-        case (EXPR_NOT):
-            expr_print(e->left);
-            printf(" ! ");
-            expr_print(e->right);
-        case (EXPR_POWER):
-            expr_print(e->left);
-            printf(" ^ ");
-            expr_print(e->right);
-        case (EXPR_MODULO):
-            expr_print(e->left);
-            printf(" %% ");
-            expr_print(e->right);
-        case (EXPR_LESS_THAN):
-            expr_print(e->left);
-            printf(" < ");
-            expr_print(e->right);
-        case (EXPR_GREATER_THAN):
-            expr_print(e->left);
-            printf(" > ");
-            expr_print(e->right);
-        case (EXPR_LESS_THAN_OR_EQUAL):
-            expr_print(e->left);
-            printf(" <= ");
-            expr_print(e->right);
-        case (EXPR_GREATER_THAN_OR_EQUAL):
-            expr_print(e->left);
-            printf(" >= ");
-            expr_print(e->right);
-        case (EXPR_EQUIVALENCE_COMPARISON):
-            expr_print(e->left);
-            printf(" == ");
-            expr_print(e->right);
-        case (EXPR_NONEQUIVALENCE_COMPARISON):
-            expr_print(e->left);
-            printf(" != ");
-            expr_print(e->right);
-        case (EXPR_AND):
-            expr_print(e->left);
-            printf(" && ");
-            expr_print(e->right);
-        case (EXPR_OR):
-            expr_print(e->left);
-            printf(" || ");
-            expr_print(e->right);
-        case (EXPR_ASSIGNMENT):
-            expr_print(e->left);
-            printf(" = ");
-            expr_print(e->right);
-        case (EXPR_BOOLEAN_LITERAL):
-            expr_print(e->left);
-            printf("%i",e->literal_value);
-            expr_print(e->right);
-        case (EXPR_INTEGER_LITERAL):
-            expr_print(e->left);
-            printf("%i",e->literal_value);
-            expr_print(e->right);
-        case (EXPR_CHARACTER_LITERAL):
-            expr_print(e->left);
-            printf("%c",e->literal_value);
-            expr_print(e->right);
-        case (EXPR_STRING_LITERAL):
-            expr_print(e->left);
-            printf("%s",e->string_literal);
-            expr_print(e->right);
-        case (EXPR_IDENTIFIER):
-            expr_print(e->left);
-            printf("%s",e->name);
-            expr_print(e->right);
-        case (EXPR_PARENTHESES):
-            printf("(");
-            expr_print(e->left);
-            printf(")");
-        case (EXPR_FUNCTION_CALL):
-            expr_print(e->left);
-            printf("(");
-            expr_print(e->right);
-            printf(")");
-        case (EXPR_ARRAY_INDEX):
-            expr_print(e->left);
-            printf("[");
-            expr_print(e->right);
-            printf("]");
+    if (e != NULL) {
+        switch (e->kind){
+            case (EXPR_ADD):
+                if (e->left != 0) expr_print(e->left);
+                printf(" + ");
+                if (e->right != 0) expr_print(e->right);
+                break;
+            case (EXPR_SUB):
+                if (e->left != 0) expr_print(e->left);
+                printf(" - ");
+                if (e->right != 0) expr_print(e->right);
+                break;
+            case (EXPR_MUL):
+                if (e->left != 0) expr_print(e->left);
+                printf(" * ");
+                if (e->right != 0) expr_print(e->right);
+                break;
+            case (EXPR_DIV):
+                if (e->left != 0) expr_print(e->left);
+                printf(" / ");
+                if (e->right != 0) expr_print(e->right);
+                break;
+            case (EXPR_INCREMENT):
+                if (e->left != 0) expr_print(e->left);
+                printf(" ++ ");
+                if (e->right != 0) expr_print(e->right);
+                break;
+            case (EXPR_DECREMENT):
+                if (e->left != 0) expr_print(e->left);
+                printf(" -- ");
+                if (e->right != 0) expr_print(e->right);
+                break;
+            case (EXPR_NOT):
+                if (e->left != 0) expr_print(e->left);
+                printf(" ! ");
+                if (e->right != 0) expr_print(e->right);
+                break;
+            case (EXPR_POWER):
+                if (e->left != 0) expr_print(e->left);
+                printf(" ^ ");
+                if (e->right != 0) expr_print(e->right);
+                break;
+            case (EXPR_MODULO):
+                if (e->left != 0) expr_print(e->left);
+                printf(" %% ");
+                if (e->right != 0) expr_print(e->right);
+                break;
+            case (EXPR_LESS_THAN):
+                if (e->left != 0) expr_print(e->left);
+                printf(" < ");
+                if (e->right != 0) expr_print(e->right);
+                break;
+            case (EXPR_GREATER_THAN):
+                if (e->left != 0) expr_print(e->left);
+                printf(" > ");
+                if (e->right != 0) expr_print(e->right);
+                break;
+            case (EXPR_LESS_THAN_OR_EQUAL):
+                if (e->left != 0) expr_print(e->left);
+                printf(" <= ");
+                if (e->right != 0) expr_print(e->right);
+                break;
+            case (EXPR_GREATER_THAN_OR_EQUAL):
+                if (e->left != 0) expr_print(e->left);
+                printf(" >= ");
+                if (e->right != 0) expr_print(e->right);
+                break;
+            case (EXPR_EQUIVALENCE_COMPARISON):
+                if (e->left != 0) expr_print(e->left);
+                printf(" == ");
+                if (e->right != 0) expr_print(e->right);
+                break;
+            case (EXPR_NONEQUIVALENCE_COMPARISON):
+                if (e->left != 0) expr_print(e->left);
+                printf(" != ");
+                if (e->right != 0) expr_print(e->right);
+                break;
+            case (EXPR_AND):
+                if (e->left != 0) expr_print(e->left);
+                printf(" && ");
+                if (e->right != 0) expr_print(e->right);
+                break;
+            case (EXPR_OR):
+                if (e->left != 0) expr_print(e->left);
+                printf(" || ");
+                if (e->right != 0) expr_print(e->right);
+                break;
+            case (EXPR_ASSIGNMENT):
+                if (e->left != 0) expr_print(e->left);
+                printf(" = ");
+                if (e->right != 0) expr_print(e->right);
+                break;
+            case (EXPR_BOOLEAN_LITERAL):
+                if (e->left != 0) expr_print(e->left);
+                if (e->literal_value != 0) printf("%i",e->literal_value);
+                if (e->right != 0) expr_print(e->right);
+                break;
+            case (EXPR_INTEGER_LITERAL):
+                if (e->left != 0) expr_print(e->left);
+                if (e->literal_value != 0) printf("%i",e->literal_value);
+                if (e->right != 0) expr_print(e->right);
+                break;
+            case (EXPR_CHARACTER_LITERAL):
+                if (e->left != 0) expr_print(e->left);
+                if (e->literal_value != 0) printf("%c",e->literal_value);
+                if (e->right != 0) expr_print(e->right);
+                break;
+            case (EXPR_STRING_LITERAL):
+                if (e->left != 0) expr_print(e->left);
+                if (e->literal_value != 0) printf("%s",e->string_literal);
+                if (e->right != 0) expr_print(e->right);
+                break;
+            case (EXPR_IDENTIFIER):
+                if (e->left != 0) expr_print(e->left);
+                if (e->literal_value != 0) printf("%s",e->name);
+                if (e->right != 0) expr_print(e->right);
+                break;
+            case (EXPR_PARENTHESES):
+                printf("(");
+                if (e->left != 0) expr_print(e->left);
+                printf(")");
+                break;
+            case (EXPR_FUNCTION_CALL):
+                if (e->left != 0) expr_print(e->left);
+                printf("(");
+                if (e->right != 0) expr_print(e->right);
+                printf(")");
+                break;
+            case (EXPR_ARRAY_INDEX):
+                if (e->left != 0) expr_print(e->left);
+                printf("[");
+                if (e->right != 0) expr_print(e->right);
+                printf("]");
+                break;
+        }
+        if (e->next != 0){
+            printf(", "); 
+            expr_print(e->next);
+        }
     }
 
-    if (e->next != 0){
-        printf(", "); 
-        expr_print(e->next);
-    }*/
 }
