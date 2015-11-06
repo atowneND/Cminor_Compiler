@@ -121,6 +121,7 @@ decl_list
 decl
     : ident TOKEN_COLON type TOKEN_ASSIGN expression TOKEN_SC /* other type assingments */
     | ident TOKEN_COLON type TOKEN_SC /* declarations without assignments */
+    | ident TOKEN_COLON type TOKEN_ASSIGN TOKEN_LBRACE expression_list TOKEN_RBRACE TOKEN_SC /* array assignment */
     | ident TOKEN_COLON type TOKEN_ASSIGN TOKEN_LBRACE stmt_list TOKEN_RBRACE /* function assignments */
     ;
 
