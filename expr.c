@@ -218,3 +218,6 @@ void expr_print( struct expr *e ){
     }
 
 }
+
+struct type *expr_typecheck(struct type *t){
+}

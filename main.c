@@ -37,10 +37,14 @@ int main(int argc, char *argv[]){
     int action = 0;
     if (!strcmp(argv[1],"-scan")){
         action = 1;
-    }else if (!strcmp(argv[1],"-parse")){
+    }else if (!strcmp(argv[1],"-print")){
         action = 2;
+    }else if (!strcmp(argv[1],"-resolve")){
+        action = 3;
+    }else if (!strcmp(argv[1],"-typecheck")){
+        action = 4;
     }else{
-        fprintf(stderr,"usage: ./cminor <option> <filename>\n<option> must be -scan or -parse\n");
+        fprintf(stderr,"usage: ./cminor <option> <filename>\n<option> must be -scan or -resolve or -typecheck\n");
         exit(1);
     }
 
@@ -71,6 +75,12 @@ int main(int argc, char *argv[]){
             if (yyparse()==0){
                 printf("parse successful\n");
             }
+            break;
+        case 3:
+            printf("resolve\n");
+            break;
+        case 4:
+            printf("typechecking\n");
             break;
         default:
             fprintf(stderr,"Incorrect option selected\n");

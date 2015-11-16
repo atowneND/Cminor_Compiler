@@ -128,3 +128,34 @@ void print_indents(void){
         printf("    ");
     }
 }
+
+void stmt_resolve( struct stmt *s ){
+    if (s != NULL) {
+        // resolve this stmt
+        switch (s->kind){
+            case STMT_DECL:
+                decl_resolve(s->decl);
+                break;
+            case STMT_EXPR:
+                break;
+            case STMT_IF_ELSE:
+                break;
+            case STMT_FOR:
+                break;
+            case STMT_WHILE:
+                break;
+            case STMT_PRINT:
+                break;
+            case STMT_RETURN:
+                break;
+            case STMT_BLOCK:
+                break;
+            default:
+                break;
+        }
+        // add to symbol table
+        if (s->next != NULL) {
+            stmt_resolve(s->next);
+        }
+    }
+}

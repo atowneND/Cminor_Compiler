@@ -56,3 +56,13 @@ void decl_print( struct decl *d ){
         }
     }
 }
+
+void decl_resolve( struct decl *d ){
+    if (d != NULL) {
+        // resolve this decl
+        // add to symbol table
+        if (d->next != NULL) {
+            decl_resolve(d->next);
+        }
+    }
+}

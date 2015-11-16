@@ -29,5 +29,6 @@ struct stmt * stmt_create( stmt_kind_t kind, struct decl *d, struct expr *init_e
 void print_indents(void);
 void stmt_print( struct stmt *s );
 
+void stmt_resolve( struct stmt *s );
 
 #endif

@@ -57,3 +57,22 @@ void type_print( struct type *t ) {
         }
     }
 }
+
+struct type *type_copy(struct type *t){
+    struct type *new_type = malloc(sizeof(struct type));
+
+    new_type->kind = t->kind;
+    // do these need to be malloc'd?
+    new_type->params = t->params;
+    new_type->subtype = t->subtype;
+    new_type->expr = t->expr;
+
+    return new_type;
+}
+
+int type_compare(struct type *a, struct type *b){
+}
+
+void type_delete(struct type *t){
+    free(t);
+}
