@@ -20,5 +20,6 @@ struct decl * decl_create( char *name, struct type *t, struct expr *v, struct st
 void decl_print( struct decl *d );
 
 void decl_resolve( struct decl *d );
+struct type *decl_typecheck(struct type *a, struct type *b);
 
 #endif

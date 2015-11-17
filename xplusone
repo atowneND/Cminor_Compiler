@@ -1,0 +1,7 @@
+main: function void () = {
+//    a = 1+b;
+//    c = 2;
+//    d = e;
+    x = y+9;
+    // it's reducing x=y before it gets to the +9
+}

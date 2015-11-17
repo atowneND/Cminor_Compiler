@@ -219,5 +219,24 @@ void expr_print( struct expr *e ){
 
 }
 
-//struct type *expr_typecheck(struct type *t){
-//}
+void expr_resolve(struct expr *e){
+    if (e == NULL) {
+        return;
+    } else {
+        expr_resolve(e->left);
+        expr_resolve(e->right);
+
+        if (e->name != NULL){
+            // add to symbol table
+        }
+
+        expr_resolve(e->next);
+    }
+}
+
+struct type *expr_typecheck(struct type *a, struct type *b){
+    if (a->kind != b->kind){
+        fprintf(stderr,"typecheck error\n");
+    }
+    return a;
+}

@@ -66,3 +66,10 @@ void decl_resolve( struct decl *d ){
         }
     }
 }
+
+struct type *decl_typecheck(struct type *a, struct type *b){
+    if (a->kind != b->kind){
+        fprintf(stderr,"typecheck error\n");
+    }
+    return a;
+}

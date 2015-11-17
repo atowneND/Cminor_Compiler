@@ -14,6 +14,7 @@ extern struct expr * parser_result;
 extern int yylex();
 extern FILE * yyin;
 extern char * yytext;
+extern struct decl *deleteme;
 
 extern const char *token_string(int t);
 
@@ -74,6 +75,7 @@ int main(int argc, char *argv[]){
             // parse
             if (yyparse()==0){
                 printf("parse successful\n");
+                decl_print(deleteme);
             }
             break;
         case 3:

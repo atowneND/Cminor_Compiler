@@ -89,6 +89,7 @@ so that it can be retrieved by main().
 */
 
 struct expr * parser_result = 0;
+struct decl *deleteme;
 
 %}
 
@@ -118,7 +119,9 @@ struct expr * parser_result = 0;
 /* Here is the grammar: program is the start symbol. */
 program     
     : decl_list
-        { $$ = $1; decl_print($1); }
+        /*{ $$ = $1; deleteme = $1; decl_print($1); }*/
+        /*{ deleteme = $1; decl_print($1); }*/
+        { deleteme = $1; }
     ;
 
 decl_list   
@@ -371,7 +374,7 @@ base_level_expr
 
 ident       
     : TOKEN_IDENT /* need to add to the symbol table, so this token gets its own NT */
-        { $$ = strdup(yytext);}
+        { $$ = strdup(yytext); }
     ;
 
 integer_literal
