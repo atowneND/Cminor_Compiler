@@ -70,8 +70,8 @@ struct type *type_copy(struct type *t){
     return new_type;
 }
 
-int type_compare(struct type *a, struct type *b){
-}
+//int type_compare(struct type *a, struct type *b){
+//}
 
 void type_delete(struct type *t){
     free(t);
