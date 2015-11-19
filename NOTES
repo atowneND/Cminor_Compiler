@@ -1,3 +1,2 @@
-Arrays are broken
-    - must be fixed in the grammar
-Need to distinguish between scan and parse errors
+expr_resolve($$); 266
+stmt_resolve($$); 154,156,158,160,162,164,168

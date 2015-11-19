@@ -1,4 +1,4 @@
-OBJECT_FILES=token.o decl.o stmt.o expr.o type.o param_list.o
+OBJECT_FILES=token.o decl.o stmt.o expr.o type.o param_list.o scope.o symbol.o
 
 # The top level rule indicates how to link everything together into calc
 

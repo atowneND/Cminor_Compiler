@@ -1,7 +1,9 @@
 #include "expr.h"
+#include "scope.h"
 #include <stdlib.h>
 
 extern int indent;
+extern int error_counter;
 
 struct expr * expr_create(
         expr_t kind,
@@ -222,16 +224,37 @@ void expr_print( struct expr *e ){
 void expr_resolve(struct expr *e){
     if (e == NULL) {
         return;
-    } else {
-        expr_resolve(e->left);
-        expr_resolve(e->right);
-
-        if (e->name != NULL){
-            // add to symbol table
-        }
-
-        expr_resolve(e->next);
     }
+
+    expr_resolve(e->left);
+    expr_resolve(e->right);
+
+    if (e->kind==EXPR_IDENTIFIER){
+        struct symbol *s = scope_lookup(e->name);
+        if (s != NULL){
+            e->symbol = s;
+            char *this_variable = malloc(sizeof(char) * 10);
+            switch (s->kind){
+                case SYMBOL_LOCAL:
+                    sprintf(this_variable,"local %i",s->which);
+                    break;
+                case SYMBOL_GLOBAL:
+                    sprintf(this_variable,"global %i",s->which);
+                    break;
+                case SYMBOL_PARAM:
+                    sprintf(this_variable,"param  %i",s->which);
+                    break;
+                default:
+                    fprintf(stderr,"Scope not recognized for symbol: %s\n",e->name);
+                    break;
+            }
+            printf("%s resolved to %s\n",e->name,this_variable);
+        } else {
+            printf("Symbol %s not declared\n",e->name);
+            error_counter += 1;
+        }
+    }
+    expr_resolve(e->next);
 }
 
 struct type *expr_typecheck(struct type *a, struct type *b){

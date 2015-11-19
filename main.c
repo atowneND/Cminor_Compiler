@@ -14,11 +14,13 @@ extern struct expr * parser_result;
 extern int yylex();
 extern FILE * yyin;
 extern char * yytext;
-extern struct decl *deleteme;
+extern struct decl *ast_pointer;
 
 extern const char *token_string(int t);
 
 int indent = 0;
+int error_counter = 0;
+int scope_ctr = 0;
 
 int main(int argc, char *argv[]){
     // check input
@@ -75,11 +77,15 @@ int main(int argc, char *argv[]){
             // parse
             if (yyparse()==0){
                 printf("parse successful\n");
-                decl_print(deleteme);
+                decl_print(ast_pointer);
             }
             break;
         case 3:
-            printf("resolve\n");
+            if (yyparse()!=0){
+                fprintf(stderr,"Error parsing\n");
+            } else {
+                printf("parse successful\n");
+            }
             break;
         case 4:
             printf("typechecking\n");

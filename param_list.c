@@ -1,4 +1,5 @@
 #include "param_list.h"
+#include "scope.h"
 #include <stdlib.h>
 
 extern int indent;
@@ -37,4 +38,18 @@ void param_list_print( struct param_list *a ){
             param_list_print(a->next);
         }
     }
+}
+
+void param_list_resolve(struct param_list *p){
+    if (p == NULL) {
+        return;
+    }
+    struct symbol *sym = symbol_create(p->type->kind, p->type, p->name);
+    if (scope_lookup_local(p->name) != NULL) {
+        fprintf(stderr,"No redeclarations allowed: %s\n",p->name);
+        return;
+    }
+
+    scope_bind(p->name,sym);
+    param_list_resolve(p->next);
 }

@@ -17,5 +17,6 @@ struct param_list {
 struct param_list * param_list_create( char *name, struct type *type, struct param_list *next );
 void param_list_append( struct param_list *original_params, struct param_list *new_param);
 void param_list_print( struct param_list *a );
+void param_list_resolve(struct param_list *p);
 
 #endif

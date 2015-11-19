@@ -3,5 +3,6 @@ main: function void () = {
 //    c = 2;
 //    d = e;
     x = y+9;
+//    x = 3*2^4;
     // it's reducing x=y before it gets to the +9
 }

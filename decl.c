@@ -2,6 +2,9 @@
 #include "stmt.h"
 #include "type.h"
 #include "expr.h"
+#include "scope.h"
+#include "symbol.h"
+#include "param_list.h"
 #include <stdlib.h>
 
 extern int indent;
@@ -58,13 +61,31 @@ void decl_print( struct decl *d ){
 }
 
 void decl_resolve( struct decl *d ){
-    if (d != NULL) {
-        // resolve this decl
-        // add to symbol table
-        if (d->next != NULL) {
-            decl_resolve(d->next);
-        }
+    if (d == NULL) {
+        return;
     }
+
+    // create the symbol structure
+    struct symbol *sym = symbol_create(d->type->kind, d->type, d->name);
+    // no redeclarations
+    if (scope_lookup_local(d->name) != NULL) {
+        fprintf(stderr,"No redeclarations allowed: %s\n",d->name);
+        return;
+    }
+
+    // add to symbol table
+    scope_bind(d->name,sym);
+
+    // resolve components of decl
+    expr_resolve(d->value);
+    if (d->code != NULL) {
+        scope_enter();
+        param_list_resolve(d->type->params);
+        stmt_resolve(d->code);
+        scope_exit();
+    }
+
+    decl_resolve(d->next);
 }
 
 struct type *decl_typecheck(struct type *a, struct type *b){

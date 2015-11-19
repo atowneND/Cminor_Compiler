@@ -1,4 +1,5 @@
 #include "stmt.h"
+#include "scope.h"
 #include <stdlib.h>
 
 extern int indent;
@@ -130,32 +131,49 @@ void print_indents(void){
 }
 
 void stmt_resolve( struct stmt *s ){
-    if (s != NULL) {
-        // resolve this stmt
-        switch (s->kind){
-            case STMT_DECL:
-                decl_resolve(s->decl);
-                break;
-            case STMT_EXPR:
-                break;
-            case STMT_IF_ELSE:
-                break;
-            case STMT_FOR:
-                break;
-            case STMT_WHILE:
-                break;
-            case STMT_PRINT:
-                break;
-            case STMT_RETURN:
-                break;
-            case STMT_BLOCK:
-                break;
-            default:
-                break;
-        }
-        // add to symbol table
-        if (s->next != NULL) {
-            stmt_resolve(s->next);
-        }
+    if (s == NULL) {
+        return;
+    }
+
+    // resolve this stmt
+    switch (s->kind){
+        case STMT_DECL:
+            decl_resolve(s->decl);
+            break;
+        case STMT_EXPR:
+            expr_resolve(s->init_expr);
+            break;
+        case STMT_IF_ELSE:
+            expr_resolve(s->init_expr);
+            stmt_resolve(s->body);
+            stmt_resolve(s->else_body);
+            break;
+        case STMT_FOR:
+            expr_resolve(s->init_expr);
+            expr_resolve(s->expr);
+            expr_resolve(s->next_expr);
+            stmt_resolve(s->body);
+            break;
+        case STMT_WHILE:
+            fprintf(stderr,"While loops not supported\n");
+            break;
+        case STMT_PRINT:
+            expr_resolve(s->init_expr);
+            break;
+        case STMT_RETURN:
+            expr_resolve(s->init_expr);
+            break;
+        case STMT_BLOCK:
+            scope_enter();
+            stmt_resolve(s->body);
+            scope_exit();
+            break;
+        default:
+            break;
+    }
+
+    // next statement
+    if (s->next != NULL) {
+        stmt_resolve(s->next);
     }
 }
