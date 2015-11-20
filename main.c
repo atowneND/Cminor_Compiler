@@ -3,12 +3,12 @@
 #include <string.h>
 
 #include "token.h"
-#include "decl.h"
-#include "expr.h"
-#include "stmt.h"
-#include "symbol.h"
 #include "type.h"
+#include "stmt.h"
+#include "decl.h"
+#include "symbol.h"
 #include "scope.h"
+#include "expr.h"
 
 extern int yyparse();
 extern struct expr * parser_result;

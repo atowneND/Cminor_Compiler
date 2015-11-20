@@ -1,6 +1,7 @@
 #ifndef STMT_H
 #define STMT_H
 
+#include "type.h"
 #include "decl.h"
 
 typedef enum {
@@ -30,5 +31,6 @@ void print_indents(void);
 void stmt_print( struct stmt *s );
 
 void stmt_resolve( struct stmt *s );
+void stmt_typecheck(struct stmt *s, struct type *current_type);
 
 #endif

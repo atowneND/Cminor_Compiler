@@ -1,5 +1,6 @@
-#include "stmt.h"
+#include "type.h"
 #include "scope.h"
+#include "stmt.h"
 #include <stdlib.h>
 
 extern int indent;
@@ -178,4 +179,62 @@ void stmt_resolve( struct stmt *s ){
     if (s->next != NULL) {
         stmt_resolve(s->next);
     }
+}
+
+void stmt_typecheck(struct stmt *s, struct type *current_type){
+    if (s == NULL){
+        return;
+    }
+    struct type *t = malloc(sizeof(struct type));
+    struct expr *e = malloc(sizeof(struct expr));
+    switch (s->kind){
+	    case STMT_DECL:
+	        break;
+	    case STMT_EXPR:
+	        break;
+	    case STMT_IF_ELSE:
+	        t = expr_typecheck(s->init_expr);
+	        if (t->kind != TYPE_BOOLEAN){
+	            error_counter += 1;
+	            printf("Error #%i ",error_counter);
+	            printf("type error: expression in if statement must be boolean: ");
+	            expr_print(s->init_expr);
+            }
+            stmt_typecheck(s->body,current_type);
+            stmt_typecheck(s->else_body,current_type);
+	        break;
+	    case STMT_FOR:
+	        expr_typecheck(s->init_expr);
+	        expr_typecheck(s->expr);
+	        expr_typecheck(s->next_expr);
+	        stmt_typecheck(s->body,current_type);
+	        break;
+        case STMT_WHILE:
+            // this should never happen. I just want gcc -Wall to be quiet about it
+            break;
+	    case STMT_PRINT:
+	        e = s->init_expr;
+	        while (e != NULL) { 
+	            expr_typecheck(e);
+	            e = e->next;
+            }
+	        break;
+	    case STMT_RETURN:
+	        t = expr_typecheck(s->init_expr);
+	        if (t->kind != current_type->kind){
+	            error_counter += 1;
+	            printf("Error #%i ",error_counter);
+	            printf("type error: returned expression ");
+	            expr_print(s->init_expr);
+	            printf(" has type ");
+	            type_print(t);
+	            printf("\n\tFunction expecting return type ");
+	            type_print(current_type);
+            }
+	        break;
+        case STMT_BLOCK:
+            stmt_typecheck(s->body,current_type);
+            break;
+    }
+    stmt_typecheck(s->next, current_type);
 }

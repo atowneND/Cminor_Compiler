@@ -12,5 +12,4 @@ struct symbol *scope_lookup(const char *name);
 struct symbol *scope_lookup_local(const char *name);
 
 void sym_table_print(struct hash_table *h);
-int sym_is_global(struct decl *d);
 #endif

@@ -21,5 +21,6 @@ void decl_print( struct decl *d );
 
 void decl_resolve( struct decl *d );
 struct type *decl_typecheck(struct decl *d);
+int decl_expr_comp(struct decl *d);
 
 #endif

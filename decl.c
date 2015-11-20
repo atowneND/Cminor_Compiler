@@ -1,10 +1,10 @@
 #include "decl.h"
-#include "stmt.h"
 #include "type.h"
 #include "expr.h"
 #include "scope.h"
 #include "symbol.h"
 #include "param_list.h"
+#include "stmt.h"
 #include <stdlib.h>
 
 extern int indent;
@@ -98,6 +98,9 @@ void decl_resolve( struct decl *d ){
 }
 
 struct type *decl_typecheck(struct decl *d){
+    if (d == NULL) {
+        return type_create(TYPE_VOID,0,0,0);
+    }
     // if d is global and right side is not constant, return error
     struct symbol *sym = scope_lookup(d->name);
     if (sym->kind == SYMBOL_GLOBAL){
@@ -108,5 +111,40 @@ struct type *decl_typecheck(struct decl *d){
     }
 
     // type to expression
-    // stmt_list typecheck
+    if (d->value != NULL){
+        struct type *e = expr_typecheck(d->value);
+        if ( d->type->kind != e->kind){
+            error_counter += 1;
+            printf("Error #%i ",error_counter);
+            printf("type error: invalid declaration of ");
+            type_print(d->type);
+            printf(" (%s) = ",d->name);
+            type_print(d->value->type);
+            literal_print(d->value);
+        }
+        // expression list
+        struct expr *tmp = d->value->next;
+        while (tmp != NULL){
+            e = expr_typecheck(tmp);
+            if ( d->type->kind != e->kind){
+                error_counter += 1;
+                printf("Error #%i ",error_counter);
+                printf("type error: invalid declaration of ");
+                type_print(d->type);
+                printf(" (%s) = ",d->name);
+                type_print(d->value->type);
+                literal_print(d->value);
+            }
+            tmp = tmp->next;
+        }
+    }
+
+    // return value
+    stmt_typecheck(d->code, d->type);
+
+    // function calls
+    
+    // next decl in the list
+    decl_typecheck(d->next);
+    return d->type;
 }

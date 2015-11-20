@@ -80,7 +80,3 @@ struct symbol *scope_lookup_local(const char *name){
 
     return sym;
 }
-
-int sym_is_global(struct decl *d){
-
-}
