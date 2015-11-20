@@ -4,6 +4,8 @@
 #include "type.h"
 #include "decl.h"
 
+struct type;
+
 typedef enum {
 	STMT_DECL,
 	STMT_EXPR,

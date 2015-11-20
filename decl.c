@@ -25,6 +25,7 @@ struct decl * decl_create(
     new_declaration->type = t;
     new_declaration->value = v;
     new_declaration->code = c;
+    new_declaration->symbol = 0;
     new_declaration->next = next;
 
     return new_declaration;
@@ -80,6 +81,7 @@ void decl_resolve( struct decl *d ){
     if (scope_lookup_local(d->name) != NULL) {
         fprintf(stderr,"No redeclarations allowed: %s\n",d->name);
         error_counter += 1;
+        return;
     }
 
     // add to symbol table
@@ -95,6 +97,7 @@ void decl_resolve( struct decl *d ){
     }
 
     decl_resolve(d->next);
+    decl_typecheck(d);
 }
 
 struct type *decl_typecheck(struct decl *d){
@@ -110,8 +113,8 @@ struct type *decl_typecheck(struct decl *d){
         }
     }
 
-    // type to expression
     if (d->value != NULL){
+        // type to expression
         struct type *e = expr_typecheck(d->value);
         if ( d->type->kind != e->kind){
             error_counter += 1;
@@ -139,10 +142,8 @@ struct type *decl_typecheck(struct decl *d){
         }
     }
 
-    // return value
+    // return value (function definitions)
     stmt_typecheck(d->code, d->type);
-
-    // function calls
     
     // next decl in the list
     decl_typecheck(d->next);

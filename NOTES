@@ -7,3 +7,6 @@ LOCAL_CTR needs to be reset for each scope
 PARAM_CTR needs to be reset for each function
 check expr_typecheck, case EXPR_ASSIGNMENT - can the right be a function?
 fprintf vs printf in typechecking functions
+globals should resolve to themselves, not a number
+error numbers should be associated with name resolution
+array initialization - empty brackets as a function parameter, else constant

@@ -14,6 +14,7 @@ struct param_list * param_list_create(
 
     new_param_list->name = name;
     new_param_list->type = type;
+    new_param_list->symbol = 0;
     new_param_list->next = next;
 
     return new_param_list;

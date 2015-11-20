@@ -20,7 +20,7 @@ extern struct decl *ast_pointer;
 extern const char *token_string(int t);
 void name_resolution(void);
 
-void deleteme_test(void);
+int fooctr = 0;
 
 int indent = 0;
 int error_counter = 0;
@@ -92,7 +92,6 @@ int main(int argc, char *argv[]){
         case 4:
             printf("typechecking\n");
             name_resolution();
-            deleteme_test();
             break;
         default:
             fprintf(stderr,"Incorrect option selected\n");
@@ -119,20 +118,4 @@ void name_resolution(void){
     } else {
         printf("%i name resolution errors\n",error_counter);
     }
-}
-void deleteme_test(void){
-    struct expr *e1 = expr_create(EXPR_INTEGER_LITERAL,0,0,0);
-    struct expr *e2 = expr_create(EXPR_STRING_LITERAL,0,0,0);
-    struct expr *e3 = expr_create(EXPR_ADD,0,0,0);
-    e3->left = e1;
-    e3->right = e2;
-    e1->literal_value = -3;
-    e2->string_literal = "hello";
-    expr_typecheck(e1);
-    expr_typecheck(e2);
-    expr_typecheck(e3);
-    
-    struct type *a = type_create(TYPE_INTEGER,0,0,e1);
-    struct type *b = type_create(TYPE_STRING,0,0,e2);
-    type_compare(a,b);
 }

@@ -1,7 +1,7 @@
+#include <stdlib.h>
 #include "type.h"
 #include "scope.h"
 #include "stmt.h"
-#include <stdlib.h>
 
 extern int indent;
 extern int error_counter;
@@ -185,16 +185,19 @@ void stmt_typecheck(struct stmt *s, struct type *current_type){
     if (s == NULL){
         return;
     }
-    struct type *t = malloc(sizeof(struct type));
+
+    type_kind_t expected_return_type;
+    type_kind_t return_type;
     struct expr *e = malloc(sizeof(struct expr));
+
     switch (s->kind){
 	    case STMT_DECL:
 	        break;
 	    case STMT_EXPR:
 	        break;
 	    case STMT_IF_ELSE:
-	        t = expr_typecheck(s->init_expr);
-	        if (t->kind != TYPE_BOOLEAN){
+	        s->init_expr->type = expr_typecheck(s->init_expr);
+	        if (s->init_expr->type->kind != TYPE_BOOLEAN){
 	            error_counter += 1;
 	            printf("Error #%i ",error_counter);
 	            printf("type error: expression in if statement must be boolean: ");
@@ -204,9 +207,9 @@ void stmt_typecheck(struct stmt *s, struct type *current_type){
             stmt_typecheck(s->else_body,current_type);
 	        break;
 	    case STMT_FOR:
-	        expr_typecheck(s->init_expr);
-	        expr_typecheck(s->expr);
-	        expr_typecheck(s->next_expr);
+	        s->init_expr->type = expr_typecheck(s->init_expr);
+	        s->expr->type = expr_typecheck(s->expr);
+	        s->next_expr->type = expr_typecheck(s->next_expr);
 	        stmt_typecheck(s->body,current_type);
 	        break;
         case STMT_WHILE:
@@ -215,22 +218,45 @@ void stmt_typecheck(struct stmt *s, struct type *current_type){
 	    case STMT_PRINT:
 	        e = s->init_expr;
 	        while (e != NULL) { 
-	            expr_typecheck(e);
+	            e->type = expr_typecheck(e);
 	            e = e->next;
             }
 	        break;
 	    case STMT_RETURN:
-	        t = expr_typecheck(s->init_expr);
-	        if (t->kind != current_type->kind){
-	            error_counter += 1;
-	            printf("Error #%i ",error_counter);
-	            printf("type error: returned expression ");
-	            expr_print(s->init_expr);
-	            printf(" has type ");
-	            type_print(t);
-	            printf("\n\tFunction expecting return type ");
-	            type_print(current_type);
+	        if (s->init_expr != NULL) { 
+	            s->init_expr->type = expr_typecheck(s->init_expr);
+
+                return_type = s->init_expr->type->kind;
+            } else {
+                return_type = TYPE_VOID;
             }
+            
+            if (current_type->kind == TYPE_FUNCTION){
+                expected_return_type = current_type->subtype->kind;
+            } else {
+                expected_return_type = current_type->kind;
+            }
+
+            if (return_type != expected_return_type){
+                error_counter += 1;
+                printf("Error #%i ",error_counter);
+                printf("type error: returned expression has type ");
+                if (s->init_expr!=NULL){ 
+                    expr_print(s->init_expr);
+                } else {
+                    printf("void");
+                }
+                if (s->init_expr!=NULL){ 
+                    if (s->init_expr->type!=NULL){ 
+                        type_print(s->init_expr->type);
+                    } else {
+                        printf("void");
+                    }
+                }
+                printf("\n\tFunction expecting return type ");
+                type_print(current_type);
+            }
+
 	        break;
         case STMT_BLOCK:
             stmt_typecheck(s->body,current_type);

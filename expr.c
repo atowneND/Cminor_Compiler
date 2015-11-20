@@ -1,5 +1,6 @@
 #include "expr.h"
 #include "scope.h"
+#include "param_list.h"
 #include <stdlib.h>
 
 extern int indent;
@@ -19,6 +20,13 @@ struct expr * expr_create(
     new_expression->right = right;
     new_expression->next = next;
 
+    new_expression->name = 0;
+    new_expression->symbol = 0;
+    new_expression->literal_value = 0;
+    new_expression->string_literal = 0;
+
+    new_expression->type = 0;
+
     return new_expression;
 }
 
@@ -36,7 +44,16 @@ struct expr * expr_create_name( const char *n ){
     struct expr *new_expression = malloc(sizeof(struct expr));
 
     new_expression->kind = EXPR_IDENTIFIER;
+    new_expression->left = 0;
+    new_expression->right = 0;
+    new_expression->next = 0;
+
     new_expression->name = n;
+    new_expression->symbol = 0;
+    new_expression->literal_value = 0;
+    new_expression->string_literal = 0;
+
+    new_expression->type = 0;
     
     return new_expression;
 }
@@ -45,7 +62,16 @@ struct expr * expr_create_boolean_literal( int c ){
     struct expr *new_expression = malloc(sizeof(struct expr));
 
     new_expression->kind = EXPR_BOOLEAN_LITERAL;
+    new_expression->left = 0;
+    new_expression->right = 0;
+    new_expression->next = 0;
+
+    new_expression->name = 0;
+    new_expression->symbol = 0;
     new_expression->literal_value = c;
+    new_expression->string_literal = 0;
+
+    new_expression->type = 0;
 
     return new_expression;
 }
@@ -54,7 +80,16 @@ struct expr * expr_create_integer_literal( int c ){
     struct expr *new_expression = malloc(sizeof(struct expr));
 
     new_expression->kind = EXPR_INTEGER_LITERAL;
+    new_expression->left = 0;
+    new_expression->right = 0;
+    new_expression->next = 0;
+
+    new_expression->name = 0;
+    new_expression->symbol = 0;
     new_expression->literal_value = c;
+    new_expression->string_literal = 0;
+
+    new_expression->type = 0;
 
     return new_expression;
 }
@@ -63,7 +98,16 @@ struct expr * expr_create_character_literal( int c ){
     struct expr *new_expression = malloc(sizeof(struct expr));
     
     new_expression->kind = EXPR_CHARACTER_LITERAL;
+    new_expression->left = 0;
+    new_expression->right = 0;
+    new_expression->next = 0;
+
+    new_expression->name = 0;
+    new_expression->symbol = 0;
     new_expression->literal_value = c;
+    new_expression->string_literal = 0;
+
+    new_expression->type = 0;
 
     return new_expression;
 }
@@ -72,7 +116,16 @@ struct expr * expr_create_string_literal( const char *str ){
     struct expr *new_expression = malloc(sizeof(struct expr));
     
     new_expression->kind = EXPR_STRING_LITERAL;
+    new_expression->left = 0;
+    new_expression->right = 0;
+    new_expression->next = 0;
+
+    new_expression->name = 0;
+    new_expression->symbol = 0;
+    new_expression->literal_value = 0;
     new_expression->string_literal = str;
+
+    new_expression->type = 0;
 
     return new_expression;
 }
@@ -629,8 +682,6 @@ struct type *expr_typecheck(struct expr *e){
             e->type = type_create(TYPE_ARRAY, 0, 0, 0);
             break;
     }
-    free(l);
-    free(r);
     return e->type;
 }
 

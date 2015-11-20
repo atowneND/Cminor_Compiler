@@ -2,10 +2,10 @@
 #ifndef PARAM_LIST_H
 #define PARAM_LIST_H
 
-#include "type.h"
 #include <stdio.h>
 
 struct expr;
+struct type;
 
 struct param_list {
 	char *name;
