@@ -1,0 +1,8 @@
+main: function void () = {
+    writechar: function void ( c: char );
+    a: integer = 65;
+    writechar(a);  // error: a is not a char!
+
+    x: integer = 0;
+    x = b[0];      // error: x is not a boolean!
+}

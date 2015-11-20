@@ -149,21 +149,21 @@ stmt_list
 
 stmt
     : decl
-        { $$ = stmt_create(STMT_DECL, $1, 0, 0, 0, 0, 0, 0); stmt_resolve($$); } 
+        { $$ = stmt_create(STMT_DECL, $1, 0, 0, 0, 0, 0, 0); } 
     | TOKEN_IF TOKEN_LPAREN expression TOKEN_RPAREN matched_stmt TOKEN_ELSE stmt
-        { $$ = stmt_create(STMT_IF_ELSE, 0, $3, 0, 0, $5, $7, 0); stmt_resolve($$); }
+        { $$ = stmt_create(STMT_IF_ELSE, 0, $3, 0, 0, $5, $7, 0); }
     | TOKEN_IF TOKEN_LPAREN expression TOKEN_RPAREN stmt
-        { $$ = stmt_create(STMT_IF_ELSE, 0, $3, 0, 0, $5, 0, 0); stmt_resolve($$); }
+        { $$ = stmt_create(STMT_IF_ELSE, 0, $3, 0, 0, $5, 0, 0); }
     | return_stmt
-        { $$ = $1; stmt_resolve($$); }
+        { $$ = $1; }
     | print_stmt
-        { $$ = $1; stmt_resolve($$); }
+        { $$ = $1; }
     | expression TOKEN_SC
-        { $$ = stmt_create(STMT_EXPR, 0, $1, 0, 0, 0, 0, 0); stmt_resolve($$); }
+        { $$ = stmt_create(STMT_EXPR, 0, $1, 0, 0, 0, 0, 0); }
     | TOKEN_LBRACE stmt_list TOKEN_RBRACE
-        { $$ = stmt_create(STMT_BLOCK, 0, 0, 0, 0, $2, 0, 0); stmt_resolve($$); }
+        { $$ = stmt_create(STMT_BLOCK, 0, 0, 0, 0, $2, 0, 0); }
     | TOKEN_FOR TOKEN_LPAREN optional_expression TOKEN_SC optional_expression TOKEN_SC optional_expression TOKEN_RPAREN stmt
-        { $$ = stmt_create(STMT_FOR, 0, $3, $5, $7, $9, 0, 0); stmt_resolve($$); }
+        { $$ = stmt_create(STMT_FOR, 0, $3, $5, $7, $9, 0, 0); }
     ;
 
 matched_stmt 

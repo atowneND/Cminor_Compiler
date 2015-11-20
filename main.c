@@ -8,6 +8,7 @@
 #include "stmt.h"
 #include "symbol.h"
 #include "type.h"
+#include "scope.h"
 
 extern int yyparse();
 extern struct expr * parser_result;
@@ -17,10 +18,16 @@ extern char * yytext;
 extern struct decl *ast_pointer;
 
 extern const char *token_string(int t);
+void name_resolution(void);
+
+void deleteme_test(void);
 
 int indent = 0;
 int error_counter = 0;
 int scope_ctr = 0;
+int global_ctr = 0;
+int local_ctr = 0;
+int param_ctr = 0;
 
 int main(int argc, char *argv[]){
     // check input
@@ -67,7 +74,6 @@ int main(int argc, char *argv[]){
             while(1){
                 returned_token = yylex();
                 printf("%s\n",token_string(returned_token));
-//                printf("%i\n",returned_token);
                 if(!returned_token){
                     break;
                 }
@@ -81,14 +87,12 @@ int main(int argc, char *argv[]){
             }
             break;
         case 3:
-            if (yyparse()!=0){
-                fprintf(stderr,"Error parsing\n");
-            } else {
-                printf("parse successful\n");
-            }
+            name_resolution();
             break;
         case 4:
             printf("typechecking\n");
+            name_resolution();
+            deleteme_test();
             break;
         default:
             fprintf(stderr,"Incorrect option selected\n");
@@ -97,4 +101,38 @@ int main(int argc, char *argv[]){
 	fclose(yyin);
     
     return 0;
+}
+
+void name_resolution(void){
+    scope_enter();
+    if (yyparse()!=0){
+        fprintf(stderr,"Error parsing\n");
+    } else {
+        printf("parse successful\n");
+    }
+
+    decl_resolve(ast_pointer);
+    scope_exit();
+
+    if (error_counter == 1){ 
+        printf("%i name resolution error\n",error_counter);
+    } else {
+        printf("%i name resolution errors\n",error_counter);
+    }
+}
+void deleteme_test(void){
+    struct expr *e1 = expr_create(EXPR_INTEGER_LITERAL,0,0,0);
+    struct expr *e2 = expr_create(EXPR_STRING_LITERAL,0,0,0);
+    struct expr *e3 = expr_create(EXPR_ADD,0,0,0);
+    e3->left = e1;
+    e3->right = e2;
+    e1->literal_value = -3;
+    e2->string_literal = "hello";
+    expr_typecheck(e1);
+    expr_typecheck(e2);
+    expr_typecheck(e3);
+    
+    struct type *a = type_create(TYPE_INTEGER,0,0,e1);
+    struct type *b = type_create(TYPE_STRING,0,0,e2);
+    type_compare(a,b);
 }

@@ -3,6 +3,7 @@
 #include <stdlib.h>
 
 extern int indent;
+extern int error_counter;
 
 struct stmt * stmt_create(
         stmt_kind_t kind,
@@ -156,6 +157,7 @@ void stmt_resolve( struct stmt *s ){
             break;
         case STMT_WHILE:
             fprintf(stderr,"While loops not supported\n");
+            error_counter += 1;
             break;
         case STMT_PRINT:
             expr_resolve(s->init_expr);

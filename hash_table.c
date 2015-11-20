@@ -7,6 +7,7 @@ See the file COPYING for details.
 
 #include "hash_table.h"
 
+#include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
@@ -369,5 +370,4 @@ unsigned hash_string(const char *s)
 {
 	return jenkins_hash((const ub1 *) s, strlen(s), 0);
 }
-
 /* vim: set noexpandtab tabstop=4: */

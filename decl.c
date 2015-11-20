@@ -8,6 +8,8 @@
 #include <stdlib.h>
 
 extern int indent;
+extern int scope_ctr;
+extern int error_counter;
 
 struct decl * decl_create( 
         char *name,
@@ -66,11 +68,18 @@ void decl_resolve( struct decl *d ){
     }
 
     // create the symbol structure
-    struct symbol *sym = symbol_create(d->type->kind, d->type, d->name);
+    symbol_t kind;
+    if (scope_ctr <=1){
+        kind = SYMBOL_GLOBAL;
+    }else{
+        kind = SYMBOL_LOCAL;
+    }
+    struct symbol *sym = symbol_create(kind, d->type, d->name);
+    d->symbol = sym;
     // no redeclarations
     if (scope_lookup_local(d->name) != NULL) {
         fprintf(stderr,"No redeclarations allowed: %s\n",d->name);
-        return;
+        error_counter += 1;
     }
 
     // add to symbol table
@@ -88,9 +97,16 @@ void decl_resolve( struct decl *d ){
     decl_resolve(d->next);
 }
 
-struct type *decl_typecheck(struct type *a, struct type *b){
-    if (a->kind != b->kind){
-        fprintf(stderr,"typecheck error\n");
+struct type *decl_typecheck(struct decl *d){
+    // if d is global and right side is not constant, return error
+    struct symbol *sym = scope_lookup(d->name);
+    if (sym->kind == SYMBOL_GLOBAL){
+        if (d->value != NULL){
+        }
+        if (d->code != NULL){
+        }
     }
-    return a;
+
+    // type to expression
+    // stmt_list typecheck
 }

@@ -44,7 +44,7 @@ void param_list_resolve(struct param_list *p){
     if (p == NULL) {
         return;
     }
-    struct symbol *sym = symbol_create(p->type->kind, p->type, p->name);
+    struct symbol *sym = symbol_create(SYMBOL_PARAM, p->type, p->name);
     if (scope_lookup_local(p->name) != NULL) {
         fprintf(stderr,"No redeclarations allowed: %s\n",p->name);
         return;
@@ -52,4 +52,7 @@ void param_list_resolve(struct param_list *p){
 
     scope_bind(p->name,sym);
     param_list_resolve(p->next);
+}
+
+void param_list_typecheck(void){
 }
