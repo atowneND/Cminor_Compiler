@@ -4,5 +4,6 @@ main: function void () = {
     writechar(a);  // error: a is not a char!
 
     x: integer = 0;
+    b: array[1] integer;
     x = b[0];      // error: x is not a boolean!
 }

@@ -1,0 +1,21 @@
+#!/bin/bash
+
+file_list=(grammar.bison\
+    decl.c decl.h\
+    expr.c expr.h\
+    hash_table.c hash_table.h\
+    main.c\
+    Makefile\
+    param_list.c param_list.h\
+    scanner.l\
+    scope.c scope.h\
+    stmt.c stmt.h\
+    symbol.c symbol.h\
+    token.c token.h\
+    type.c type.h\
+    ptests/* \
+    )
+
+for i in ${file_list[*]}; do
+    cp $i for_dropbox/
+done

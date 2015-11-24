@@ -1,5 +1,0 @@
-main: function void () {
-    while(1){
-        print 'y';
-    }
-}

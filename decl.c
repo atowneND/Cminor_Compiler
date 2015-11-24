@@ -97,7 +97,6 @@ void decl_resolve( struct decl *d ){
     }
 
     decl_resolve(d->next);
-    decl_typecheck(d);
 }
 
 struct type *decl_typecheck(struct decl *d){
@@ -116,7 +115,12 @@ struct type *decl_typecheck(struct decl *d){
     if (d->value != NULL){
         // type to expression
         struct type *e = expr_typecheck(d->value);
-        if ( d->type->kind != e->kind){
+        // if array, use subtype
+        type_kind_t d_kind = d->type->kind;
+        if (d_kind == TYPE_ARRAY){
+            d_kind = d->type->subtype->kind;
+        }
+        if ( d_kind != e->kind){
             error_counter += 1;
             printf("Error #%i ",error_counter);
             printf("type error: invalid declaration of ");
@@ -129,7 +133,7 @@ struct type *decl_typecheck(struct decl *d){
         struct expr *tmp = d->value->next;
         while (tmp != NULL){
             e = expr_typecheck(tmp);
-            if ( d->type->kind != e->kind){
+            if ( d_kind != e->kind){
                 error_counter += 1;
                 printf("Error #%i ",error_counter);
                 printf("type error: invalid declaration of ");

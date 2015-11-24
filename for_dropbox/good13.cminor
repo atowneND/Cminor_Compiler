@@ -1,0 +1,3 @@
+main: function void () = {
+print "This was a test file full of text. It should not parse because there are no declarations.";
+}

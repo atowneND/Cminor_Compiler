@@ -1,0 +1,5 @@
+main:function void()={
+for (1>3;3<5;1){
+    print "hi";
+}
+}

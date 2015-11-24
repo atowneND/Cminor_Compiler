@@ -4,7 +4,12 @@
 
 extern int indent;
 
-struct type * type_create( type_kind_t kind, struct param_list *params, struct type *subtype, struct expr *expression){
+struct type * type_create( 
+        type_kind_t kind,
+        struct param_list *params,
+        struct type *subtype,
+        struct expr *expression
+    ){
     // create new struct
     struct type *new_type = malloc(sizeof(struct type));
 
@@ -56,4 +61,27 @@ void type_print( struct type *t ) {
                 break;
         }
     }
+}
+
+struct type *type_copy(struct type *t){
+    struct type *new_type = malloc(sizeof(struct type));
+
+    new_type->kind = t->kind;
+    new_type->params = t->params;
+    new_type->subtype = t->subtype;
+    new_type->expr = t->expr;
+
+    return new_type;
+}
+
+int type_compare(struct type *a, struct type *b){
+    if (a->kind == b->kind){
+        return 1;
+    }else{
+        return 0;
+    }
+}
+
+void type_delete(struct type *t){
+    free(t);
 }

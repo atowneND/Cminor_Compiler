@@ -1,0 +1,3 @@
+main:function void () = {
+x: string = "#include <stdio.h>";
+}

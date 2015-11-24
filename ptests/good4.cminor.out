@@ -1,8 +1,0 @@
-main: function void () = {
-    writechar: function void (c: char);
-    a: integer = 65;
-    writechar(a);
-    x: integer = 0;
-    x = b[0];
-}
-parse successful

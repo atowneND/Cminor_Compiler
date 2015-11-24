@@ -5,6 +5,9 @@ x: integer = 65;
 y: char = 'A';
 
 main: function void () = {
-    if(x>y) print x; // error: x and y are of different types!
+    f: boolean = true;
+    y: integer = 3;
+//    x: char = 'a';
+    if(x>y) print x; 
     if(f) print 0; // error: f is not a boolean!
 }

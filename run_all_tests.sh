@@ -6,7 +6,7 @@ ntests=0
 
 for testfile in ptests/good*.cminor
 do
-	if ./cminor -parse $testfile > $testfile.out
+	if ./cminor -typecheck $testfile > $testfile.out
 	then
 		echo "$testfile success (as expected)"
         nsuccess=$((nsuccess+1))
@@ -19,7 +19,7 @@ done
 
 for testfile in ptests/bad*.cminor
 do
-	if ./cminor -parse $testfile > $testfile.out
+	if ./cminor -typecheck $testfile > $testfile.out
 	then
 		echo "$testfile success (INCORRECT)"
         nfails=$((nfails+1))

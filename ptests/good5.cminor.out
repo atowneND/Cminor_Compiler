@@ -1,7 +1,0 @@
-b: boolean;
-x: integer = 3;
-y: integer = 5;
-main: function void () = {
-    b = x < y;
-}
-parse successful

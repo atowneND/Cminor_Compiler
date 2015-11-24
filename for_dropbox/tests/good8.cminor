@@ -5,11 +5,14 @@ printarray: function void ( a: array [] integer, size: integer ) = {
     }
 }
 
+x:integer = 3;
+y:integer = 2;
+
 main: function integer () = {
 // ex3
     if(x>y) print x; // error: x and y are of different types!
 
-    f: integer = 0;
+    f: boolean = false;
     if(f) print 0; // error: f is not a boolean!
 
 // ex4
@@ -18,10 +21,13 @@ main: function integer () = {
     writechar(a);  // error: a is not a char!
 
     x: integer = 0;
+    b: array [2] integer = {1,2};
     x = b[0];      // error: x is not a boolean!
 }
 
 b: function integer (x:integer) = {
+    f: boolean = false;
+    y: boolean = true;
     print 3;
     if (f) {
         print 0;

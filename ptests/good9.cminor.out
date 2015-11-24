@@ -1,7 +1,0 @@
-puts: function void (s: string);
-main: function integer () = {
-    puts("hello world");
-    print "hello";
-    return 0;
-}
-parse successful

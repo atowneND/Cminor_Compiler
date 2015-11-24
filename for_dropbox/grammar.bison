@@ -89,6 +89,7 @@ so that it can be retrieved by main().
 */
 
 struct expr * parser_result = 0;
+struct decl *ast_pointer;
 
 %}
 
@@ -118,7 +119,7 @@ struct expr * parser_result = 0;
 /* Here is the grammar: program is the start symbol. */
 program     
     : decl_list
-        { $$ = $1; decl_print($1); }
+        { ast_pointer = $1; }
     ;
 
 decl_list   
@@ -157,7 +158,7 @@ stmt
         { $$ = $1; }
     | print_stmt
         { $$ = $1; }
-    | optional_expression TOKEN_SC
+    | expression TOKEN_SC
         { $$ = stmt_create(STMT_EXPR, 0, $1, 0, 0, 0, 0, 0); }
     | TOKEN_LBRACE stmt_list TOKEN_RBRACE
         { $$ = stmt_create(STMT_BLOCK, 0, 0, 0, 0, $2, 0, 0); }
@@ -174,7 +175,7 @@ matched_stmt
         { $$ = $1; }
     | print_stmt
         { $$ = $1; }
-    | optional_expression TOKEN_SC
+    | expression TOKEN_SC
         { $$ = stmt_create(STMT_EXPR, 0, $1, 0, 0, 0, 0, 0); }
     | TOKEN_LBRACE stmt_list TOKEN_RBRACE
         { $$ = stmt_create(STMT_BLOCK, 0, 0, 0, 0, $2, 0, 0); }
@@ -371,7 +372,7 @@ base_level_expr
 
 ident       
     : TOKEN_IDENT /* need to add to the symbol table, so this token gets its own NT */
-        { $$ = strdup(yytext);}
+        { $$ = strdup(yytext); }
     ;
 
 integer_literal

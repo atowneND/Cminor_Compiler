@@ -1,10 +1,15 @@
 #include "decl.h"
-#include "stmt.h"
 #include "type.h"
 #include "expr.h"
+#include "scope.h"
+#include "symbol.h"
+#include "param_list.h"
+#include "stmt.h"
 #include <stdlib.h>
 
 extern int indent;
+extern int scope_ctr;
+extern int error_counter;
 
 struct decl * decl_create( 
         char *name,
@@ -20,6 +25,7 @@ struct decl * decl_create(
     new_declaration->type = t;
     new_declaration->value = v;
     new_declaration->code = c;
+    new_declaration->symbol = 0;
     new_declaration->next = next;
 
     return new_declaration;
@@ -55,4 +61,95 @@ void decl_print( struct decl *d ){
             decl_print(d->next);
         }
     }
+}
+
+void decl_resolve( struct decl *d ){
+    if (d == NULL) {
+        return;
+    }
+
+    // create the symbol structure
+    symbol_t kind;
+    if (scope_ctr <=1){
+        kind = SYMBOL_GLOBAL;
+    }else{
+        kind = SYMBOL_LOCAL;
+    }
+    struct symbol *sym = symbol_create(kind, d->type, d->name);
+    d->symbol = sym;
+    // no redeclarations
+    if (scope_lookup_local(d->name) != NULL) {
+        fprintf(stderr,"No redeclarations allowed: %s\n",d->name);
+        error_counter += 1;
+        return;
+    }
+
+    // add to symbol table
+    scope_bind(d->name,sym);
+
+    // resolve components of decl
+    expr_resolve(d->value);
+    if (d->code != NULL) {
+        scope_enter();
+        param_list_resolve(d->type->params);
+        stmt_resolve(d->code);
+        scope_exit();
+    }
+
+    decl_resolve(d->next);
+}
+
+struct type *decl_typecheck(struct decl *d){
+    if (d == NULL) {
+        return type_create(TYPE_VOID,0,0,0);
+    }
+    // if d is global and right side is not constant, return error
+    struct symbol *sym = scope_lookup(d->name);
+    if (sym->kind == SYMBOL_GLOBAL){
+        if (d->value != NULL){
+        }
+        if (d->code != NULL){
+        }
+    }
+
+    if (d->value != NULL){
+        // type to expression
+        struct type *e = expr_typecheck(d->value);
+        // if array, use subtype
+        type_kind_t d_kind = d->type->kind;
+        if (d_kind == TYPE_ARRAY){
+            d_kind = d->type->subtype->kind;
+        }
+        if ( d_kind != e->kind){
+            error_counter += 1;
+            printf("Error #%i ",error_counter);
+            printf("type error: invalid declaration of ");
+            type_print(d->type);
+            printf(" (%s) = ",d->name);
+            type_print(d->value->type);
+            literal_print(d->value);
+        }
+        // expression list
+        struct expr *tmp = d->value->next;
+        while (tmp != NULL){
+            e = expr_typecheck(tmp);
+            if ( d_kind != e->kind){
+                error_counter += 1;
+                printf("Error #%i ",error_counter);
+                printf("type error: invalid declaration of ");
+                type_print(d->type);
+                printf(" (%s) = ",d->name);
+                type_print(d->value->type);
+                literal_print(d->value);
+            }
+            tmp = tmp->next;
+        }
+    }
+
+    // return value (function definitions)
+    stmt_typecheck(d->code, d->type);
+    
+    // next decl in the list
+    decl_typecheck(d->next);
+    return d->type;
 }

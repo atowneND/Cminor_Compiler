@@ -6,5 +6,6 @@ s: string  = "hello cminor\n";
 
 main: function integer () = {
     /* A C-style comment */
-    a=5; // A C++ style comment
+    
+    a: integer=5; // A C++ style comment
 }

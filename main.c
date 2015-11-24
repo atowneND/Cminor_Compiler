@@ -111,6 +111,11 @@ void name_resolution(void){
     }
 
     decl_resolve(ast_pointer);
+    if (error_counter == 0) { 
+        decl_typecheck(ast_pointer);
+    }else{
+        printf("Please resolve all naming errors before moving on to typechecking\n");
+    }
     scope_exit();
 
     if (error_counter == 1){ 

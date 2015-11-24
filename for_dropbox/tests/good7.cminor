@@ -1,9 +1,12 @@
+square: function integer (x: integer);
 main: function integer()={
-print "The temperature is: ", temp, " degrees\n";
+//    print "The temperature is: ", temp, " degrees\n";
+    temp: integer = square(3);
+    print "The temperature is: ", temp, " degrees\n";
 }
 
-square: function integer ( x: integer ) = {
-    return x^2;
-}
+//square: function integer ( x: integer ) = {
+//    return x^2;
+//}
 
 

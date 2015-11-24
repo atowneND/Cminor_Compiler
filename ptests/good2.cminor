@@ -1,28 +1,46 @@
+foo:function integer(x:integer,a:boolean)= {
+    if (a){
+        return x;
+    } else {
+        return 0;
+    }
+}
+
 main: function integer () = {
+this_is_an_ident:integer;
 this_is_an_ident=3;
 this_is_an_ident = 5 || 3;
 this_is_an_ident = 5 && 3;
+a:boolean;
+x:integer;
 a = x != 3;
 a = x == 3;
 a = x < 3;
 a = x > 3;
 a = x <= 3;
 a = x >= 3;
-a = x + y;
-a = x - y;
-a = x * y;
-a = x / y;
-a = x % y;
-a = x^y;
-a = !y;
-a = -y;
-a = +y;
-a = "hello";
-a = 'c';
+a = !a;
+
+b:integer;
+y:integer;
+b = x + y;
+b = x - y;
+b = x * y;
+b = x / y;
+b = x % y;
+b = x^y;
+b = -y;
+b = +y;
+
+c:string;
+c = "hello";
+d:char = 'c';
 a = true;
 a = false;
-a = (x+y);
-a = z[x-y];
+b = (x+y);
+
+z:array[10]integer;
+b = z[x-y];
 a = foo(3,false);
 a = x++;
 a = y--;

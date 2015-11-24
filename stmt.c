@@ -197,14 +197,19 @@ void stmt_typecheck(struct stmt *s, struct type *current_type){
 	        break;
 	    case STMT_IF_ELSE:
 	        s->init_expr->type = expr_typecheck(s->init_expr);
-	        if (s->init_expr->type->kind != TYPE_BOOLEAN){
-	            error_counter += 1;
-	            printf("Error #%i ",error_counter);
-	            printf("type error: expression in if statement must be boolean: ");
-	            expr_print(s->init_expr);
+	        if (s->init_expr != NULL){
+	            if (s->init_expr->type != NULL) {
+                    if (s->init_expr->type->kind != TYPE_BOOLEAN){
+                        error_counter += 1;
+                        printf("Error #%i ",error_counter);
+                        printf("type error: expression in if statement must be boolean: ");
+                        expr_print(s->init_expr);
+                        printf("\n");
+                    }
+                    stmt_typecheck(s->body,current_type);
+                    stmt_typecheck(s->else_body,current_type);
+                }
             }
-            stmt_typecheck(s->body,current_type);
-            stmt_typecheck(s->else_body,current_type);
 	        break;
 	    case STMT_FOR:
 	        s->init_expr->type = expr_typecheck(s->init_expr);
@@ -255,6 +260,7 @@ void stmt_typecheck(struct stmt *s, struct type *current_type){
                 }
                 printf("\n\tFunction expecting return type ");
                 type_print(current_type);
+                printf("\n");
             }
 
 	        break;
