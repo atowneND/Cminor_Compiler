@@ -1,6 +1,5 @@
-2D arrays
-- need to check array assignment lengths and function parameter sizes
-fprintf vs printf in typechecking functions
-globals should resolve to themselves, not a number
-error numbers should be associated with name resolution
-array initialization - empty brackets as a function parameter, else constant
+- [ ] 2D arrays
+      - need to check array assignment lengths and function parameter sizes
+- [ ] fprintf vs printf in typechecking functions
+- [ ] error numbers should be associated with name resolution
+- [ ] array initialization - empty brackets as a function parameter, else constant
