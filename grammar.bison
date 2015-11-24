@@ -107,7 +107,7 @@ struct decl *ast_pointer;
 %type <decl> program decl_list decl
 %type <stmt> stmt_list stmt matched_stmt return_stmt print_stmt
 %type <param_list> param_list non_empty_param_list param
-%type <expr> optional_expression optional_expression_list non_empty_expr_prefix expression_list expression assign_level_expr or_comparison_expr and_comparison_expr eq_comparison_expr value_comparison_expr add_level_expr mult_level_expr exponent_level_expr unary_level_expr base_level_expr
+%type <expr> array_size optional_expression optional_expression_list non_empty_expr_prefix expression_list expression assign_level_expr or_comparison_expr and_comparison_expr eq_comparison_expr value_comparison_expr add_level_expr mult_level_expr exponent_level_expr unary_level_expr base_level_expr
 %type <type> type
 %type <str_literal> ident string_literal
 %type <int_literal> integer_literal character_literal true_literal false_literal
@@ -204,10 +204,17 @@ type
         { $$ = type_create(TYPE_BOOLEAN, 0, 0, 0); }
     | TOKEN_VOID
         { $$ = type_create(TYPE_VOID, 0, 0, 0); }
-    | TOKEN_ARRAY TOKEN_LBRACK optional_expression TOKEN_RBRACK type
-        { $$ = type_create(TYPE_ARRAY, 0, $5, $3); }
+    | TOKEN_ARRAY array_size type
+        { $$ = type_create(TYPE_ARRAY, 0, $3, $2); }
     | TOKEN_FCALL type TOKEN_LPAREN param_list TOKEN_RPAREN
         { $$ = type_create(TYPE_FUNCTION, $4, $2, 0); }
+    ;
+
+array_size
+    : TOKEN_LBRACK optional_expression TOKEN_RBRACK array_size
+        { $$ = $2; }
+    |
+        { $$ = 0; }
     ;
 
 param_list
