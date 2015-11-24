@@ -342,7 +342,6 @@ struct type *expr_typecheck(struct expr *e){
             if ((l->kind != TYPE_INTEGER) || (r->kind != TYPE_INTEGER)){
                 if (l->kind == TYPE_VOID) { // unary minor
                     e->type = type_create(TYPE_INTEGER,0,0,0);
-                    printf("here\n");
                 } else {
                     error_counter += 1;
                     printf("Error #%i ",error_counter);

@@ -67,7 +67,7 @@ void scope_bind(const char *name, struct symbol *s){
 struct symbol *scope_lookup(const char *name){
     struct symbol *sym = hash_table_lookup(head_hash_table_node->current_hash_table,name);
     struct hash_table_node *tmp = head_hash_table_node;
-    if ((!sym) && (scope_ctr>0)){
+    while (!sym){
         tmp = tmp->next_hash_table;
         sym = hash_table_lookup(tmp->current_hash_table, name);
     }
