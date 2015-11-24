@@ -317,11 +317,11 @@ add_level_expr
     ;
 
 mult_level_expr 
-    : mult_level_expr TOKEN_MULT base_level_expr
+    : mult_level_expr TOKEN_MULT exponent_level_expr
         { $$ = expr_create(EXPR_MUL, $1, $3, 0); }
-    | mult_level_expr TOKEN_DIV base_level_expr
+    | mult_level_expr TOKEN_DIV exponent_level_expr
         { $$ = expr_create(EXPR_DIV, $1, $3, 0); }
-    | mult_level_expr TOKEN_MOD base_level_expr
+    | mult_level_expr TOKEN_MOD exponent_level_expr
         { $$ = expr_create(EXPR_MODULO, $1, $3, 0); }
     | exponent_level_expr
         { $$ = $1; }
@@ -355,7 +355,7 @@ base_level_expr
     | character_literal
         { $$ = expr_create_character_literal($1); }
     | true_literal
-        { $$ = expr_create_boolean_literal($1); }
+        { $$ = expr_create_boolean_literal($1);printf("yytext = %s\n",yytext); }
     | false_literal
         { $$ = expr_create_boolean_literal($1); }
     | TOKEN_LPAREN expression TOKEN_RPAREN
@@ -367,7 +367,7 @@ base_level_expr
     | base_level_expr TOKEN_INC /* is this right? */
         { $$ = expr_create(EXPR_INCREMENT, $1, 0, 0); }
     | base_level_expr TOKEN_DEC /* is this right? */
-        { $$ = expr_create(EXPR_DECREMENT, $1, 0, 0); }
+        { $$ = expr_create(EXPR_DECREMENT, $1, 0, 0); printf("yytext = %s\n",yytext);}
     ;
 
 ident       

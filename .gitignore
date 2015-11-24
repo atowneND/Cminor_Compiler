@@ -16,3 +16,4 @@ scanner.c
 oldMakefile
 questions
 bar
+*.out

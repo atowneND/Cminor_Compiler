@@ -340,16 +340,21 @@ struct type *expr_typecheck(struct expr *e){
             l = expr_typecheck(e->left);
             r = expr_typecheck(e->right);
             if ((l->kind != TYPE_INTEGER) || (r->kind != TYPE_INTEGER)){
-                error_counter += 1;
-                printf("Error #%i ",error_counter);
-                printf("type error: cannot subtract ");
-                type_print(l);
-                literal_print(e->left);
-                printf(" from ");
-                type_print(r);
-                literal_print(e->right);
-                printf("\n");
-                e->type = 0;
+                if (l->kind == TYPE_VOID) { // unary minor
+                    e->type = type_create(TYPE_INTEGER,0,0,0);
+                    printf("here\n");
+                } else {
+                    error_counter += 1;
+                    printf("Error #%i ",error_counter);
+                    printf("type error: cannot subtract ");
+                    type_print(l);
+                    literal_print(e->left);
+                    printf(" from ");
+                    type_print(r);
+                    literal_print(e->right);
+                    printf("\n");
+                    e->type = 0;
+                }
             } else {
                 e->type = type_create(TYPE_INTEGER,0,0,0);
             }
