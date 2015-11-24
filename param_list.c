@@ -1,5 +1,6 @@
 #include "param_list.h"
 #include "scope.h"
+#include "type.h"
 #include <stdlib.h>
 
 extern int indent;

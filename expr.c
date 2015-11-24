@@ -303,7 +303,7 @@ void expr_resolve(struct expr *e){
                     sprintf(this_variable,"LOCAL %i",s->which);
                     break;
                 case SYMBOL_GLOBAL:
-                    sprintf(this_variable,"GLOBAL %i",s->which);
+                    sprintf(this_variable,"GLOBAL %s",s->name);
                     break;
                 case SYMBOL_PARAM:
                     sprintf(this_variable,"PARAM %i",s->which);

@@ -6,7 +6,6 @@
 #include "type.h"
 #include "stmt.h"
 #include "decl.h"
-#include "symbol.h"
 #include "scope.h"
 #include "expr.h"
 

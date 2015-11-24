@@ -2,7 +2,6 @@
 #include "type.h"
 #include "expr.h"
 #include "scope.h"
-#include "symbol.h"
 #include "param_list.h"
 #include "stmt.h"
 #include <stdlib.h>

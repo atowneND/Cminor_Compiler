@@ -1,8 +1,19 @@
 #ifndef SCOPE_H
 #define SCOPE_H
 
-#include "symbol.h"
 #include "hash_table.h"
+typedef enum {
+	SYMBOL_LOCAL,
+	SYMBOL_PARAM,
+	SYMBOL_GLOBAL
+} symbol_t;
+
+struct symbol {
+	symbol_t kind;
+	int which;
+	struct type *type;
+	char *name;
+};
 
 void scope_enter(void);
 void scope_exit(void);
@@ -12,4 +23,5 @@ struct symbol *scope_lookup(const char *name);
 struct symbol *scope_lookup_local(const char *name);
 
 void sym_table_print(struct hash_table *h);
+struct symbol *symbol_create(symbol_t kind, struct type *type, char *name);
 #endif

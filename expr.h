@@ -1,7 +1,6 @@
 #ifndef EXPR_H
 #define EXPR_H
 
-#include "symbol.h"
 #include "type.h"
 
 typedef enum {

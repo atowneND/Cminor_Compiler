@@ -1,11 +1,28 @@
-#include "symbol.h"
 #include "hash_table.h"
 #include <string.h>
 #include <stdlib.h>
+#include <stdio.h>
+extern int scope_ctr;
+extern int global_ctr;
+extern int local_ctr;
+extern int param_ctr;
 
 struct hash_table_node{
     struct hash_table *current_hash_table;
     struct hash_table_node *next_hash_table;
+};
+
+typedef enum {
+	SYMBOL_LOCAL,
+	SYMBOL_PARAM,
+	SYMBOL_GLOBAL
+} symbol_t;
+
+struct symbol {
+	symbol_t kind;
+	int which;
+	struct type *type;
+	char *name;
 };
 
 extern int scope_ctr;
@@ -58,7 +75,7 @@ void scope_bind(const char *name, struct symbol *s){
             printf("%s bound to sym PARAM %i\n", name, s->which);
             break;
         case SYMBOL_GLOBAL:
-            printf("%s bound to sym GLOBAL %i\n", name, s->which);
+            printf("%s bound to sym GLOBAL %s\n", name, s->name);
             break;
     }
 //    sym_table_print(head_hash_table_node->current_hash_table);
@@ -77,6 +94,17 @@ struct symbol *scope_lookup(const char *name){
 
 struct symbol *scope_lookup_local(const char *name){
     struct symbol *sym = hash_table_lookup(head_hash_table_node->current_hash_table, name);
+
+    return sym;
+}
+
+struct symbol *symbol_create(symbol_t kind, struct type *type, char *name){
+    struct symbol *sym = malloc(sizeof(struct symbol));
+    int symbol_number = hash_table_size(head_hash_table_node->current_hash_table);
+    sym->which = symbol_number;
+    sym->kind = kind;
+    sym->type = type;
+    sym->name = name;
 
     return sym;
 }
