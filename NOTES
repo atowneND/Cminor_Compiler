@@ -2,7 +2,7 @@ expr_resolve($$); 266
 stmt_resolve($$); 154,156,158,160,162,164,168
 
 2D arrays
-x+1
+- need to check array assignment lengths and function parameter sizes
 LOCAL_CTR needs to be reset for each scope
 PARAM_CTR needs to be reset for each function
 check expr_typecheck, case EXPR_ASSIGNMENT - can the right be a function?

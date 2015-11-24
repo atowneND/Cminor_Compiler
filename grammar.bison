@@ -107,7 +107,7 @@ struct decl *ast_pointer;
 %type <decl> program decl_list decl
 %type <stmt> stmt_list stmt matched_stmt return_stmt print_stmt
 %type <param_list> param_list non_empty_param_list param
-%type <expr> array_size optional_expression optional_expression_list non_empty_expr_prefix expression_list expression assign_level_expr or_comparison_expr and_comparison_expr eq_comparison_expr value_comparison_expr add_level_expr mult_level_expr exponent_level_expr unary_level_expr base_level_expr
+%type <expr> array_index array_size optional_expression optional_expression_list non_empty_expr_prefix expression_list expression assign_level_expr or_comparison_expr and_comparison_expr eq_comparison_expr value_comparison_expr add_level_expr mult_level_expr exponent_level_expr unary_level_expr base_level_expr
 %type <type> type
 %type <str_literal> ident string_literal
 %type <int_literal> integer_literal character_literal true_literal false_literal
@@ -212,7 +212,7 @@ type
 
 array_size
     : TOKEN_LBRACK optional_expression TOKEN_RBRACK array_size
-        { $$ = $2; }
+        { $$ = $2; if ($2 != 0) {$2->next_array_dimension = $4;} }
     |
         { $$ = 0; }
     ;
@@ -362,20 +362,28 @@ base_level_expr
     | character_literal
         { $$ = expr_create_character_literal($1); }
     | true_literal
-        { $$ = expr_create_boolean_literal($1);printf("yytext = %s\n",yytext); }
+        { $$ = expr_create_boolean_literal($1); }
     | false_literal
         { $$ = expr_create_boolean_literal($1); }
     | TOKEN_LPAREN expression TOKEN_RPAREN
         { $$ = expr_create(EXPR_PARENTHESES, $2, 0, 0); }
-    | ident TOKEN_LBRACK expression TOKEN_RBRACK
-        { $$ = expr_create(EXPR_ARRAY_INDEX, expr_create_name($1), $3, 0); }
+    | ident array_index
+        { $$ = expr_create(EXPR_ARRAY_INDEX, expr_create_name($1), $2, 0); }
     | ident TOKEN_LPAREN optional_expression_list TOKEN_RPAREN
         { $$ = expr_create(EXPR_FUNCTION_CALL, expr_create_name($1), $3, 0); }
     | base_level_expr TOKEN_INC /* is this right? */
         { $$ = expr_create(EXPR_INCREMENT, $1, 0, 0); }
     | base_level_expr TOKEN_DEC /* is this right? */
-        { $$ = expr_create(EXPR_DECREMENT, $1, 0, 0); printf("yytext = %s\n",yytext);}
+        { $$ = expr_create(EXPR_DECREMENT, $1, 0, 0); }
     ;
+
+array_index
+    : TOKEN_LBRACK expression TOKEN_RBRACK array_index
+        { $$ = $2; if ($2 != 0) {$2->next_array_dimension = $4;} }
+    |
+        { $$ = 0; }
+    ;
+
 
 ident       
     : TOKEN_IDENT /* need to add to the symbol table, so this token gets its own NT */

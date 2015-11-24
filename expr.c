@@ -10,7 +10,7 @@ struct expr * expr_create(
         expr_t kind,
         struct expr *left,
         struct expr *right,
-        struct expr *next 
+        struct expr *next
     ){
     // create new struct
     struct expr *new_expression = malloc(sizeof(struct expr));
@@ -19,6 +19,7 @@ struct expr * expr_create(
     new_expression->left = left;
     new_expression->right = right;
     new_expression->next = next;
+    new_expression->next_array_dimension = 0;
 
     new_expression->name = 0;
     new_expression->symbol = 0;
@@ -47,6 +48,7 @@ struct expr * expr_create_name( const char *n ){
     new_expression->left = 0;
     new_expression->right = 0;
     new_expression->next = 0;
+    new_expression->next_array_dimension = 0;
 
     new_expression->name = n;
     new_expression->symbol = 0;
@@ -65,6 +67,7 @@ struct expr * expr_create_boolean_literal( int c ){
     new_expression->left = 0;
     new_expression->right = 0;
     new_expression->next = 0;
+    new_expression->next_array_dimension = 0;
 
     new_expression->name = 0;
     new_expression->symbol = 0;
@@ -83,6 +86,7 @@ struct expr * expr_create_integer_literal( int c ){
     new_expression->left = 0;
     new_expression->right = 0;
     new_expression->next = 0;
+    new_expression->next_array_dimension = 0;
 
     new_expression->name = 0;
     new_expression->symbol = 0;
@@ -101,6 +105,7 @@ struct expr * expr_create_character_literal( int c ){
     new_expression->left = 0;
     new_expression->right = 0;
     new_expression->next = 0;
+    new_expression->next_array_dimension = 0;
 
     new_expression->name = 0;
     new_expression->symbol = 0;
@@ -119,6 +124,7 @@ struct expr * expr_create_string_literal( const char *str ){
     new_expression->left = 0;
     new_expression->right = 0;
     new_expression->next = 0;
+    new_expression->next_array_dimension = 0;
 
     new_expression->name = 0;
     new_expression->symbol = 0;
@@ -261,9 +267,14 @@ void expr_print( struct expr *e ){
                 break;
             case (EXPR_ARRAY_INDEX):
                 if (e->left != 0) expr_print(e->left);
-                printf("[");
-                if (e->right != 0) expr_print(e->right);
-                printf("]");
+                struct expr *tmp = malloc(sizeof(struct expr));
+                tmp = e->right;
+                while (tmp != NULL){
+                    printf("[");
+                    expr_print(tmp);
+                    printf("]");
+                    tmp = tmp->next_array_dimension;
+                }
                 break;
         }
         if (e->next != NULL){
@@ -684,6 +695,7 @@ struct type *expr_typecheck(struct expr *e){
             break;
         case (EXPR_ARRAY_INDEX):
             e->type = type_create(TYPE_ARRAY, 0, 0, 0);
+            expr_typecheck(e->next_array_dimension);
             break;
     }
     return e->type;

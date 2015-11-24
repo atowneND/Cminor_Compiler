@@ -40,6 +40,7 @@ struct expr {
 	struct expr *left;
 	struct expr *right;
 	struct expr *next; // for expression lists
+	struct expr *next_array_dimension;
 
 	/* used by leaf expr types */
 	const char *name;

@@ -37,11 +37,16 @@ void type_print( struct type *t ) {
                 printf("string");
                 break;
             case (TYPE_ARRAY):
-                printf("array [");
-                if (t->expr != 0){
-                    expr_print(t->expr);
+                printf("array ");
+                struct expr *tmp =  malloc(sizeof(struct expr));
+                tmp = t->expr;
+                while (tmp != NULL){
+                    printf("[");
+                    expr_print(tmp);
+                    printf("]");
+                    tmp = tmp->next_array_dimension;
                 }
-                printf("] ");
+                printf(" ");
                 if (t->subtype != 0){ 
                     type_print(t->subtype);
                 }
