@@ -3,10 +3,12 @@ stmt_resolve($$); 154,156,158,160,162,164,168
 
 2D arrays
 - need to check array assignment lengths and function parameter sizes
-LOCAL_CTR needs to be reset for each scope
-PARAM_CTR needs to be reset for each function
-check expr_typecheck, case EXPR_ASSIGNMENT - can the right be a function?
 fprintf vs printf in typechecking functions
 globals should resolve to themselves, not a number
 error numbers should be associated with name resolution
 array initialization - empty brackets as a function parameter, else constant
+
+LOCAL_CTR needs to be reset for each scope
+PARAM_CTR needs to be reset for each function
+- need to call hash_table_size() in symbol.c to replace
+- this will probably fix the global problem too, with just another line or two

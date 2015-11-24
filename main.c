@@ -19,6 +19,7 @@ extern struct decl *ast_pointer;
 
 extern const char *token_string(int t);
 void name_resolution(void);
+void generate_code(void);
 
 int fooctr = 0;
 
@@ -39,20 +40,37 @@ int main(int argc, char *argv[]){
         fprintf(stderr,"usage: ./cminor <option> <filename>\nPlease enter a filename\n");
         exit(1);
     }
-    else if (argc!=3){
-        fprintf(stderr,"usage: ./cminor <option> <filename>\n");
-        exit(1);
-    }
 
     int action = 0;
     if (!strcmp(argv[1],"-scan")){
         action = 1;
+        if (argc!=3){
+            fprintf(stderr,"usage: ./cminor <option> <filename>\n");
+            exit(1);
+        }
     }else if (!strcmp(argv[1],"-print")){
         action = 2;
+        if (argc!=3){
+            fprintf(stderr,"usage: ./cminor <option> <filename>\n");
+            exit(1);
+        }
     }else if (!strcmp(argv[1],"-resolve")){
         action = 3;
-    }else if (!strcmp(argv[1],"-typecheck")){
-        action = 4;
+        if (argc!=3){
+            fprintf(stderr,"usage: ./cminor <option> <filename>\n");
+            exit(1);
+        }
+    }else if (!strcmp(argv[1],"-typecheck")){ action = 4;
+        if (argc!=3){
+            fprintf(stderr,"usage: ./cminor <option> <filename>\n");
+            exit(1);
+        }
+    }else if (!strcmp(argv[1],"-codegen")){
+        action = 5;
+        if (argc!=4){
+            fprintf(stderr,"usage: ./cminor <option> <sourcefilename> <outputfilename>\n");
+            exit(1);
+        }
     }else{
         fprintf(stderr,"usage: ./cminor <option> <filename>\n<option> must be -scan or -resolve or -typecheck\n");
         exit(1);
@@ -93,6 +111,14 @@ int main(int argc, char *argv[]){
             printf("typechecking\n");
             name_resolution();
             break;
+        case 5:
+            printf("code generation\n");
+            name_resolution();
+            if (error_counter == 0){
+                printf("scanning, parsing, name resolution, and typechecking successful\n");
+            }
+            generate_code();
+            break;
         default:
             fprintf(stderr,"Incorrect option selected\n");
             break;
@@ -123,4 +149,8 @@ void name_resolution(void){
     } else {
         printf("%i name resolution errors\n",error_counter);
     }
+}
+
+void generate_code(void){
+    printf("here\n");
 }
