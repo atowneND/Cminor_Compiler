@@ -342,10 +342,8 @@ struct type *expr_typecheck(struct expr *e){
                 type_print(r);
                 literal_print(e->right);
                 printf("\n");
-                e->type = 0;
-            } else {
-                e->type = type_create(TYPE_INTEGER,0,0,0);
             }
+            e->type = type_create(TYPE_INTEGER,0,0,0);
             break;
         case (EXPR_SUB):
             l = expr_typecheck(e->left);
@@ -363,11 +361,9 @@ struct type *expr_typecheck(struct expr *e){
                     type_print(r);
                     literal_print(e->right);
                     printf("\n");
-                    e->type = 0;
                 }
-            } else {
-                e->type = type_create(TYPE_INTEGER,0,0,0);
             }
+            e->type = type_create(TYPE_INTEGER,0,0,0);
             break;
         case (EXPR_MUL):
             l = expr_typecheck(e->left);
@@ -382,10 +378,8 @@ struct type *expr_typecheck(struct expr *e){
                 type_print(r);
                 literal_print(e->right);
                 printf("\n");
-                e->type = 0;
-            } else {
-                e->type = type_create(TYPE_INTEGER,0,0,0);
             }
+            e->type = type_create(TYPE_INTEGER,0,0,0);
             break;
         case (EXPR_DIV):
             l = expr_typecheck(e->left);
@@ -400,10 +394,8 @@ struct type *expr_typecheck(struct expr *e){
                 type_print(r);
                 literal_print(e->right);
                 printf("\n");
-                e->type = 0;
-            } else {
-                e->type = type_create(TYPE_INTEGER,0,0,0);
             }
+            e->type = type_create(TYPE_INTEGER,0,0,0);
             break;
         case (EXPR_INCREMENT):
             l = expr_typecheck(e->left);
@@ -414,10 +406,8 @@ struct type *expr_typecheck(struct expr *e){
                 type_print(l);
                 literal_print(e->left);
                 printf("\n");
-                e->type = 0;
-            } else {
-                e->type = type_create(TYPE_INTEGER,0,0,0);
             }
+            e->type = type_create(TYPE_INTEGER,0,0,0);
             break;
         case (EXPR_DECREMENT):
             l = expr_typecheck(e->left);
@@ -428,10 +418,8 @@ struct type *expr_typecheck(struct expr *e){
                 type_print(l);
                 literal_print(e->left);
                 printf("\n");
-                e->type = 0;
-            } else {
-                e->type = type_create(TYPE_INTEGER,0,0,0);
             }
+            e->type = type_create(TYPE_INTEGER,0,0,0);
             break;
         case (EXPR_NOT):
             r = expr_typecheck(e->right);
@@ -442,10 +430,8 @@ struct type *expr_typecheck(struct expr *e){
                 type_print(r);
                 literal_print(e->right);
                 printf("\n");
-                e->type = 0;
-            } else {
-                e->type = type_create(TYPE_BOOLEAN,0,0,0);
             }
+            e->type = type_create(TYPE_BOOLEAN,0,0,0);
             break;
         case (EXPR_POWER):
             l = expr_typecheck(e->left);
@@ -460,10 +446,8 @@ struct type *expr_typecheck(struct expr *e){
                 type_print(r);
                 literal_print(e->right);
                 printf("\n");
-                e->type = 0;
-            } else {
-                e->type = type_create(TYPE_INTEGER,0,0,0);
             }
+            e->type = type_create(TYPE_INTEGER,0,0,0);
             break;
         case (EXPR_MODULO):
             l = expr_typecheck(e->left);
@@ -478,10 +462,8 @@ struct type *expr_typecheck(struct expr *e){
                 type_print(r);
                 literal_print(e->right);
                 printf("\n");
-                e->type = 0;
-            } else {
-                e->type = type_create(TYPE_INTEGER,0,0,0);
             }
+            e->type = type_create(TYPE_INTEGER,0,0,0);
             break;
         case (EXPR_LESS_THAN):
             l = expr_typecheck(e->left);
@@ -496,10 +478,8 @@ struct type *expr_typecheck(struct expr *e){
                 type_print(r);
                 literal_print(e->right);
                 printf("\n");
-                e->type = 0;
-            } else {
-                e->type = type_create(TYPE_BOOLEAN,0,0,0);
             }
+            e->type = type_create(TYPE_BOOLEAN,0,0,0);
             break;
         case (EXPR_GREATER_THAN):
             l = expr_typecheck(e->left);
@@ -514,10 +494,8 @@ struct type *expr_typecheck(struct expr *e){
                 type_print(r);
                 literal_print(e->right);
                 printf("\n");
-                e->type = 0;
-            } else {
-                e->type = type_create(TYPE_BOOLEAN,0,0,0);
             }
+            e->type = type_create(TYPE_BOOLEAN,0,0,0);
             break;
         case (EXPR_LESS_THAN_OR_EQUAL):
             l = expr_typecheck(e->left);
@@ -532,10 +510,8 @@ struct type *expr_typecheck(struct expr *e){
                 type_print(r);
                 literal_print(e->right);
                 printf("\n");
-                e->type = 0;
-            } else {
-                e->type = type_create(TYPE_BOOLEAN,0,0,0);
             }
+            e->type = type_create(TYPE_BOOLEAN,0,0,0);
             break;
         case (EXPR_GREATER_THAN_OR_EQUAL):
             l = expr_typecheck(e->left);
@@ -550,10 +526,8 @@ struct type *expr_typecheck(struct expr *e){
                 type_print(r);
                 literal_print(e->right);
                 printf("\n");
-                e->type = 0;
-            } else {
-                e->type = type_create(TYPE_BOOLEAN,0,0,0);
             }
+            e->type = type_create(TYPE_BOOLEAN,0,0,0);
             break;
         case (EXPR_EQUIVALENCE_COMPARISON):
             l = expr_typecheck(e->left);
@@ -562,12 +536,10 @@ struct type *expr_typecheck(struct expr *e){
                 error_counter += 1;
                 printf("Error #%i ",error_counter);
                 printf("type error: cannot compare equivalence of functions\n");
-                e->type = 0;
             } else if ((l->kind == TYPE_ARRAY) || (r->kind == TYPE_ARRAY)){
                 error_counter += 1;
                 printf("Error #%i ",error_counter);
                 printf("type error: cannot compare equivalence of arrays\n");
-                e->type = 0;
             } else if (l->kind != r->kind){
                 error_counter += 1;
                 printf("Error #%i ",error_counter);
@@ -578,10 +550,8 @@ struct type *expr_typecheck(struct expr *e){
                 type_print(r);
                 literal_print(e->right);
                 printf("\n");
-                e->type = 0;
-            } else {
-                e->type = type_create(TYPE_BOOLEAN,0,0,0);
             }
+            e->type = type_create(TYPE_BOOLEAN,0,0,0);
             break;
         case (EXPR_NONEQUIVALENCE_COMPARISON):
             l = expr_typecheck(e->left);
@@ -590,12 +560,10 @@ struct type *expr_typecheck(struct expr *e){
                 error_counter += 1;
                 printf("Error #%i ",error_counter);
                 printf("type error: cannot compare equivalence of functions\n");
-                e->type = 0;
             } else if ((l->kind == TYPE_ARRAY) || (r->kind == TYPE_ARRAY)){
                 error_counter += 1;
                 printf("Error #%i ",error_counter);
                 printf("type error: cannot compare equivalence of arrays\n");
-                e->type = 0;
             } else if (l->kind != r->kind){
                 error_counter += 1;
                 printf("Error #%i ",error_counter);
@@ -606,10 +574,8 @@ struct type *expr_typecheck(struct expr *e){
                 type_print(r);
                 literal_print(e->right);
                 printf("\n");
-                e->type = 0;
-            } else {
-                e->type = type_create(TYPE_BOOLEAN,0,0,0);
             }
+            e->type = type_create(TYPE_BOOLEAN,0,0,0);
             break;
         case (EXPR_AND):
             l = expr_typecheck(e->left);
@@ -624,10 +590,8 @@ struct type *expr_typecheck(struct expr *e){
                 type_print(r);
                 literal_print(e->right);
                 printf("\n");
-                e->type = 0;
-            } else {
-                e->type = type_create(TYPE_BOOLEAN,0,0,0);
             }
+            e->type = type_create(TYPE_BOOLEAN,0,0,0);
             break;
         case (EXPR_OR):
             l = expr_typecheck(e->left);
@@ -642,10 +606,8 @@ struct type *expr_typecheck(struct expr *e){
                 type_print(r);
                 literal_print(e->right);
                 printf("\n");
-                e->type = 0;
-            } else {
-                e->type = type_create(TYPE_BOOLEAN,0,0,0);
             }
+            e->type = type_create(TYPE_BOOLEAN,0,0,0);
             break;
         case (EXPR_ASSIGNMENT):
             l = expr_typecheck(e->left);
@@ -655,21 +617,18 @@ struct type *expr_typecheck(struct expr *e){
                 error_counter += 1;
                 printf("Error #%i ",error_counter);
                 printf("type error: cannot assign a function\n");
-                e->type = 0;
             } else if (l->kind != r->kind) {
                 error_counter += 1;
                 printf("Error #%i ",error_counter);
                 printf("type error: cannot assign ");
-                type_print(l);
-                literal_print(e->left);
-                printf(" to ");
                 type_print(r);
                 literal_print(e->right);
+                printf(" to ");
+                type_print(l);
+                literal_print(e->left);
                 printf("\n");
-                e->type = 0;
-            } else {
-                e->type = type_create(l->kind,0,0,0);
             }
+            e->type = type_create(l->kind,0,0,0);
             break;
         case (EXPR_BOOLEAN_LITERAL):
             e->type = type_create(TYPE_BOOLEAN, 0, 0, 0);

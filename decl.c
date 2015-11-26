@@ -104,10 +104,12 @@ struct type *decl_typecheck(struct decl *d){
     }
     // if d is global and right side is not constant, return error
     struct symbol *sym = scope_lookup(d->name);
-    if (sym->kind == SYMBOL_GLOBAL){
-        if (d->value != NULL){
-        }
-        if (d->code != NULL){
+    if (sym != NULL) {
+        if (sym->kind == SYMBOL_GLOBAL){
+            if (d->value != NULL){
+            }
+            if (d->code != NULL){
+            }
         }
     }
 

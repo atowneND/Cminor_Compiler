@@ -192,8 +192,10 @@ void stmt_typecheck(struct stmt *s, struct type *current_type){
 
     switch (s->kind){
 	    case STMT_DECL:
+	        decl_typecheck(s->decl);
 	        break;
 	    case STMT_EXPR:
+	        s->init_expr->type = expr_typecheck(s->init_expr);
 	        break;
 	    case STMT_IF_ELSE:
 	        s->init_expr->type = expr_typecheck(s->init_expr);
