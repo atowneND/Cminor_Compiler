@@ -2,6 +2,7 @@
 #include "scope.h"
 #include "type.h"
 #include <stdlib.h>
+#include "decl.h"
 
 extern int indent;
 
@@ -56,5 +57,13 @@ void param_list_resolve(struct param_list *p){
     param_list_resolve(p->next);
 }
 
-void param_list_typecheck(void){
+void param_list_typeset(struct decl *d){
+    if (d == NULL) return;
+    struct symbol *sym = scope_lookup(d->name);
+    printf("name: %s\n",d->name);
 }
+
+//void param_list_typecheck(struct param_list *p, struct type *subtype_list, struct decl *d){
+//    printf("p->name=%s, type=%i; check_type=%i\n",p->name,p->type->kind,subtype_list->kind);
+//    param_list_typecheck(p->next, d->next->type->subtype, d->next);
+//}

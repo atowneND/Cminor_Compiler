@@ -4,3 +4,5 @@
 - [ ] error numbers should be associated with name resolution
 - [ ] array initialization - empty brackets as a function parameter, else constant
 - [ ] checking for global assignments to be constant
+
+in stmt.c: check all calls to stmt_typecheck

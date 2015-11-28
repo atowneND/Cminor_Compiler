@@ -181,7 +181,7 @@ void stmt_resolve( struct stmt *s ){
     }
 }
 
-void stmt_typecheck(struct stmt *s, struct type *current_type){
+void stmt_typecheck(struct stmt *s, struct type *current_type, struct decl *d){
     if (s == NULL){
         return;
     }
@@ -195,10 +195,10 @@ void stmt_typecheck(struct stmt *s, struct type *current_type){
 	        decl_typecheck(s->decl);
 	        break;
 	    case STMT_EXPR:
-	        s->init_expr->type = expr_typecheck(s->init_expr);
+	        s->init_expr->type = expr_typecheck(s->init_expr,d);
 	        break;
 	    case STMT_IF_ELSE:
-	        s->init_expr->type = expr_typecheck(s->init_expr);
+	        s->init_expr->type = expr_typecheck(s->init_expr,d);
 	        if (s->init_expr != NULL){
 	            if (s->init_expr->type != NULL) {
                     if (s->init_expr->type->kind != TYPE_BOOLEAN){
@@ -208,16 +208,16 @@ void stmt_typecheck(struct stmt *s, struct type *current_type){
                         expr_print(s->init_expr);
                         printf("\n");
                     }
-                    stmt_typecheck(s->body,current_type);
-                    stmt_typecheck(s->else_body,current_type);
+                    stmt_typecheck(s->body,current_type,d);
+                    stmt_typecheck(s->else_body,current_type,d);
                 }
             }
 	        break;
 	    case STMT_FOR:
-	        s->init_expr->type = expr_typecheck(s->init_expr);
-	        s->expr->type = expr_typecheck(s->expr);
-	        s->next_expr->type = expr_typecheck(s->next_expr);
-	        stmt_typecheck(s->body,current_type);
+	        s->init_expr->type = expr_typecheck(s->init_expr,d);
+	        s->expr->type = expr_typecheck(s->expr,d);
+	        s->next_expr->type = expr_typecheck(s->next_expr,d);
+	        stmt_typecheck(s->body,current_type,d);
 	        break;
         case STMT_WHILE:
             // this should never happen. I just want gcc -Wall to be quiet about it
@@ -225,13 +225,13 @@ void stmt_typecheck(struct stmt *s, struct type *current_type){
 	    case STMT_PRINT:
 	        e = s->init_expr;
 	        while (e != NULL) { 
-	            e->type = expr_typecheck(e);
+	            e->type = expr_typecheck(e,d);
 	            e = e->next;
             }
 	        break;
 	    case STMT_RETURN:
 	        if (s->init_expr != NULL) { 
-	            s->init_expr->type = expr_typecheck(s->init_expr);
+	            s->init_expr->type = expr_typecheck(s->init_expr,d);
 
                 return_type = s->init_expr->type->kind;
             } else {
@@ -267,8 +267,8 @@ void stmt_typecheck(struct stmt *s, struct type *current_type){
 
 	        break;
         case STMT_BLOCK:
-            stmt_typecheck(s->body,current_type);
+            stmt_typecheck(s->body,current_type,d);
             break;
     }
-    stmt_typecheck(s->next, current_type);
+    stmt_typecheck(s->next, current_type,d);
 }

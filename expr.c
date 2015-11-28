@@ -322,7 +322,7 @@ void expr_resolve(struct expr *e){
     expr_resolve(e->next);
 }
 
-struct type *expr_typecheck(struct expr *e){
+struct type *expr_typecheck(struct expr *e, struct decl *d){
     if (e == NULL) {
         return type_create(TYPE_VOID,0,0,0);
     }
@@ -330,8 +330,8 @@ struct type *expr_typecheck(struct expr *e){
     struct type *r = malloc(sizeof(struct type));
     switch (e->kind){
         case (EXPR_ADD):
-            l = expr_typecheck(e->left);
-            r = expr_typecheck(e->right);
+            l = expr_typecheck(e->left,d);
+            r = expr_typecheck(e->right,d);
             if ((l->kind != TYPE_INTEGER) || (r->kind != TYPE_INTEGER)){
                 error_counter += 1;
                 printf("Error #%i ",error_counter);
@@ -346,8 +346,8 @@ struct type *expr_typecheck(struct expr *e){
             e->type = type_create(TYPE_INTEGER,0,0,0);
             break;
         case (EXPR_SUB):
-            l = expr_typecheck(e->left);
-            r = expr_typecheck(e->right);
+            l = expr_typecheck(e->left,d);
+            r = expr_typecheck(e->right,d);
             if ((l->kind != TYPE_INTEGER) || (r->kind != TYPE_INTEGER)){
                 if (l->kind == TYPE_VOID) { // unary minor
                     e->type = type_create(TYPE_INTEGER,0,0,0);
@@ -366,8 +366,8 @@ struct type *expr_typecheck(struct expr *e){
             e->type = type_create(TYPE_INTEGER,0,0,0);
             break;
         case (EXPR_MUL):
-            l = expr_typecheck(e->left);
-            r = expr_typecheck(e->right);
+            l = expr_typecheck(e->left,d);
+            r = expr_typecheck(e->right,d);
             if ((l->kind != TYPE_INTEGER) || (r->kind != TYPE_INTEGER)){
                 error_counter += 1;
                 printf("Error #%i ",error_counter);
@@ -382,8 +382,8 @@ struct type *expr_typecheck(struct expr *e){
             e->type = type_create(TYPE_INTEGER,0,0,0);
             break;
         case (EXPR_DIV):
-            l = expr_typecheck(e->left);
-            r = expr_typecheck(e->right);
+            l = expr_typecheck(e->left,d);
+            r = expr_typecheck(e->right,d);
             if ((l->kind != TYPE_INTEGER) || (r->kind != TYPE_INTEGER)){
                 error_counter += 1;
                 printf("Error #%i ",error_counter);
@@ -398,7 +398,7 @@ struct type *expr_typecheck(struct expr *e){
             e->type = type_create(TYPE_INTEGER,0,0,0);
             break;
         case (EXPR_INCREMENT):
-            l = expr_typecheck(e->left);
+            l = expr_typecheck(e->left,d);
             if (l->kind != TYPE_INTEGER){
                 error_counter += 1;
                 printf("Error #%i ",error_counter);
@@ -410,7 +410,7 @@ struct type *expr_typecheck(struct expr *e){
             e->type = type_create(TYPE_INTEGER,0,0,0);
             break;
         case (EXPR_DECREMENT):
-            l = expr_typecheck(e->left);
+            l = expr_typecheck(e->left,d);
             if (l->kind != TYPE_INTEGER){
                 error_counter += 1;
                 printf("Error #%i ",error_counter);
@@ -422,7 +422,7 @@ struct type *expr_typecheck(struct expr *e){
             e->type = type_create(TYPE_INTEGER,0,0,0);
             break;
         case (EXPR_NOT):
-            r = expr_typecheck(e->right);
+            r = expr_typecheck(e->right,d);
             if (r->kind != TYPE_BOOLEAN){
                 error_counter += 1;
                 printf("Error #%i ",error_counter);
@@ -434,8 +434,8 @@ struct type *expr_typecheck(struct expr *e){
             e->type = type_create(TYPE_BOOLEAN,0,0,0);
             break;
         case (EXPR_POWER):
-            l = expr_typecheck(e->left);
-            r = expr_typecheck(e->right);
+            l = expr_typecheck(e->left,d);
+            r = expr_typecheck(e->right,d);
             if ((l->kind != TYPE_INTEGER) || (r->kind != TYPE_INTEGER)){
                 error_counter += 1;
                 printf("Error #%i ",error_counter);
@@ -450,8 +450,8 @@ struct type *expr_typecheck(struct expr *e){
             e->type = type_create(TYPE_INTEGER,0,0,0);
             break;
         case (EXPR_MODULO):
-            l = expr_typecheck(e->left);
-            r = expr_typecheck(e->right);
+            l = expr_typecheck(e->left,d);
+            r = expr_typecheck(e->right,d);
             if ((l->kind != TYPE_INTEGER) || (r->kind != TYPE_INTEGER)){
                 error_counter += 1;
                 printf("Error #%i ",error_counter);
@@ -466,8 +466,8 @@ struct type *expr_typecheck(struct expr *e){
             e->type = type_create(TYPE_INTEGER,0,0,0);
             break;
         case (EXPR_LESS_THAN):
-            l = expr_typecheck(e->left);
-            r = expr_typecheck(e->right);
+            l = expr_typecheck(e->left,d);
+            r = expr_typecheck(e->right,d);
             if ((l->kind != TYPE_INTEGER) || (r->kind != TYPE_INTEGER)){
                 error_counter += 1;
                 printf("Error #%i ",error_counter);
@@ -482,8 +482,8 @@ struct type *expr_typecheck(struct expr *e){
             e->type = type_create(TYPE_BOOLEAN,0,0,0);
             break;
         case (EXPR_GREATER_THAN):
-            l = expr_typecheck(e->left);
-            r = expr_typecheck(e->right);
+            l = expr_typecheck(e->left,d);
+            r = expr_typecheck(e->right,d);
             if ((l->kind != TYPE_INTEGER) || (r->kind != TYPE_INTEGER)){
                 error_counter += 1;
                 printf("Error #%i ",error_counter);
@@ -498,8 +498,8 @@ struct type *expr_typecheck(struct expr *e){
             e->type = type_create(TYPE_BOOLEAN,0,0,0);
             break;
         case (EXPR_LESS_THAN_OR_EQUAL):
-            l = expr_typecheck(e->left);
-            r = expr_typecheck(e->right);
+            l = expr_typecheck(e->left,d);
+            r = expr_typecheck(e->right,d);
             if ((l->kind != TYPE_INTEGER) || (r->kind != TYPE_INTEGER)){
                 error_counter += 1;
                 printf("Error #%i ",error_counter);
@@ -514,8 +514,8 @@ struct type *expr_typecheck(struct expr *e){
             e->type = type_create(TYPE_BOOLEAN,0,0,0);
             break;
         case (EXPR_GREATER_THAN_OR_EQUAL):
-            l = expr_typecheck(e->left);
-            r = expr_typecheck(e->right);
+            l = expr_typecheck(e->left,d);
+            r = expr_typecheck(e->right,d);
             if ((l->kind != TYPE_INTEGER) || (r->kind != TYPE_INTEGER)){
                 error_counter += 1;
                 printf("Error #%i ",error_counter);
@@ -530,8 +530,8 @@ struct type *expr_typecheck(struct expr *e){
             e->type = type_create(TYPE_BOOLEAN,0,0,0);
             break;
         case (EXPR_EQUIVALENCE_COMPARISON):
-            l = expr_typecheck(e->left);
-            r = expr_typecheck(e->right);
+            l = expr_typecheck(e->left,d);
+            r = expr_typecheck(e->right,d);
             if ((l->kind == TYPE_FUNCTION) || (r->kind == TYPE_FUNCTION)){
                 error_counter += 1;
                 printf("Error #%i ",error_counter);
@@ -554,8 +554,8 @@ struct type *expr_typecheck(struct expr *e){
             e->type = type_create(TYPE_BOOLEAN,0,0,0);
             break;
         case (EXPR_NONEQUIVALENCE_COMPARISON):
-            l = expr_typecheck(e->left);
-            r = expr_typecheck(e->right);
+            l = expr_typecheck(e->left,d);
+            r = expr_typecheck(e->right,d);
             if ((l->kind == TYPE_FUNCTION) || (r->kind == TYPE_FUNCTION)){
                 error_counter += 1;
                 printf("Error #%i ",error_counter);
@@ -578,8 +578,8 @@ struct type *expr_typecheck(struct expr *e){
             e->type = type_create(TYPE_BOOLEAN,0,0,0);
             break;
         case (EXPR_AND):
-            l = expr_typecheck(e->left);
-            r = expr_typecheck(e->right);
+            l = expr_typecheck(e->left,d);
+            r = expr_typecheck(e->right,d);
             if ((l->kind != TYPE_BOOLEAN) || (r->kind != TYPE_BOOLEAN)){
                 error_counter += 1;
                 printf("Error #%i ",error_counter);
@@ -594,8 +594,8 @@ struct type *expr_typecheck(struct expr *e){
             e->type = type_create(TYPE_BOOLEAN,0,0,0);
             break;
         case (EXPR_OR):
-            l = expr_typecheck(e->left);
-            r = expr_typecheck(e->right);
+            l = expr_typecheck(e->left,d);
+            r = expr_typecheck(e->right,d);
             if ((l->kind != TYPE_BOOLEAN) || (r->kind != TYPE_BOOLEAN)){
                 error_counter += 1;
                 printf("Error #%i ",error_counter);
@@ -610,8 +610,8 @@ struct type *expr_typecheck(struct expr *e){
             e->type = type_create(TYPE_BOOLEAN,0,0,0);
             break;
         case (EXPR_ASSIGNMENT):
-            l = expr_typecheck(e->left);
-            r = expr_typecheck(e->right);
+            l = expr_typecheck(e->left,d);
+            r = expr_typecheck(e->right,d);
             //if ((l->kind == TYPE_FUNCTION) || (r->kind == TYPE_FUNCTION)){
             if (l->kind == TYPE_FUNCTION){
                 error_counter += 1;
@@ -646,15 +646,17 @@ struct type *expr_typecheck(struct expr *e){
             e->type = e->symbol->type;
             break;
         case (EXPR_PARENTHESES):
-            e->type = expr_typecheck(e->left);
+            e->type = expr_typecheck(e->left,d);
             break;
         case (EXPR_FUNCTION_CALL):
-            param_list_typecheck();
+            // check parameters
+            //param_list_typecheck();
+            param_list_typeset(d);
             e->type = e->left->symbol->type->subtype;
             break;
         case (EXPR_ARRAY_INDEX):
             e->type = type_create(TYPE_ARRAY, 0, 0, 0);
-            expr_typecheck(e->next_array_dimension);
+            expr_typecheck(e->next_array_dimension,d);
             break;
     }
     return e->type;

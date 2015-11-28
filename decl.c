@@ -115,7 +115,7 @@ struct type *decl_typecheck(struct decl *d){
 
     if (d->value != NULL){
         // type to expression
-        struct type *e = expr_typecheck(d->value);
+        struct type *e = expr_typecheck(d->value,d);
         // if array, use subtype
         type_kind_t d_kind = d->type->kind;
         if (d_kind == TYPE_ARRAY){
@@ -133,7 +133,7 @@ struct type *decl_typecheck(struct decl *d){
         // expression list
         struct expr *tmp = d->value->next;
         while (tmp != NULL){
-            e = expr_typecheck(tmp);
+            e = expr_typecheck(tmp,d);
             if ( d_kind != e->kind){
                 error_counter += 1;
                 printf("Error #%i ",error_counter);
@@ -148,7 +148,9 @@ struct type *decl_typecheck(struct decl *d){
     }
 
     // return value (function definitions)
-    stmt_typecheck(d->code, d->type);
+    //param_list_typecheck(d->type->params, d->type->subtype, d);
+    stmt_typecheck(d->code, d->type, d);
+    //stmt_typecheck(d);
     
     // next decl in the list
     decl_typecheck(d->next);
