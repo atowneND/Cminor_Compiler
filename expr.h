@@ -63,6 +63,7 @@ struct expr * expr_create_character_literal( int c );
 struct expr * expr_create_string_literal( const char *str );
 
 void expr_print( struct expr *e );
+
 void expr_resolve(struct expr *e);
 struct type *expr_typecheck(struct expr *e, struct decl *d);
 void literal_print(struct expr *e);

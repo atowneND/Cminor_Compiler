@@ -1,4 +1,5 @@
 #include "hash_table.h"
+#include "type.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -6,6 +7,7 @@ extern int scope_ctr;
 extern int global_ctr;
 extern int local_ctr;
 extern int param_ctr;
+struct type;
 
 struct hash_table_node{
     struct hash_table *current_hash_table;
@@ -23,6 +25,7 @@ struct symbol {
 	int which;
 	struct type *type;
 	char *name;
+	struct hash_table_node *function_hash_table;
 };
 
 extern int scope_ctr;
@@ -58,7 +61,7 @@ void scope_enter(void){
 
 void scope_exit(void){
     // move head to next
-    hash_table_clear(head_hash_table_node->current_hash_table);
+//    hash_table_clear(head_hash_table_node->current_hash_table);
     head_hash_table_node = head_hash_table_node->next_hash_table;
     scope_ctr -= 1;
 }
@@ -78,12 +81,22 @@ void scope_bind(const char *name, struct symbol *s){
             printf("%s bound to sym GLOBAL %s\n", name, s->name);
             break;
     }
-//    sym_table_print(head_hash_table_node->current_hash_table);
 }
 
 struct symbol *scope_lookup(const char *name){
     struct symbol *sym = hash_table_lookup(head_hash_table_node->current_hash_table,name);
     struct hash_table_node *tmp = head_hash_table_node->next_hash_table;
+    while ((!sym) && (tmp != NULL)){
+        sym = hash_table_lookup(tmp->current_hash_table, name);
+        tmp = tmp->next_hash_table;
+    }
+
+    return sym;
+}
+
+struct symbol *scope_lookup_function(const char *name, struct hash_table_node *ht){
+    struct symbol *sym = hash_table_lookup(ht->current_hash_table,name);
+    struct hash_table_node *tmp = ht->next_hash_table;
     while ((!sym) && (tmp != NULL)){
         sym = hash_table_lookup(tmp->current_hash_table, name);
         tmp = tmp->next_hash_table;
@@ -105,6 +118,7 @@ struct symbol *symbol_create(symbol_t kind, struct type *type, char *name){
     sym->kind = kind;
     sym->type = type;
     sym->name = name;
+    //sym->function_hash_table;
 
     return sym;
 }

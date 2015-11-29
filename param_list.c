@@ -5,6 +5,8 @@
 #include "decl.h"
 
 extern int indent;
+extern int error_counter;
+extern struct hash_table_node *head_hash_table_node;
 
 struct param_list * param_list_create(
         char *name,
@@ -57,13 +59,31 @@ void param_list_resolve(struct param_list *p){
     param_list_resolve(p->next);
 }
 
-void param_list_typeset(struct decl *d){
-    if (d == NULL) return;
-    struct symbol *sym = scope_lookup(d->name);
-    printf("name: %s\n",d->name);
-}
+void param_list_typecheck(const char *fname,struct expr *e_params,struct decl *d){
+//    printf("function name = %s    ",fname);
+    struct symbol *sym = scope_lookup(fname);
+    struct hash_table_node *function_ht = sym->function_hash_table;
+//    printf("etype: %i\n",e_params->type->kind);
+    type_kind_t expected_type;
+    type_kind_t given_type;
+    struct param_list *p;
+    p = sym->type->params;
 
-//void param_list_typecheck(struct param_list *p, struct type *subtype_list, struct decl *d){
-//    printf("p->name=%s, type=%i; check_type=%i\n",p->name,p->type->kind,subtype_list->kind);
-//    param_list_typecheck(p->next, d->next->type->subtype, d->next);
-//}
+    while ((p != NULL) && (e_params != NULL)) { 
+        expr_typecheck(e_params,d);
+        expected_type = p->type->kind;
+        given_type = e_params->type->kind;
+        if (expected_type != given_type){
+            error_counter += 1;
+            sym = scope_lookup_function(p->name,function_ht);
+            printf("Typechecking error: Function %s parameter %i is expected to be type ",fname,sym->which);
+            type_print(sym->type);
+            printf(" but argument given was type ");
+            type_print(e_params->type);
+            printf("\n");
+        }
+        p = p->next;
+        e_params = e_params->next;
+    }
+    //sym->type->params->next->type->kind
+}

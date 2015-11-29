@@ -1,3 +1,4 @@
+#include "decl.h"
 #include "expr.h"
 #include "scope.h"
 #include "param_list.h"
@@ -33,8 +34,10 @@ struct expr * expr_create(
 
 void expr_append(struct expr *original_list, struct expr *new_expr){
     if (original_list->next != 0) {
+        // search for end of list
         expr_append( original_list->next, new_expr);
     } else {
+        // add to end of list
         original_list->next = new_expr;
         new_expr->next = 0;
         return;
@@ -650,8 +653,7 @@ struct type *expr_typecheck(struct expr *e, struct decl *d){
             break;
         case (EXPR_FUNCTION_CALL):
             // check parameters
-            //param_list_typecheck();
-            param_list_typeset(d);
+            param_list_typecheck(e->left->name,e->right,d);
             e->type = e->left->symbol->type->subtype;
             break;
         case (EXPR_ARRAY_INDEX):

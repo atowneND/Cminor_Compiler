@@ -9,6 +9,7 @@
 extern int indent;
 extern int scope_ctr;
 extern int error_counter;
+extern struct hash_table_node *head_hash_table_node;
 
 struct decl * decl_create( 
         char *name,
@@ -90,6 +91,9 @@ void decl_resolve( struct decl *d ){
     expr_resolve(d->value);
     if (d->code != NULL) {
         scope_enter();
+        if (sym->type->kind==TYPE_FUNCTION) {
+            sym->function_hash_table = head_hash_table_node;
+        }
         param_list_resolve(d->type->params);
         stmt_resolve(d->code);
         scope_exit();
@@ -148,9 +152,7 @@ struct type *decl_typecheck(struct decl *d){
     }
 
     // return value (function definitions)
-    //param_list_typecheck(d->type->params, d->type->subtype, d);
     stmt_typecheck(d->code, d->type, d);
-    //stmt_typecheck(d);
     
     // next decl in the list
     decl_typecheck(d->next);
