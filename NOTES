@@ -5,7 +5,5 @@
 - [ ] array initialization - empty brackets as a function parameter, else constant
 - [ ] checking for global assignments to be constant
 
-in stmt.c: check all calls to stmt_typecheck
-
-e->left->symbol->type->params->(next->)*type->kind
-- expected function call types
+WTF IS HAPPENING WITH THE GRAMMAR
+passing decl to certain functions may not be specific/recursive enough...
