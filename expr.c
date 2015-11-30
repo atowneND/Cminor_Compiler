@@ -620,6 +620,27 @@ struct type *expr_typecheck(struct expr *e, struct decl *d){
                 error_counter += 1;
                 printf("Error #%i ",error_counter);
                 printf("type error: cannot assign a function\n");
+            } else if (l->kind == TYPE_ARRAY) {
+                type_kind_t expected_type = e->left->type->subtype->kind;
+                struct expr *elist = e->right;
+                while (elist != NULL) {
+                    r = expr_typecheck(elist,d);
+                    type_kind_t given_type = elist->type->kind;
+                    if (expected_type != given_type) {
+                        error_counter += 1;
+                        printf("Error #%i ",error_counter);
+                        printf("type error: cannot assign ");
+                        type_print(r);
+                        literal_print(elist);
+                        printf(" to an element of ");
+                        type_print(l);
+                        literal_print(e->left);
+                        printf("\n");
+                    }
+                    elist = elist->next;
+                }
+                //e->right->(next->)name
+                //struct symbol *sym = scope_lookup(e->left->name);
             } else if (l->kind != r->kind) {
                 error_counter += 1;
                 printf("Error #%i ",error_counter);
@@ -680,7 +701,7 @@ void literal_print(struct expr *e){
             printf(" (%s)",e->string_literal);
             break;
         case (TYPE_ARRAY):
-            printf(" (%s[%i])",e->left->name,e->right->literal_value);
+            printf(" (%s)",e->name);
             break;
         case (TYPE_FUNCTION):
             printf(" (%s)",e->left->name);
