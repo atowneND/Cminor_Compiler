@@ -139,13 +139,15 @@ void name_resolution(void){
     if (error_counter == 0) { 
         decl_typecheck(ast_pointer);
     }else{
-        printf("Please resolve all naming errors before moving on to typechecking\n");
+        fprintf(stderr,"Please resolve all naming errors before moving on to typechecking\n");
     }
     scope_exit();
 
     if (error_counter == 1){ 
-        printf("%i name resolution error\n",error_counter);
-    } else {
+        fprintf(stderr,"%i name resolution error\n",error_counter);
+    } else if (error_counter > 0) {
+        fprintf(stderr,"%i name resolution errors\n",error_counter);
+    } else if (error_counter == 0) {
         printf("%i name resolution errors\n",error_counter);
     }
 }

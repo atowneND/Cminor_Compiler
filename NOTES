@@ -1,6 +1,123 @@
-- [ ] 2D arrays
-      - need to check array assignment lengths and function parameter sizes
-- [ ] fprintf vs printf in typechecking functions
-- [ ] error numbers should be associated with name resolution
-- [ ] array initialization - empty brackets as a function parameter, else constant
 - [ ] checking for global assignments to be constant
+
+void stmt_codegen(struct decl *d, FILE *file)
+void stmt_codegen()
+void expr_codegen()
+
+register.h
+const char *register_name(int r);
+int register_alloc();
+void register_free(int r);
+
+the only allocatable registers
+rbx
+r10
+...
+r15
+
+put all registers in the table and flag a few that are scratch
+
+char *symbol_code(struct symbol *s);
+// returns string that represents assembly language equivalent
+// number or name, return location
+
+GENERAL_IDEA
+post-order traversal of expr_tree
+at leaves, load values out of memory and into registers
+note in expr_tree which register; record in e->reg = register
+at integer nodes, generate code, record register
+check for free registers
+
+void expr_codegen(struct expr *e, FILE *file){
+switch (e->kind){
+    case INTEGER:
+        e->reg = register_alloc();
+        fprintf(file,"MOV $%d, %s\n",e->literal_value,register_name(e->reg));
+        break;
+    case NAME:
+        e->reg = register_alloc();
+        fprintf(file,"MOV %s, %s\n",symbol_code(e->symbol),register_name(e->reg));
+        break;
+    case ADD:
+        expr_codegen(e->left,file);
+        expr_codegen(e->right,file);
+        fprintf(file,"ADD %s, %s",register_name(e->left->reg),register_name(e->right->reg));
+        e->reg = e->right->reg;
+        register_free(e->left->reg);
+        break;
+    case MULT:
+        expr_codegen(e->left,file);
+        expr_codegen(e->right,file);
+        fprintf(file,"MOV %s, %%rax\n",register_name(e->left->reg));
+        fprintf(file,"IMUL %s\n",register_name(e->right->reg)); // implicitly multiply by %rax, leaves result in %rax
+        fprintf(file,"MOV %%rax, %s\n",register_name(e->right->reg)); // store result in right register
+        free(e->left->reg);
+        e->reg = e->right->reg;
+        break;
+}
+
+IF_ELSE
+expr_codegen(s->expr)
+CMP %E, $1
+JE L1
+stmt_codegen(s->body)
+JMP L2
+L1: stmt_codegen(s->else_body)
+L2:
+
+FOR
+x;
+-->if(!y) ---
+| S;        |
+--Z;        |
+   <---------
+expr_codegen(s->init_expr)
+L1:
+expr_codegen(s->expr);
+CMP %E, $0
+stmt_codegen(s->body);
+expr_codegen(s->next_expr);
+JMP L1
+LZ
+
+PRINT
+for each argument{
+expr_generate(e)
+t=expr_typecheck(e) // just to get the type of e
+if (t==INTEGER){
+    gen code for print integer (%E)
+}else(t==BOOLEAN){
+}
+}
+
+stmt->function calls - don't forget to free registers!
+
+DECLARATIONS
+split global
+    declaration, no assignment:
+        .data
+        x: .quad 0
+        .data
+        s: .string "hello"
+    function:
+        .text
+        .global f
+        f: [PREAMBLE]
+        stmt_generate(d->code)
+        [POSTAMBLE]
+        *****check name resolution in functions - all locals should be consecutive?
+split local
+    declaration, no assignment:
+        do nothing (done in preamble)
+    declaration, definition:
+        expr_codegen(d->value)
+        MOV %E, -?(%rbp)
+    s: string:
+        pointer on the stack
+    t: string = "nd"
+        "nd" is a global constant
+        store pointer to "nd" in t
+        expr_generate(d->code) -> .data .s .string "nd"
+                                  .text LEA %s, %E
+        MOV %E, -?(%rbp)
+-----------------------------------------------

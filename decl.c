@@ -127,12 +127,12 @@ struct type *decl_typecheck(struct decl *d){
         }
         if ( d_kind != e->kind){
             error_counter += 1;
-            printf("Error #%i ",error_counter);
-            printf("type error: invalid declaration of ");
-            type_print(d->type);
-            printf(" (%s) = ",d->name);
-            type_print(d->value->type);
-            literal_print(d->value);
+            fprintf(stderr,"Error #%i ",error_counter);
+            fprintf(stderr,"type error: invalid declaration of ");
+            type_print_error(d->type);
+            fprintf(stderr," (%s) = ",d->name);
+            type_print_error(d->value->type);
+            literal_print_error(d->value);
         }
         // expression list
         struct expr *tmp = d->value->next;
@@ -140,12 +140,12 @@ struct type *decl_typecheck(struct decl *d){
             e = expr_typecheck(tmp,d);
             if ( d_kind != e->kind){
                 error_counter += 1;
-                printf("Error #%i ",error_counter);
-                printf("type error: invalid declaration of ");
-                type_print(d->type);
-                printf(" (%s) = ",d->name);
-                type_print(d->value->type);
-                literal_print(d->value);
+                fprintf(stderr,"Error #%i ",error_counter);
+                fprintf(stderr,"type error: invalid declaration of ");
+                type_print_error(d->type);
+                fprintf(stderr," (%s) = ",d->name);
+                type_print_error(d->value->type);
+                literal_print_error(d->value);
             }
             tmp = tmp->next;
         }

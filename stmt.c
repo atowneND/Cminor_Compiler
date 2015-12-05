@@ -32,7 +32,6 @@ struct stmt * stmt_create(
 }
 
 void stmt_print( struct stmt *s ) {
-//    printf("%i, idents=%i\n",s->kind,indent);
     if (s != NULL) {
         switch (s->kind){
             case STMT_DECL:
@@ -203,10 +202,10 @@ void stmt_typecheck(struct stmt *s, struct type *current_type, struct decl *d){
 	            if (s->init_expr->type != NULL) {
                     if (s->init_expr->type->kind != TYPE_BOOLEAN){
                         error_counter += 1;
-                        printf("Error #%i ",error_counter);
-                        printf("type error: expression in if statement must be boolean: ");
-                        expr_print(s->init_expr);
-                        printf("\n");
+                        fprintf(stderr,"Error #%i ",error_counter);
+                        fprintf(stderr,"type error: expression in if statement must be boolean: ");
+                        expr_print_error(s->init_expr);
+                        fprintf(stderr,"\n");
                     }
                     stmt_typecheck(s->body,current_type,d);
                     stmt_typecheck(s->else_body,current_type,d);
@@ -246,23 +245,23 @@ void stmt_typecheck(struct stmt *s, struct type *current_type, struct decl *d){
 
             if (return_type != expected_return_type){
                 error_counter += 1;
-                printf("Error #%i ",error_counter);
-                printf("type error: returned expression has type ");
+                fprintf(stderr,"Error #%i ",error_counter);
+                fprintf(stderr,"type error: returned expression has type ");
                 if (s->init_expr!=NULL){ 
-                    expr_print(s->init_expr);
+                    expr_print_error(s->init_expr);
                 } else {
-                    printf("void");
+                    fprintf(stderr,"void");
                 }
                 if (s->init_expr!=NULL){ 
                     if (s->init_expr->type!=NULL){ 
-                        type_print(s->init_expr->type);
+                        type_print_error(s->init_expr->type);
                     } else {
-                        printf("void");
+                        fprintf(stderr,"void");
                     }
                 }
-                printf("\n\tFunction expecting return type ");
-                type_print(current_type);
-                printf("\n");
+                fprintf(stderr,"\n\tFunction expecting return type ");
+                type_print_error(current_type);
+                fprintf(stderr,"\n");
             }
 
 	        break;

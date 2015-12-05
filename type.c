@@ -21,6 +21,53 @@ struct type * type_create(
     return new_type;
 }
 
+void type_print_error( struct type *t ) {
+    if (t != NULL) {
+        switch (t->kind){
+            case (TYPE_BOOLEAN):
+                fprintf(stderr,"boolean");
+                break;
+            case (TYPE_CHARACTER):
+                fprintf(stderr,"char");
+                break;
+            case (TYPE_INTEGER):
+                fprintf(stderr,"integer");
+                break;
+            case (TYPE_STRING):
+                fprintf(stderr,"string");
+                break;
+            case (TYPE_ARRAY):
+                fprintf(stderr,"array ");
+                struct expr *tmp =  malloc(sizeof(struct expr));
+                tmp = t->expr;
+                while (tmp != NULL){
+                    fprintf(stderr,"[");
+                    expr_print_error(tmp);
+                    fprintf(stderr,"]");
+                    tmp = tmp->next_array_dimension;
+                }
+                fprintf(stderr," ");
+                if (t->subtype != 0){ 
+                    type_print_error(t->subtype);
+                }
+                break;
+            case (TYPE_FUNCTION):
+                fprintf(stderr,"function ");
+                type_print_error(t->subtype);
+                fprintf(stderr," (");
+                if (t->params){ 
+                    param_list_print_error(t->params);
+                }
+                fprintf(stderr,")");
+                //indent += 1;
+                break;
+            case (TYPE_VOID):
+                fprintf(stderr,"void");
+                break;
+        }
+    }
+}
+
 void type_print( struct type *t ) {
     if (t != NULL) {
         switch (t->kind){

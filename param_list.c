@@ -7,6 +7,7 @@
 extern int indent;
 extern int error_counter;
 extern struct hash_table_node *head_hash_table_node;
+extern int param_ctr;
 
 struct param_list * param_list_create(
         char *name,
@@ -34,6 +35,17 @@ void param_list_append( struct param_list *original_params, struct param_list *n
     }
 }
 
+void param_list_print_error( struct param_list *a ){
+    if (a != NULL){
+        printf("%s: ",a->name);
+        type_print_error(a->type);
+        if (a->next != 0){
+            fprintf(stderr,", "); 
+            param_list_print_error(a->next);
+        }
+    }
+}
+
 void param_list_print( struct param_list *a ){
     if (a != NULL){
         printf("%s: ",a->name);
@@ -57,6 +69,7 @@ void param_list_resolve(struct param_list *p){
 
     scope_bind(p->name,sym);
     param_list_resolve(p->next);
+    param_ctr += 1;
 }
 
 void param_list_typecheck(const char *fname,struct expr *e_params,struct decl *d){
@@ -84,6 +97,18 @@ void param_list_typecheck(const char *fname,struct expr *e_params,struct decl *d
         }
         p = p->next;
         e_params = e_params->next;
+    }
+
+    if (p==NULL) {
+        if (e_params != NULL) {
+            error_counter += 1;
+            printf("Typechecking error: Function %s is expecting fewer paramaters\n",fname);
+        }
+    } else if (e_params == NULL) {
+        if (p != NULL) {
+            error_counter += 1;
+            printf("Typechecking error: Function %s is expecting more parameters\n",fname);
+        }
     }
     //sym->type->params->next->type->kind
 }

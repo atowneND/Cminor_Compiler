@@ -43,6 +43,7 @@ void sym_table_print(struct hash_table *h){
 }
 
 void scope_enter(void){
+    param_ctr = 0;
     struct hash_table_node *htp = malloc(sizeof(struct hash_table_node));
 
     // create hash table
@@ -64,6 +65,7 @@ void scope_exit(void){
 //    hash_table_clear(head_hash_table_node->current_hash_table);
     head_hash_table_node = head_hash_table_node->next_hash_table;
     scope_ctr -= 1;
+    param_ctr = 0;
 }
 
 void scope_bind(const char *name, struct symbol *s){
@@ -114,11 +116,10 @@ struct symbol *scope_lookup_local(const char *name){
 struct symbol *symbol_create(symbol_t kind, struct type *type, char *name){
     struct symbol *sym = malloc(sizeof(struct symbol));
     int symbol_number = hash_table_size(head_hash_table_node->current_hash_table);
-    sym->which = symbol_number;
+    sym->which = symbol_number - param_ctr;
     sym->kind = kind;
     sym->type = type;
     sym->name = name;
-    //sym->function_hash_table;
 
     return sym;
 }

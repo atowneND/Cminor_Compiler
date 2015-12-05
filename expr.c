@@ -139,6 +139,154 @@ struct expr * expr_create_string_literal( const char *str ){
     return new_expression;
 }
 
+void expr_print_error( struct expr *e ){
+    if (e != NULL) {
+        switch (e->kind){
+            case (EXPR_ADD):
+                if (e->left != 0) expr_print_error(e->left);
+                fprintf(stderr,"+");
+                if (e->right != 0) expr_print_error(e->right);
+                break;
+            case (EXPR_SUB):
+                if (e->left != 0) expr_print_error(e->left);
+                fprintf(stderr,"-");
+                if (e->right != 0) expr_print_error(e->right);
+                break;
+            case (EXPR_MUL):
+                if (e->left != 0) expr_print_error(e->left);
+                fprintf(stderr,"*");
+                if (e->right != 0) expr_print_error(e->right);
+                break;
+            case (EXPR_DIV):
+                if (e->left != 0) expr_print_error(e->left);
+                fprintf(stderr,"/");
+                if (e->right != 0) expr_print_error(e->right);
+                break;
+            case (EXPR_INCREMENT):
+                if (e->left != 0) expr_print_error(e->left);
+                fprintf(stderr,"++");
+                if (e->right != 0) expr_print_error(e->right);
+                break;
+            case (EXPR_DECREMENT):
+                if (e->left != 0) expr_print_error(e->left);
+                fprintf(stderr,"--");
+                if (e->right != 0) expr_print_error(e->right);
+                break;
+            case (EXPR_NOT):
+                if (e->left != 0) expr_print_error(e->left);
+                fprintf(stderr,"!");
+                if (e->right != 0) expr_print_error(e->right);
+                break;
+            case (EXPR_POWER):
+                if (e->left != 0) expr_print_error(e->left);
+                fprintf(stderr,"^");
+                if (e->right != 0) expr_print_error(e->right);
+                break;
+            case (EXPR_MODULO):
+                if (e->left != 0) expr_print_error(e->left);
+                fprintf(stderr,"%%");
+                if (e->right != 0) expr_print_error(e->right);
+                break;
+            case (EXPR_LESS_THAN):
+                if (e->left != 0) expr_print_error(e->left);
+                fprintf(stderr," < ");
+                if (e->right != 0) expr_print_error(e->right);
+                break;
+            case (EXPR_GREATER_THAN):
+                if (e->left != 0) expr_print_error(e->left);
+                fprintf(stderr," > ");
+                if (e->right != 0) expr_print_error(e->right);
+                break;
+            case (EXPR_LESS_THAN_OR_EQUAL):
+                if (e->left != 0) expr_print_error(e->left);
+                fprintf(stderr," <= ");
+                if (e->right != 0) expr_print_error(e->right);
+                break;
+            case (EXPR_GREATER_THAN_OR_EQUAL):
+                if (e->left != 0) expr_print_error(e->left);
+                fprintf(stderr," >= ");
+                if (e->right != 0) expr_print_error(e->right);
+                break;
+            case (EXPR_EQUIVALENCE_COMPARISON):
+                if (e->left != 0) expr_print_error(e->left);
+                fprintf(stderr," == ");
+                if (e->right != 0) expr_print_error(e->right);
+                break;
+            case (EXPR_NONEQUIVALENCE_COMPARISON):
+                if (e->left != 0) expr_print_error(e->left);
+                fprintf(stderr," != ");
+                if (e->right != 0) expr_print_error(e->right);
+                break;
+            case (EXPR_AND):
+                if (e->left != 0) expr_print_error(e->left);
+                fprintf(stderr," && ");
+                if (e->right != 0) expr_print_error(e->right);
+                break;
+            case (EXPR_OR):
+                if (e->left != 0) expr_print_error(e->left);
+                fprintf(stderr," || ");
+                if (e->right != 0) expr_print_error(e->right);
+                break;
+            case (EXPR_ASSIGNMENT):
+                if (e->left != 0) expr_print_error(e->left);
+                fprintf(stderr," = ");
+                if (e->right != 0) expr_print_error(e->right);
+                break;
+            case (EXPR_BOOLEAN_LITERAL):
+                if (e->left != 0) expr_print_error(e->left);
+                fprintf(stderr,"%i",e->literal_value);
+                if (e->right != 0) expr_print_error(e->right);
+                break;
+            case (EXPR_INTEGER_LITERAL):
+                if (e->left != 0) expr_print_error(e->left);
+                fprintf(stderr,"%i",e->literal_value);
+                if (e->right != 0) expr_print_error(e->right);
+                break;
+            case (EXPR_CHARACTER_LITERAL):
+                if (e->left != 0) expr_print_error(e->left);
+                fprintf(stderr,"'%c'",e->literal_value);
+                if (e->right != 0) expr_print_error(e->right);
+                break;
+            case (EXPR_STRING_LITERAL):
+                if (e->left != 0) expr_print_error(e->left);
+                fprintf(stderr,"%s",e->string_literal);
+                if (e->right != 0) expr_print_error(e->right);
+                break;
+            case (EXPR_IDENTIFIER):
+                if (e->left != 0) expr_print_error(e->left);
+                fprintf(stderr,"%s",e->name);
+                if (e->right != 0) expr_print_error(e->right);
+                break;
+            case (EXPR_PARENTHESES):
+                fprintf(stderr,"(");
+                if (e->left != 0) expr_print_error(e->left);
+                fprintf(stderr,")");
+                break;
+            case (EXPR_FUNCTION_CALL):
+                if (e->left != 0) expr_print_error(e->left);
+                fprintf(stderr,"(");
+                if (e->right != 0) expr_print_error(e->right);
+                fprintf(stderr,")");
+                break;
+            case (EXPR_ARRAY_INDEX):
+                if (e->left != 0) expr_print_error(e->left);
+                struct expr *tmp = malloc(sizeof(struct expr));
+                tmp = e->right;
+                while (tmp != NULL){
+                    fprintf(stderr,"[");
+                    expr_print_error(tmp);
+                    fprintf(stderr,"]");
+                    tmp = tmp->next_array_dimension;
+                }
+                break;
+        }
+        if (e->next != NULL){
+            fprintf(stderr,", "); 
+            expr_print_error(e->next);
+        }
+    }
+}
+
 void expr_print( struct expr *e ){
     if (e != NULL) {
         switch (e->kind){
@@ -337,14 +485,14 @@ struct type *expr_typecheck(struct expr *e, struct decl *d){
             r = expr_typecheck(e->right,d);
             if ((l->kind != TYPE_INTEGER) || (r->kind != TYPE_INTEGER)){
                 error_counter += 1;
-                printf("Error #%i ",error_counter);
-                printf("type error: cannot add ");
-                type_print(l);
-                literal_print(e->left);
-                printf(" to ");
-                type_print(r);
-                literal_print(e->right);
-                printf("\n");
+                fprintf(stderr,"Error #%i ",error_counter);
+                fprintf(stderr,"type error: cannot add ");
+                type_print_error(l);
+                literal_print_error(e->left);
+                fprintf(stderr," to ");
+                type_print_error(r);
+                literal_print_error(e->right);
+                fprintf(stderr,"\n");
             }
             e->type = type_create(TYPE_INTEGER,0,0,0);
             break;
@@ -356,14 +504,14 @@ struct type *expr_typecheck(struct expr *e, struct decl *d){
                     e->type = type_create(TYPE_INTEGER,0,0,0);
                 } else {
                     error_counter += 1;
-                    printf("Error #%i ",error_counter);
-                    printf("type error: cannot subtract ");
-                    type_print(l);
-                    literal_print(e->left);
-                    printf(" from ");
-                    type_print(r);
-                    literal_print(e->right);
-                    printf("\n");
+                    fprintf(stderr,"Error #%i ",error_counter);
+                    fprintf(stderr,"type error: cannot subtract ");
+                    type_print_error(l);
+                    literal_print_error(e->left);
+                    fprintf(stderr," from ");
+                    type_print_error(r);
+                    literal_print_error(e->right);
+                    fprintf(stderr,"\n");
                 }
             }
             e->type = type_create(TYPE_INTEGER,0,0,0);
@@ -373,14 +521,14 @@ struct type *expr_typecheck(struct expr *e, struct decl *d){
             r = expr_typecheck(e->right,d);
             if ((l->kind != TYPE_INTEGER) || (r->kind != TYPE_INTEGER)){
                 error_counter += 1;
-                printf("Error #%i ",error_counter);
-                printf("type error: cannot multiply ");
-                type_print(l);
-                literal_print(e->left);
-                printf(" and ");
-                type_print(r);
-                literal_print(e->right);
-                printf("\n");
+                fprintf(stderr,"Error #%i ",error_counter);
+                fprintf(stderr,"type error: cannot multiply ");
+                type_print_error(l);
+                literal_print_error(e->left);
+                fprintf(stderr," and ");
+                type_print_error(r);
+                literal_print_error(e->right);
+                fprintf(stderr,"\n");
             }
             e->type = type_create(TYPE_INTEGER,0,0,0);
             break;
@@ -389,14 +537,14 @@ struct type *expr_typecheck(struct expr *e, struct decl *d){
             r = expr_typecheck(e->right,d);
             if ((l->kind != TYPE_INTEGER) || (r->kind != TYPE_INTEGER)){
                 error_counter += 1;
-                printf("Error #%i ",error_counter);
-                printf("type error: cannot divide ");
-                type_print(l);
-                literal_print(e->left);
-                printf(" by ");
-                type_print(r);
-                literal_print(e->right);
-                printf("\n");
+                fprintf(stderr,"Error #%i ",error_counter);
+                fprintf(stderr,"type error: cannot divide ");
+                type_print_error(l);
+                literal_print_error(e->left);
+                fprintf(stderr," by ");
+                type_print_error(r);
+                literal_print_error(e->right);
+                fprintf(stderr,"\n");
             }
             e->type = type_create(TYPE_INTEGER,0,0,0);
             break;
@@ -404,11 +552,11 @@ struct type *expr_typecheck(struct expr *e, struct decl *d){
             l = expr_typecheck(e->left,d);
             if (l->kind != TYPE_INTEGER){
                 error_counter += 1;
-                printf("Error #%i ",error_counter);
-                printf("type error: cannot increment ");
-                type_print(l);
-                literal_print(e->left);
-                printf("\n");
+                fprintf(stderr,"Error #%i ",error_counter);
+                fprintf(stderr,"type error: cannot increment ");
+                type_print_error(l);
+                literal_print_error(e->left);
+                fprintf(stderr,"\n");
             }
             e->type = type_create(TYPE_INTEGER,0,0,0);
             break;
@@ -416,11 +564,11 @@ struct type *expr_typecheck(struct expr *e, struct decl *d){
             l = expr_typecheck(e->left,d);
             if (l->kind != TYPE_INTEGER){
                 error_counter += 1;
-                printf("Error #%i ",error_counter);
-                printf("type error: cannot decrement ");
-                type_print(l);
-                literal_print(e->left);
-                printf("\n");
+                fprintf(stderr,"Error #%i ",error_counter);
+                fprintf(stderr,"type error: cannot decrement ");
+                type_print_error(l);
+                literal_print_error(e->left);
+                fprintf(stderr,"\n");
             }
             e->type = type_create(TYPE_INTEGER,0,0,0);
             break;
@@ -428,11 +576,11 @@ struct type *expr_typecheck(struct expr *e, struct decl *d){
             r = expr_typecheck(e->right,d);
             if (r->kind != TYPE_BOOLEAN){
                 error_counter += 1;
-                printf("Error #%i ",error_counter);
-                printf("type error: cannot negate ");
-                type_print(r);
-                literal_print(e->right);
-                printf("\n");
+                fprintf(stderr,"Error #%i ",error_counter);
+                fprintf(stderr,"type error: cannot negate ");
+                type_print_error(r);
+                literal_print_error(e->right);
+                fprintf(stderr,"\n");
             }
             e->type = type_create(TYPE_BOOLEAN,0,0,0);
             break;
@@ -441,14 +589,14 @@ struct type *expr_typecheck(struct expr *e, struct decl *d){
             r = expr_typecheck(e->right,d);
             if ((l->kind != TYPE_INTEGER) || (r->kind != TYPE_INTEGER)){
                 error_counter += 1;
-                printf("Error #%i ",error_counter);
-                printf("type error: cannot raise ");
-                type_print(l);
-                literal_print(e->left);
-                printf(" to power ");
-                type_print(r);
-                literal_print(e->right);
-                printf("\n");
+                fprintf(stderr,"Error #%i ",error_counter);
+                fprintf(stderr,"type error: cannot raise ");
+                type_print_error(l);
+                literal_print_error(e->left);
+                fprintf(stderr," to power ");
+                type_print_error(r);
+                literal_print_error(e->right);
+                fprintf(stderr,"\n");
             }
             e->type = type_create(TYPE_INTEGER,0,0,0);
             break;
@@ -457,14 +605,14 @@ struct type *expr_typecheck(struct expr *e, struct decl *d){
             r = expr_typecheck(e->right,d);
             if ((l->kind != TYPE_INTEGER) || (r->kind != TYPE_INTEGER)){
                 error_counter += 1;
-                printf("Error #%i ",error_counter);
-                printf("type error: cannot take modulus of ");
-                type_print(l);
-                literal_print(e->left);
-                printf(" and ");
-                type_print(r);
-                literal_print(e->right);
-                printf("\n");
+                fprintf(stderr,"Error #%i ",error_counter);
+                fprintf(stderr,"type error: cannot take modulus of ");
+                type_print_error(l);
+                literal_print_error(e->left);
+                fprintf(stderr," and ");
+                type_print_error(r);
+                literal_print_error(e->right);
+                fprintf(stderr,"\n");
             }
             e->type = type_create(TYPE_INTEGER,0,0,0);
             break;
@@ -473,14 +621,14 @@ struct type *expr_typecheck(struct expr *e, struct decl *d){
             r = expr_typecheck(e->right,d);
             if ((l->kind != TYPE_INTEGER) || (r->kind != TYPE_INTEGER)){
                 error_counter += 1;
-                printf("Error #%i ",error_counter);
-                printf("type error: cannot compare ");
-                type_print(l);
-                literal_print(e->left);
-                printf(" to ");
-                type_print(r);
-                literal_print(e->right);
-                printf("\n");
+                fprintf(stderr,"Error #%i ",error_counter);
+                fprintf(stderr,"type error: cannot compare ");
+                type_print_error(l);
+                literal_print_error(e->left);
+                fprintf(stderr," to ");
+                type_print_error(r);
+                literal_print_error(e->right);
+                fprintf(stderr,"\n");
             }
             e->type = type_create(TYPE_BOOLEAN,0,0,0);
             break;
@@ -489,14 +637,14 @@ struct type *expr_typecheck(struct expr *e, struct decl *d){
             r = expr_typecheck(e->right,d);
             if ((l->kind != TYPE_INTEGER) || (r->kind != TYPE_INTEGER)){
                 error_counter += 1;
-                printf("Error #%i ",error_counter);
-                printf("type error: cannot compare ");
-                type_print(l);
-                literal_print(e->left);
-                printf(" to ");
-                type_print(r);
-                literal_print(e->right);
-                printf("\n");
+                fprintf(stderr,"Error #%i ",error_counter);
+                fprintf(stderr,"type error: cannot compare ");
+                type_print_error(l);
+                literal_print_error(e->left);
+                fprintf(stderr," to ");
+                type_print_error(r);
+                literal_print_error(e->right);
+                fprintf(stderr,"\n");
             }
             e->type = type_create(TYPE_BOOLEAN,0,0,0);
             break;
@@ -505,14 +653,14 @@ struct type *expr_typecheck(struct expr *e, struct decl *d){
             r = expr_typecheck(e->right,d);
             if ((l->kind != TYPE_INTEGER) || (r->kind != TYPE_INTEGER)){
                 error_counter += 1;
-                printf("Error #%i ",error_counter);
-                printf("type error: cannot compare ");
-                type_print(l);
-                literal_print(e->left);
-                printf(" to ");
-                type_print(r);
-                literal_print(e->right);
-                printf("\n");
+                fprintf(stderr,"Error #%i ",error_counter);
+                fprintf(stderr,"type error: cannot compare ");
+                type_print_error(l);
+                literal_print_error(e->left);
+                fprintf(stderr," to ");
+                type_print_error(r);
+                literal_print_error(e->right);
+                fprintf(stderr,"\n");
             }
             e->type = type_create(TYPE_BOOLEAN,0,0,0);
             break;
@@ -521,14 +669,14 @@ struct type *expr_typecheck(struct expr *e, struct decl *d){
             r = expr_typecheck(e->right,d);
             if ((l->kind != TYPE_INTEGER) || (r->kind != TYPE_INTEGER)){
                 error_counter += 1;
-                printf("Error #%i ",error_counter);
-                printf("type error: cannot compare ");
-                type_print(l);
-                literal_print(e->left);
-                printf(" to ");
-                type_print(r);
-                literal_print(e->right);
-                printf("\n");
+                fprintf(stderr,"Error #%i ",error_counter);
+                fprintf(stderr,"type error: cannot compare ");
+                type_print_error(l);
+                literal_print_error(e->left);
+                fprintf(stderr," to ");
+                type_print_error(r);
+                literal_print_error(e->right);
+                fprintf(stderr,"\n");
             }
             e->type = type_create(TYPE_BOOLEAN,0,0,0);
             break;
@@ -537,22 +685,22 @@ struct type *expr_typecheck(struct expr *e, struct decl *d){
             r = expr_typecheck(e->right,d);
             if ((l->kind == TYPE_FUNCTION) || (r->kind == TYPE_FUNCTION)){
                 error_counter += 1;
-                printf("Error #%i ",error_counter);
-                printf("type error: cannot compare equivalence of functions\n");
+                fprintf(stderr,"Error #%i ",error_counter);
+                fprintf(stderr,"type error: cannot compare equivalence of functions\n");
             } else if ((l->kind == TYPE_ARRAY) || (r->kind == TYPE_ARRAY)){
                 error_counter += 1;
-                printf("Error #%i ",error_counter);
-                printf("type error: cannot compare equivalence of arrays\n");
+                fprintf(stderr,"Error #%i ",error_counter);
+                fprintf(stderr,"type error: cannot compare equivalence of arrays\n");
             } else if (l->kind != r->kind){
                 error_counter += 1;
-                printf("Error #%i ",error_counter);
-                printf("type error: cannot compare equivalence of ");
-                type_print(l);
-                literal_print(e->left);
-                printf(" to ");
-                type_print(r);
-                literal_print(e->right);
-                printf("\n");
+                fprintf(stderr,"Error #%i ",error_counter);
+                fprintf(stderr,"type error: cannot compare equivalence of ");
+                type_print_error(l);
+                literal_print_error(e->left);
+                fprintf(stderr," to ");
+                type_print_error(r);
+                literal_print_error(e->right);
+                fprintf(stderr,"\n");
             }
             e->type = type_create(TYPE_BOOLEAN,0,0,0);
             break;
@@ -561,22 +709,22 @@ struct type *expr_typecheck(struct expr *e, struct decl *d){
             r = expr_typecheck(e->right,d);
             if ((l->kind == TYPE_FUNCTION) || (r->kind == TYPE_FUNCTION)){
                 error_counter += 1;
-                printf("Error #%i ",error_counter);
-                printf("type error: cannot compare equivalence of functions\n");
+                fprintf(stderr,"Error #%i ",error_counter);
+                fprintf(stderr,"type error: cannot compare equivalence of functions\n");
             } else if ((l->kind == TYPE_ARRAY) || (r->kind == TYPE_ARRAY)){
                 error_counter += 1;
-                printf("Error #%i ",error_counter);
-                printf("type error: cannot compare equivalence of arrays\n");
+                fprintf(stderr,"Error #%i ",error_counter);
+                fprintf(stderr,"type error: cannot compare equivalence of arrays\n");
             } else if (l->kind != r->kind){
                 error_counter += 1;
-                printf("Error #%i ",error_counter);
-                printf("type error: cannot compare equivalence of ");
-                type_print(l);
-                literal_print(e->left);
-                printf(" to ");
-                type_print(r);
-                literal_print(e->right);
-                printf("\n");
+                fprintf(stderr,"Error #%i ",error_counter);
+                fprintf(stderr,"type error: cannot compare equivalence of ");
+                type_print_error(l);
+                literal_print_error(e->left);
+                fprintf(stderr," to ");
+                type_print_error(r);
+                literal_print_error(e->right);
+                fprintf(stderr,"\n");
             }
             e->type = type_create(TYPE_BOOLEAN,0,0,0);
             break;
@@ -585,14 +733,14 @@ struct type *expr_typecheck(struct expr *e, struct decl *d){
             r = expr_typecheck(e->right,d);
             if ((l->kind != TYPE_BOOLEAN) || (r->kind != TYPE_BOOLEAN)){
                 error_counter += 1;
-                printf("Error #%i ",error_counter);
-                printf("type error: cannot compare ");
-                type_print(l);
-                literal_print(e->left);
-                printf(" to ");
-                type_print(r);
-                literal_print(e->right);
-                printf("\n");
+                fprintf(stderr,"Error #%i ",error_counter);
+                fprintf(stderr,"type error: cannot compare ");
+                type_print_error(l);
+                literal_print_error(e->left);
+                fprintf(stderr," to ");
+                type_print_error(r);
+                literal_print_error(e->right);
+                fprintf(stderr,"\n");
             }
             e->type = type_create(TYPE_BOOLEAN,0,0,0);
             break;
@@ -601,56 +749,71 @@ struct type *expr_typecheck(struct expr *e, struct decl *d){
             r = expr_typecheck(e->right,d);
             if ((l->kind != TYPE_BOOLEAN) || (r->kind != TYPE_BOOLEAN)){
                 error_counter += 1;
-                printf("Error #%i ",error_counter);
-                printf("type error: cannot compare ");
-                type_print(l);
-                literal_print(e->left);
-                printf(" to ");
-                type_print(r);
-                literal_print(e->right);
-                printf("\n");
+                fprintf(stderr,"Error #%i ",error_counter);
+                fprintf(stderr,"type error: cannot compare ");
+                type_print_error(l);
+                literal_print_error(e->left);
+                fprintf(stderr," to ");
+                type_print_error(r);
+                literal_print_error(e->right);
+                fprintf(stderr,"\n");
             }
             e->type = type_create(TYPE_BOOLEAN,0,0,0);
             break;
         case (EXPR_ASSIGNMENT):
+            /**************************/
             l = expr_typecheck(e->left,d);
-            r = expr_typecheck(e->right,d);
-            //if ((l->kind == TYPE_FUNCTION) || (r->kind == TYPE_FUNCTION)){
-            if (l->kind == TYPE_FUNCTION){
-                error_counter += 1;
-                printf("Error #%i ",error_counter);
-                printf("type error: cannot assign a function\n");
-            } else if (l->kind == TYPE_ARRAY) {
-                type_kind_t expected_type = e->left->type->subtype->kind;
+            if (l->kind == TYPE_ARRAY) {
+                type_kind_t expected_type;
+                if (l->subtype != NULL) { 
+                    expected_type = l->subtype->kind;
+                } else {
+                    expected_type = l->kind;
+                }
                 struct expr *elist = e->right;
                 while (elist != NULL) {
                     r = expr_typecheck(elist,d);
                     type_kind_t given_type = elist->type->kind;
                     if (expected_type != given_type) {
                         error_counter += 1;
-                        printf("Error #%i ",error_counter);
-                        printf("type error: cannot assign ");
-                        type_print(r);
-                        literal_print(elist);
-                        printf(" to an element of ");
-                        type_print(l);
-                        literal_print(e->left);
-                        printf("\n");
+                        fprintf(stderr,"Error #%i ",error_counter);
+                        fprintf(stderr,"type error: cannot assign ");
+                        type_print_error(r);
+                        literal_print_error(elist);
+                        fprintf(stderr," to an element of ");
+                        type_print_error(l);
+                        struct expr *etmp = e->left;
+                        if (e->left->kind == EXPR_ARRAY_INDEX){
+                            etmp = etmp->left;
+                        }
+                        struct type *ttmp = etmp->type->subtype;
+                        while (ttmp->kind == TYPE_ARRAY) {
+                            ttmp = ttmp->subtype;
+                        }
+                        literal_print_error(etmp);
+                        fprintf(stderr,"\n");
                     }
                     elist = elist->next;
                 }
-                //e->right->(next->)name
-                //struct symbol *sym = scope_lookup(e->left->name);
-            } else if (l->kind != r->kind) {
-                error_counter += 1;
-                printf("Error #%i ",error_counter);
-                printf("type error: cannot assign ");
-                type_print(r);
-                literal_print(e->right);
-                printf(" to ");
-                type_print(l);
-                literal_print(e->left);
-                printf("\n");
+            /**************************/
+            } else { 
+                r = expr_typecheck(e->right,d);
+                //if ((l->kind == TYPE_FUNCTION) || (r->kind == TYPE_FUNCTION)){
+                if (l->kind == TYPE_FUNCTION){
+                    error_counter += 1;
+                    fprintf(stderr,"Error #%i ",error_counter);
+                    fprintf(stderr,"type error: cannot assign a function\n");
+                } else if (l->kind != r->kind) {
+                    error_counter += 1;
+                    fprintf(stderr,"Error #%i ",error_counter);
+                    fprintf(stderr,"type error: cannot assign ");
+                    type_print_error(r);
+                    literal_print_error(e->right);
+                    fprintf(stderr," to ");
+                    type_print_error(l);
+                    literal_print_error(e->left);
+                    fprintf(stderr,"\n");
+                }
             }
             e->type = type_create(l->kind,0,0,0);
             break;
@@ -678,11 +841,39 @@ struct type *expr_typecheck(struct expr *e, struct decl *d){
             e->type = e->left->symbol->type->subtype;
             break;
         case (EXPR_ARRAY_INDEX):
+            l = expr_typecheck(e->left,d);
+            r = expr_typecheck(e->right,d);
             e->type = type_create(TYPE_ARRAY, 0, 0, 0);
             expr_typecheck(e->next_array_dimension,d);
             break;
     }
     return e->type;
+}
+
+void literal_print_error(struct expr *e){
+    if (e->type == NULL) return;
+    switch (e->type->kind){
+        case (TYPE_BOOLEAN):
+            fprintf(stderr," (%i)",e->literal_value);
+            break;
+        case (TYPE_CHARACTER):
+            fprintf(stderr," (%c)",e->literal_value);
+            break;
+        case (TYPE_INTEGER):
+            fprintf(stderr," (%i)",e->literal_value);
+            break;
+        case (TYPE_STRING):
+            fprintf(stderr," (%s)",e->string_literal);
+            break;
+        case (TYPE_ARRAY):
+            fprintf(stderr," (%s)",e->name);
+            break;
+        case (TYPE_FUNCTION):
+            fprintf(stderr," (%s)",e->left->name);
+            break;
+        case (TYPE_VOID):
+            break;
+    }
 }
 
 void literal_print(struct expr *e){

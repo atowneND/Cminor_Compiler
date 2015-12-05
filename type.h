@@ -26,6 +26,7 @@ struct type * type_create(
     struct type *subtype,
     struct expr *expression
 );
+void type_print_error( struct type *t );
 void type_print( struct type *t );
 
 struct type *type_copy(struct type *t);
