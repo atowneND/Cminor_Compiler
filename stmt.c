@@ -271,3 +271,30 @@ void stmt_typecheck(struct stmt *s, struct type *current_type, struct decl *d){
     }
     stmt_typecheck(s->next, current_type,d);
 }
+
+void stmt_codegen(struct stmt *s, char *fd){
+    if (!s) return;
+    printf("codegen for stmt\n");
+    switch (s->kind){
+        case STMT_DECL:
+            decl_codegen(s->decl,fd);
+            break;
+        case STMT_EXPR:
+            expr_codegen(s->init_expr,fd);
+//            register_free(s->expr->reg);
+            break;
+        case STMT_IF_ELSE:
+            break;
+        case STMT_FOR:
+            break;
+        case STMT_WHILE:
+            break;
+        case STMT_PRINT:
+            break;
+        case STMT_RETURN:
+            break;
+        case STMT_BLOCK:
+            stmt_codegen(s->body,fd);
+            break;
+    }
+}

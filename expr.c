@@ -901,3 +901,8 @@ void literal_print(struct expr *e){
             break;
     }
 }
+
+void expr_codegen(struct expr *e, char *fd){
+    if (!e) return;
+    printf("codegen for expr\n");
+}

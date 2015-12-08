@@ -159,6 +159,11 @@ struct type *decl_typecheck(struct decl *d){
     return d->type;
 }
 
-void decl_codegen(struct decl *d){
-    printf("codegen for decl\n");
+void decl_codegen(struct decl *d, char *fd){
+    if (!d) return;
+    printf("codegen for decl %s\n",d->name);
+    expr_codegen(d->value, fd);
+    stmt_codegen(d->code, fd);
+    // case statement for different kinds of decls
+    decl_codegen(d->next, fd);
 }

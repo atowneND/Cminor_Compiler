@@ -70,4 +70,6 @@ struct type *expr_typecheck(struct expr *e, struct decl *d);
 void literal_print_error(struct expr *e);
 void literal_print(struct expr *e);
 
+void expr_codegen(struct expr *e, char *fd);
+
 #endif
