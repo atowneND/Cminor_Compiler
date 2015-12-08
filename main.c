@@ -154,4 +154,5 @@ void name_resolution(void){
 
 void generate_code(void){
     printf("here\n");
+    decl_codegen(ast_pointer);
 }

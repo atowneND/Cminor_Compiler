@@ -158,3 +158,7 @@ struct type *decl_typecheck(struct decl *d){
     decl_typecheck(d->next);
     return d->type;
 }
+
+void decl_codegen(struct decl *d){
+    printf("codegen for decl\n");
+}
