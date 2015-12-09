@@ -35,22 +35,42 @@ typedef enum {
 	/* many more types to add here */
 } expr_t;
 
-struct expr {
-	/* used by all expr types */
-	expr_t kind;
-	struct expr *left;
-	struct expr *right;
-	struct expr *next; // for expression lists
-	struct expr *next_array_dimension;
+typedef enum{
+    RAX_REG,
+    RBX_REG,
+    RCX_REG,
+    RDX_REG,
+    RSI_REG,
+    RDI_REG,
+    RBP_REG,
+    RSP_REG,
+    R8_REG,
+    R9_REG,
+    R10_REG,
+    R11_REG,
+    R12_REG,
+    R13_REG,
+    R14_REG,
+    R15_REG
+} register_t;
 
-	/* used by leaf expr types */
-	const char *name;
-	struct symbol *symbol;
+struct expr {
+    /* used by all expr types */
+    expr_t kind;
+    struct expr *left;
+    struct expr *right;
+    struct expr *next; // for expression lists
+    struct expr *next_array_dimension;
+
+    /* used by leaf expr types */
+    const char *name;
+    struct symbol *symbol;
 	int literal_value;
 	const char * string_literal;
 
 	/* for typechecking */
 	struct type *type;
+	register_t reg;
 };
 
 struct expr * expr_create( expr_t kind, struct expr *left, struct expr *right, struct expr *next );

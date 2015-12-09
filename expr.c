@@ -28,6 +28,7 @@ struct expr * expr_create(
     new_expression->string_literal = 0;
 
     new_expression->type = 0;
+    new_expression->reg = 0;
 
     return new_expression;
 }
@@ -59,6 +60,7 @@ struct expr * expr_create_name( const char *n ){
     new_expression->string_literal = 0;
 
     new_expression->type = 0;
+    new_expression->reg = 0;
     
     return new_expression;
 }
@@ -78,6 +80,7 @@ struct expr * expr_create_boolean_literal( int c ){
     new_expression->string_literal = 0;
 
     new_expression->type = 0;
+    new_expression->reg = 0;
 
     return new_expression;
 }
@@ -97,6 +100,7 @@ struct expr * expr_create_integer_literal( int c ){
     new_expression->string_literal = 0;
 
     new_expression->type = 0;
+    new_expression->reg = 0;
 
     return new_expression;
 }
@@ -116,6 +120,7 @@ struct expr * expr_create_character_literal( int c ){
     new_expression->string_literal = 0;
 
     new_expression->type = 0;
+    new_expression->reg = 0;
 
     return new_expression;
 }
@@ -135,6 +140,7 @@ struct expr * expr_create_string_literal( const char *str ){
     new_expression->string_literal = str;
 
     new_expression->type = 0;
+    new_expression->reg = 0;
 
     return new_expression;
 }
