@@ -114,9 +114,6 @@ int main(int argc, char *argv[]){
         case 5:
             printf("code generation\n");
             name_resolution();
-            if (error_counter == 0){
-                printf("scanning, parsing, name resolution, and typechecking successful\n");
-            }
             char *outputfile = argv[3];
             FILE *fd = fopen(outputfile,"w");
             generate_code(fd);
@@ -147,11 +144,13 @@ void name_resolution(void){
     scope_exit();
 
     if (error_counter == 1){ 
-        fprintf(stderr,"%i name resolution error\n",error_counter);
+        fprintf(stderr,"\n%i name resolution error\n",error_counter);
+        exit(1);
     } else if (error_counter > 0) {
-        fprintf(stderr,"%i name resolution errors\n",error_counter);
+        fprintf(stderr,"\n%i name resolution errors\n",error_counter);
+        exit(1);
     } else if (error_counter == 0) {
-        printf("%i name resolution errors\n",error_counter);
+        printf("\n%i name resolution errors\n",error_counter);
     }
 }
 

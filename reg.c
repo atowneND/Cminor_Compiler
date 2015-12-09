@@ -75,6 +75,26 @@ void init_registers(void){
     }
 }
 
+int register_alloc(void){
+    int i,done;
+    done = 0;
+    for (i=0;i<=MAX_REG;i++){
+        if (r_table[i].scratch){ // only check scratch registers
+            if (!r_table[i].reg_used){
+                r_table[i].reg_used = 1;
+                done = 1;
+                break;
+            }
+        }
+    }
+    if (!done){
+        fprintf(stderr,"Ran out of registers\n");
+        return -1;
+    } else {
+        return i;
+    }
+}
+
 void register_free(my_registers_t reg){
     // free register
 }

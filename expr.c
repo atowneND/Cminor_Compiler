@@ -911,4 +911,62 @@ void literal_print(struct expr *e){
 void expr_codegen(struct expr *e, FILE *fd){
     if (!e) return;
     printf("codegen for expr\n");
+    switch (e->kind){
+        case EXPR_ADD:
+            break;
+        case EXPR_SUB:
+            break;
+        case EXPR_MUL:
+            break;
+        case EXPR_DIV:
+            break;
+        case EXPR_INCREMENT:
+            break;
+        case EXPR_DECREMENT:
+            break;
+        case EXPR_NOT:
+            break;
+        case EXPR_POWER:
+            break;
+        case EXPR_MODULO:
+            break;
+        case EXPR_LESS_THAN:
+            break;
+        case EXPR_GREATER_THAN:
+            break;
+        case EXPR_LESS_THAN_OR_EQUAL:
+            break;
+        case EXPR_GREATER_THAN_OR_EQUAL:
+            break;
+        case EXPR_EQUIVALENCE_COMPARISON:
+            break;
+        case EXPR_NONEQUIVALENCE_COMPARISON:
+            break;
+        case EXPR_AND:
+            break;
+        case EXPR_OR:
+            break;
+        case EXPR_ASSIGNMENT:
+            break;
+        case EXPR_BOOLEAN_LITERAL:
+            break;
+        case EXPR_INTEGER_LITERAL:
+            e->reg = register_alloc();
+            fprintf(fd,"MOV $%d, %s\n",e->literal_value, register_name(e->reg));
+            break;
+        case EXPR_CHARACTER_LITERAL:
+            break;
+        case EXPR_STRING_LITERAL:
+            break;
+        case EXPR_IDENTIFIER:
+            e->reg = register_alloc();
+            fprintf(fd,"MOV %s, %s\n",symbol_code(e->symbol), register_name(e->reg));
+            break;
+        case EXPR_PARENTHESES:
+            break;
+        case EXPR_FUNCTION_CALL:
+            break;
+        case EXPR_ARRAY_INDEX:
+            break;
+    }
 }

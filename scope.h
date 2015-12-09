@@ -26,4 +26,7 @@ struct symbol *scope_lookup_local(const char *name);
 
 void sym_table_print(struct hash_table *h);
 struct symbol *symbol_create(symbol_t kind, struct type *type, char *name);
+
+char *symbol_code(struct symbol *s);
+
 #endif

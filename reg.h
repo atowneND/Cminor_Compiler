@@ -28,7 +28,7 @@ struct reg_status {
 const char *register_name(int r);
 void init_registers(void);
 
-int register_alloc();
+int register_alloc(void);
 void register_free(my_registers_t reg); // this may need work
 
 #endif

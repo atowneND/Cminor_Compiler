@@ -276,26 +276,80 @@ void stmt_typecheck(struct stmt *s, struct type *current_type, struct decl *d){
 void stmt_codegen(struct stmt *s, FILE *fd){
     if (!s) return;
     printf("codegen for stmt\n");
+    struct expr *e = malloc(sizeof(struct expr));
     switch (s->kind){
         case STMT_DECL:
             decl_codegen(s->decl,fd);
             break;
         case STMT_EXPR:
             expr_codegen(s->init_expr,fd);
-            register_free(s->expr->reg);
+            register_free(s->init_expr->reg);
             break;
         case STMT_IF_ELSE:
+            expr_codegen(s->init_expr,fd);
+            // cmp %E, $1
+            // JE L1
+            stmt_codegen(s->body,fd);
+            // JMP L2
+            // L1: 
+            stmt_codegen(s->else_body,fd);
+            // L2:
             break;
         case STMT_FOR:
+            expr_codegen(s->init_expr,fd); // evaluate first expression in for parens
+            // L1
+            expr_codegen(s->expr,fd); // proceed?
+            // CMP %E, $0
+            stmt_codegen(s->body,fd); // if yes, evaluate body of for loop
+            expr_codegen(s->next_expr,fd); // iterate
+            // JMP L1
+            // L2
             break;
         case STMT_WHILE:
+            fprintf(stderr,"while loops not supported\n");
             break;
         case STMT_PRINT:
+            e = s->init_expr;
+            while (e != NULL) {
+                switch (e->type->kind){
+                    case TYPE_BOOLEAN:
+                        // call print_boolean(int b);
+                        break;
+                    case TYPE_CHARACTER:
+                        // call print_character(char c);
+                        break;
+                    case TYPE_INTEGER:
+                        // call print_integer(int x);
+                        break;
+                    case TYPE_STRING:
+                        // call print_string(const char *s);
+                        break;
+                    case TYPE_ARRAY:
+                        fprintf(stderr,"arrays are not supported\n");
+                        break;
+                    case TYPE_FUNCTION:
+                        // fprintf(fd,".data\n");
+                        // preamble
+                        // call function
+                        // need to include parameter list
+                        // postamble
+                        break;
+                    case TYPE_VOID:
+                        // wtf do you do with a void?
+                        break;
+                }
+                e = e->next;
+            }
+            // determine type
+            // switch case and print
             break;
         case STMT_RETURN:
+            expr_codegen(s->init_expr,fd);
+            // RET expr_codegen output
             break;
         case STMT_BLOCK:
             stmt_codegen(s->body,fd);
             break;
     }
+    stmt_codegen(s->next, fd);
 }

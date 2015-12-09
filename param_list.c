@@ -75,6 +75,7 @@ void param_list_resolve(struct param_list *p){
 void param_list_typecheck(const char *fname,struct expr *e_params,struct decl *d){
 //    printf("function name = %s    ",fname);
     struct symbol *sym = scope_lookup(fname);
+    if (!sym) return;
     struct hash_table_node *function_ht = sym->function_hash_table;
 //    printf("etype: %i\n",e_params->type->kind);
     type_kind_t expected_type;

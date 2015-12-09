@@ -123,3 +123,9 @@ struct symbol *symbol_create(symbol_t kind, struct type *type, char *name){
 
     return sym;
 }
+
+char *symbol_code(struct symbol *s){
+    // this needs work
+    // TODO symbol_code
+    return s->name;
+}
