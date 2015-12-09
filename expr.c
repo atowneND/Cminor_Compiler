@@ -28,7 +28,7 @@ struct expr * expr_create(
     new_expression->string_literal = 0;
 
     new_expression->type = 0;
-    new_expression->expr_reg = 0;
+    new_expression->reg = 0;
 
     return new_expression;
 }
@@ -60,7 +60,7 @@ struct expr * expr_create_name( const char *n ){
     new_expression->string_literal = 0;
 
     new_expression->type = 0;
-    new_expression->expr_reg = 0;
+    new_expression->reg = 0;
     
     return new_expression;
 }
@@ -80,7 +80,7 @@ struct expr * expr_create_boolean_literal( int c ){
     new_expression->string_literal = 0;
 
     new_expression->type = 0;
-    new_expression->expr_reg = 0;
+    new_expression->reg = 0;
 
     return new_expression;
 }
@@ -100,7 +100,7 @@ struct expr * expr_create_integer_literal( int c ){
     new_expression->string_literal = 0;
 
     new_expression->type = 0;
-    new_expression->expr_reg = 0;
+    new_expression->reg = 0;
 
     return new_expression;
 }
@@ -120,7 +120,7 @@ struct expr * expr_create_character_literal( int c ){
     new_expression->string_literal = 0;
 
     new_expression->type = 0;
-    new_expression->expr_reg = 0;
+    new_expression->reg = 0;
 
     return new_expression;
 }
@@ -140,7 +140,7 @@ struct expr * expr_create_string_literal( const char *str ){
     new_expression->string_literal = str;
 
     new_expression->type = 0;
-    new_expression->expr_reg = 0;
+    new_expression->reg = 0;
 
     return new_expression;
 }
@@ -908,7 +908,7 @@ void literal_print(struct expr *e){
     }
 }
 
-void expr_codegen(struct expr *e, char *fd){
+void expr_codegen(struct expr *e, FILE *fd){
     if (!e) return;
     printf("codegen for expr\n");
 }

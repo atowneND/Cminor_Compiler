@@ -21,9 +21,14 @@ typedef enum{
 
 struct reg_status {
     my_registers_t reg_name;
-    int reg_free;
+    int reg_used;
+    int scratch;
 };
 
-void register_free(struct reg_status *expr_reg);
+const char *register_name(int r);
+void init_registers(void);
+
+int register_alloc();
+void register_free(my_registers_t reg); // this may need work
 
 #endif

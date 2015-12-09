@@ -35,6 +35,6 @@ void stmt_print( struct stmt *s );
 void stmt_resolve( struct stmt *s );
 void stmt_typecheck(struct stmt *s, struct type *current_type, struct decl *d);
 
-void stmt_codegen(struct stmt *s, char *fd);
+void stmt_codegen(struct stmt *s, FILE *fd);
 
 #endif

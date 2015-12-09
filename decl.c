@@ -1,10 +1,10 @@
+#include <stdlib.h>
 #include "decl.h"
 #include "type.h"
 #include "expr.h"
 #include "scope.h"
 #include "param_list.h"
 #include "stmt.h"
-#include <stdlib.h>
 
 extern int indent;
 extern int scope_ctr;
@@ -159,7 +159,7 @@ struct type *decl_typecheck(struct decl *d){
     return d->type;
 }
 
-void decl_codegen(struct decl *d, char *fd){
+void decl_codegen(struct decl *d, FILE *fd){
     if (!d) return;
     printf("codegen for decl %s\n",d->name);
     expr_codegen(d->value, fd);

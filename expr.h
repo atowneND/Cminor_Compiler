@@ -1,8 +1,9 @@
 #ifndef EXPR_H
 #define EXPR_H
 
+#include <stdio.h>
 #include "type.h"
-//#include "reg.h"
+#include "reg.h"
 
 struct decl;
 
@@ -52,7 +53,7 @@ struct expr {
 
 	/* for typechecking */
 	struct type *type;
-	struct reg_status *expr_reg;
+	my_registers_t reg;
 };
 
 struct expr * expr_create( expr_t kind, struct expr *left, struct expr *right, struct expr *next );
@@ -72,6 +73,6 @@ struct type *expr_typecheck(struct expr *e, struct decl *d);
 void literal_print_error(struct expr *e);
 void literal_print(struct expr *e);
 
-void expr_codegen(struct expr *e, char *fd);
+void expr_codegen(struct expr *e, FILE *fd);
 
 #endif

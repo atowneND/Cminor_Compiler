@@ -8,6 +8,7 @@
 #include "decl.h"
 #include "scope.h"
 #include "expr.h"
+#include "reg.h"
 
 extern int yyparse();
 extern struct expr * parser_result;
@@ -154,6 +155,7 @@ void name_resolution(void){
     }
 }
 
-void generate_code(char *outputfile){
-    decl_codegen(ast_pointer, outputfile);
+void generate_code(FILE *fd){
+    init_registers();
+    decl_codegen(ast_pointer, fd);
 }

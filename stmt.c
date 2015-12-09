@@ -273,7 +273,7 @@ void stmt_typecheck(struct stmt *s, struct type *current_type, struct decl *d){
     stmt_typecheck(s->next, current_type,d);
 }
 
-void stmt_codegen(struct stmt *s, char *fd){
+void stmt_codegen(struct stmt *s, FILE *fd){
     if (!s) return;
     printf("codegen for stmt\n");
     switch (s->kind){
@@ -282,7 +282,7 @@ void stmt_codegen(struct stmt *s, char *fd){
             break;
         case STMT_EXPR:
             expr_codegen(s->init_expr,fd);
-            register_free(s->expr->expr_reg);
+            register_free(s->expr->reg);
             break;
         case STMT_IF_ELSE:
             break;
