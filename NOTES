@@ -1,3 +1,4 @@
+SHOULD BOOLEAN BE QUAD OR STRING ALSO FUNCTIONS
 - [ ] checking for global assignments to be constant
 
 void stmt_codegen(struct decl *d, FILE *file)

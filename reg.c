@@ -96,5 +96,6 @@ int register_alloc(void){
 }
 
 void register_free(my_registers_t reg){
-    // free register
+    r_table[reg].reg_used = 0;
+    // TODO free register in assembly
 }

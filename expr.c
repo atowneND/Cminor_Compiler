@@ -910,15 +910,39 @@ void literal_print(struct expr *e){
 
 void expr_codegen(struct expr *e, FILE *fd){
     if (!e) return;
-    printf("codegen for expr\n");
+    // TODO finish the other cases
     switch (e->kind){
         case EXPR_ADD:
+            expr_codegen(e->left,fd);
+            expr_codegen(e->right,fd);
+            fprintf(fd,"    add %s, %s\n",register_name(e->left->reg),register_name(e->right->reg));
+            e->reg = e->right->reg;
+            register_free(e->left->reg);
             break;
         case EXPR_SUB:
+            expr_codegen(e->left,fd);
+            expr_codegen(e->right,fd);
+            fprintf(fd,"    sub %s, %s\n",register_name(e->right->reg),register_name(e->left->reg));
+            e->reg = e->right->reg;
+            register_free(e->left->reg);
             break;
         case EXPR_MUL:
+            expr_codegen(e->left,fd);
+            expr_codegen(e->right,fd);
+            fprintf(fd,"    mov %s, %%rax\n",register_name(e->left->reg));
+            fprintf(fd,"    imul %s\n",register_name(e->right->reg)); // implicitly multiply by %rax, leaves result in %rax
+            fprintf(fd,"    mov %%rax, %s\n",register_name(e->right->reg)); // store result in right register
+            register_free(e->left->reg);
+            e->reg = e->right->reg;
             break;
         case EXPR_DIV:
+            expr_codegen(e->left,fd);
+            expr_codegen(e->right,fd);
+            fprintf(fd,"    mov %s, %%rax\n",register_name(e->left->reg));
+            fprintf(fd,"    idiv %s\n",register_name(e->right->reg)); // implicitly multiply by %rax, leaves result in %rax
+            fprintf(fd,"    mov %%rax, %s\n",register_name(e->right->reg)); // store result in right register
+            register_free(e->left->reg);
+            e->reg = e->right->reg;
             break;
         case EXPR_INCREMENT:
             break;
@@ -952,7 +976,7 @@ void expr_codegen(struct expr *e, FILE *fd){
             break;
         case EXPR_INTEGER_LITERAL:
             e->reg = register_alloc();
-            fprintf(fd,"MOV $%d, %s\n",e->literal_value, register_name(e->reg));
+            fprintf(fd,"    mov $%d, %s\n",e->literal_value, register_name(e->reg));
             break;
         case EXPR_CHARACTER_LITERAL:
             break;
@@ -960,7 +984,7 @@ void expr_codegen(struct expr *e, FILE *fd){
             break;
         case EXPR_IDENTIFIER:
             e->reg = register_alloc();
-            fprintf(fd,"MOV %s, %s\n",symbol_code(e->symbol), register_name(e->reg));
+            fprintf(fd,"    mov %s, %s\n",symbol_code(e->symbol), register_name(e->reg));
             break;
         case EXPR_PARENTHESES:
             break;

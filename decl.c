@@ -161,9 +161,31 @@ struct type *decl_typecheck(struct decl *d){
 
 void decl_codegen(struct decl *d, FILE *fd){
     if (!d) return;
-    printf("codegen for decl %s\n",d->name);
-    expr_codegen(d->value, fd);
-    stmt_codegen(d->code, fd);
-    // case statement for different kinds of decls
+    symbol_t scope = d->symbol->kind;
+    if (scope==SYMBOL_GLOBAL){
+        printf("global: %s\n",d->name);
+        if ((d->value == NULL) && (d->code == NULL)){
+            // no assignment 
+            fprintf(fd,".data\n");
+            fprintf(fd,"%s: .%s\n",d->name,type_codegen(fd,d->type));
+            // need to print value
+        } else {
+            // assignment
+            fprintf(fd,".text\n    .globl %s\n",d->name);
+            fprintf(fd,"%s:\n",d->name);
+            print_preamble(fd);
+            fprintf(fd,"    # CODE\n");
+            stmt_codegen(d->code,fd);
+            print_postamble(fd);
+        }
+    }else{ // SYMBOL_PARAM or SYMBOL_LOCAL
+        printf("local: %s\n",d->name);
+        if ((d->value == NULL) && (d->code == NULL)){
+            printf("no assignment\n");
+        } else {
+            printf("assignment\n");
+        }
+    }
+
     decl_codegen(d->next, fd);
 }

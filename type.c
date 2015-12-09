@@ -137,3 +137,33 @@ int type_compare(struct type *a, struct type *b){
 void type_delete(struct type *t){
     free(t);
 }
+
+const char *type_codegen(FILE *fd,struct type *t){
+    if (t == NULL) {
+        fprintf(stderr,"This should never happen. Check decl typechecking\n");
+        return "0";
+    }
+    switch (t->kind){
+        case (TYPE_BOOLEAN):
+            return "quad";
+            break;
+        case (TYPE_CHARACTER):
+            return "quad";
+            break;
+        case (TYPE_INTEGER):
+            return "quad";
+            break;
+        case (TYPE_STRING):
+            return "string";
+            break;
+        case (TYPE_ARRAY):
+            fprintf(stderr,"Arrays not supported: cannot create this variable\n");
+            break;
+        case (TYPE_FUNCTION):
+            return "quad";
+            break;
+        case (TYPE_VOID):
+            return "quad";
+            break;
+    }
+}
