@@ -18,7 +18,7 @@ extern struct decl *ast_pointer;
 
 extern const char *token_string(int t);
 void name_resolution(void);
-void generate_code(char *outputfile);
+void generate_code(FILE *outputfile);
 
 int fooctr = 0;
 
@@ -117,7 +117,8 @@ int main(int argc, char *argv[]){
                 printf("scanning, parsing, name resolution, and typechecking successful\n");
             }
             char *outputfile = argv[3];
-            generate_code(outputfile);
+            FILE *fd = fopen(outputfile,"w");
+            generate_code(fd);
             break;
         default:
             fprintf(stderr,"Incorrect option selected\n");

@@ -2,6 +2,7 @@
 #include "type.h"
 #include "scope.h"
 #include "stmt.h"
+#include "reg.h"
 
 extern int indent;
 extern int error_counter;
@@ -281,7 +282,7 @@ void stmt_codegen(struct stmt *s, char *fd){
             break;
         case STMT_EXPR:
             expr_codegen(s->init_expr,fd);
-//            register_free(s->expr->reg);
+            register_free(s->expr->expr_reg);
             break;
         case STMT_IF_ELSE:
             break;

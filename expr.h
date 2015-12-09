@@ -2,6 +2,7 @@
 #define EXPR_H
 
 #include "type.h"
+//#include "reg.h"
 
 struct decl;
 
@@ -35,25 +36,6 @@ typedef enum {
 	/* many more types to add here */
 } expr_t;
 
-typedef enum{
-    RAX_REG,
-    RBX_REG,
-    RCX_REG,
-    RDX_REG,
-    RSI_REG,
-    RDI_REG,
-    RBP_REG,
-    RSP_REG,
-    R8_REG,
-    R9_REG,
-    R10_REG,
-    R11_REG,
-    R12_REG,
-    R13_REG,
-    R14_REG,
-    R15_REG
-} register_t;
-
 struct expr {
     /* used by all expr types */
     expr_t kind;
@@ -70,7 +52,7 @@ struct expr {
 
 	/* for typechecking */
 	struct type *type;
-	register_t reg;
+	struct reg_status *expr_reg;
 };
 
 struct expr * expr_create( expr_t kind, struct expr *left, struct expr *right, struct expr *next );
