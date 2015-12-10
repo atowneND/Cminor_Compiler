@@ -981,7 +981,6 @@ void expr_codegen(struct expr *e, FILE *fd){
 
             // print to assembly file
             fprintf(fd,"    add $1, %s\n",register_name(e->left->reg));
-            fprintf(fd,"    mov %s, %s\n",register_name(e->left->reg),symbol_code(e->left->symbol,fd));
 
             // update ast
             e->reg = e->left->reg;
@@ -993,7 +992,6 @@ void expr_codegen(struct expr *e, FILE *fd){
 
             // print to assembly file
             fprintf(fd,"    sub $1, %s\n",register_name(e->left->reg));
-            fprintf(fd,"    mov %s, %s\n",register_name(e->left->reg),symbol_code(e->left->symbol,fd));
 
             // update ast
             e->reg = e->left->reg;

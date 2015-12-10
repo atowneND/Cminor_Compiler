@@ -166,8 +166,8 @@ char *symbol_code(struct symbol *s, FILE *fd){
             break;
         case TYPE_FUNCTION:
             // who knows
-            fprintf(stderr,"Function call: scope.c:155 should be called, not moved\n");
-            strcpy(str,"");
+            fprintf(fd,"    call %s\n",s->name);
+            strcpy(str,"%rax");
             break;
         case TYPE_VOID:
             // who knows
