@@ -103,7 +103,8 @@ split global
     function:
         .text
         .global f
-        f: [PREAMBLE]
+        f: [PREAMBLE] - in symbol_code, pick which switch - if param,
+        fprintf(fd,"mov %s, -%i(%%rbp)",register_name(e->reg),sizeof(arg0))
         stmt_generate(d->code)
         [POSTAMBLE]
         *****check name resolution in functions - all locals should be consecutive?

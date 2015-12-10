@@ -1140,7 +1140,7 @@ void expr_codegen(struct expr *e, FILE *fd){
             // cleanup
             break;
         case EXPR_INTEGER_LITERAL:
-            e->reg = register_alloc();
+            e->reg = register_alloc(SCRATCH);
             fprintf(fd,"    mov $%d, %s\n",e->literal_value, register_name(e->reg));
             break;
         case EXPR_CHARACTER_LITERAL:
@@ -1166,7 +1166,7 @@ void expr_codegen(struct expr *e, FILE *fd){
             // cleanup
             break;
         case EXPR_IDENTIFIER:
-            e->reg = register_alloc();
+            e->reg = register_alloc(SCRATCH);
             fprintf(fd,"    mov %s, %s\n",symbol_code(e->symbol,fd), register_name(e->reg));
             break;
         case EXPR_PARENTHESES:
@@ -1184,11 +1184,12 @@ void expr_codegen(struct expr *e, FILE *fd){
             // evaluated after expr_ident
 
             // print to assembly file
+            param_codegen_call(e->right, e->left->symbol, fd);
             fprintf(fd,"    call %s\n",e->left->name);
+            register_free_type(ARGUMENT);
 
-            // recurse
-            expr_codegen(e->left,fd);
-            expr_codegen(e->right,fd);
+            // add parameters
+            //param_codegen(e->right,fd);
 
             // update ast
             e->reg = e->left->reg;

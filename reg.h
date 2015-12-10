@@ -1,5 +1,7 @@
 #ifndef REG_H
 #define REG_H
+#include "type.h"
+
 typedef enum{
     RAX_REG,
     RBX_REG,
@@ -36,7 +38,8 @@ struct reg_status {
 const char *register_name(int r);
 void init_registers(void);
 
-int register_alloc(void);
+int register_alloc(reg_type_t register_type);
 void register_free(my_registers_t reg); // this may need work
+void register_free_type(reg_type_t register_type); // this may need work
 
 #endif

@@ -35,4 +35,6 @@ void type_delete(struct type *t);
 
 const char *type_codegen(FILE *fd, struct type *t);
 
+int type_size(struct type *t);
+
 #endif

@@ -3,6 +3,7 @@
 #include "scope.h"
 #include "stmt.h"
 #include "reg.h"
+#include "param_list.h"
 
 extern int indent;
 extern int error_counter;
@@ -355,15 +356,22 @@ void stmt_codegen(struct stmt *s, FILE *fd){
     stmt_codegen(s->next, fd);
 }
 
-void print_preamble(FILE *fd){
+void print_preamble(FILE *fd, struct decl *d){
     fprintf(fd,"    # PREAMBLE\n");
-    fprintf(fd,"    pushq %%rbp\n");
-    fprintf(fd,"    mov %%rsp, %%rbp\n");
-    fprintf(fd,"    pushq %%rdi\n");
-    fprintf(fd,"    pushq %%rsi\n");
-    fprintf(fd,"    pushq %%rdx\n");
-    fprintf(fd,"    subq $16, %%rsp\n");
-    fprintf(fd,"    pushq %%rbx\n");
+    
+    // set base and stack pointers
+    fprintf(fd,"    pushq %%rbp # save the base pointer\n");
+    fprintf(fd,"    mov %%rsp, %%rbp # set a new base pointer\n");
+
+    // arguments
+    param_codegen_push(d->type->params, fd);
+    register_free_type(ARGUMENT);
+
+    // local variables
+    fprintf(fd,"    subq $16, %%rsp\n"); // TODO change this to allocate number of local variables
+
+    // save registers
+    fprintf(fd,"    pushq %%rbx # save callee saved registers\n");
     fprintf(fd,"    pushq %%r12\n");
     fprintf(fd,"    pushq %%r13\n");
     fprintf(fd,"    pushq %%r14\n");
@@ -372,12 +380,12 @@ void print_preamble(FILE *fd){
 
 void print_postamble(FILE *fd){
     fprintf(fd,"    # POSTAMBLE\n");
-    fprintf(fd,"    popq %%r15\n");
+    fprintf(fd,"    popq %%r15 # restore callee saved registers\n");
     fprintf(fd,"    popq %%r14\n");
     fprintf(fd,"    popq %%r13\n");
     fprintf(fd,"    popq %%r12\n");
     fprintf(fd,"    popq %%rbx\n");
-    fprintf(fd,"    mov %%rbp, %%rsp\n");
-    fprintf(fd,"    popq %%rbp\n");
-    fprintf(fd,"    ret\n");
+    fprintf(fd,"    mov %%rbp, %%rsp # reset stack to previous base pointer\n");
+    fprintf(fd,"    popq %%rbp # recover previous base pointer\n");
+    fprintf(fd,"    ret # return to the caller\n");
 }

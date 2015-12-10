@@ -1,3 +1,4 @@
+#include "type.h"
 #include "reg.h"
 #include <stdlib.h>
 #include <stdio.h>
@@ -120,11 +121,11 @@ void init_registers(void){
     }
 }
 
-int register_alloc(void){
+int register_alloc(reg_type_t register_type){
     int i,done;
     done = 0;
     for (i=0;i<=MAX_REG;i++){
-        if (r_table[i].reg_type == SCRATCH){ // only check scratch registers
+        if (r_table[i].reg_type == register_type){ // only check scratch registers
             if (!r_table[i].reg_used){
                 r_table[i].reg_used = 1;
                 done = 1;
@@ -143,4 +144,13 @@ int register_alloc(void){
 void register_free(my_registers_t reg){
     r_table[reg].reg_used = 0;
     // TODO free register in assembly
+}
+
+void register_free_type(reg_type_t register_type){
+    int i;
+    for (i=0;i<=MAX_REG;i++){
+        if (r_table[i].reg_type == register_type){
+            r_table[i].reg_used = 0;
+        }
+    }
 }

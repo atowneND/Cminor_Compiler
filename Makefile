@@ -1,7 +1,7 @@
 CMINOR_EXEC=bar
 LFLAGS=
 CMINOR_OBJECT_FILES=library.o
-OBJECT_FILES=token.o decl.o expr.o type.o stmt.o param_list.o scope.o hash_table.o reg.o
+OBJECT_FILES=token.o decl.o expr.o type.o stmt.o param_list.o reg.o scope.o hash_table.o
 
 all: $(CMINOR_EXEC) cminor
 

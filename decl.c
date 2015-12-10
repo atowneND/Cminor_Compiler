@@ -193,9 +193,10 @@ void decl_codegen(struct decl *d, FILE *fd){
             // need to print value
         } else {
             // assignment
+            //param_codegen_push(d->type->params,fd);
             fprintf(fd,".text\n    .globl %s\n",d->name);
             fprintf(fd,"%s:\n",d->name);
-            print_preamble(fd);
+            print_preamble(fd,d);
             fprintf(fd,"    # CODE\n");
             stmt_codegen(d->code,fd);
             print_postamble(fd);

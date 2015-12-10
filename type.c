@@ -168,3 +168,27 @@ const char *type_codegen(FILE *fd,struct type *t){
     }
     return "";
 }
+
+int type_size(struct type *t){
+    switch (t->kind){
+        case TYPE_BOOLEAN:
+            return sizeof(int);
+            break;
+        case TYPE_CHARACTER:
+            return sizeof(int);
+        case TYPE_INTEGER:
+            return sizeof(int);
+        case TYPE_STRING:
+            return 256;
+        case TYPE_ARRAY:
+            fprintf(stderr,"Arrays not supported: no type size\n");
+            break;
+        case TYPE_FUNCTION:
+            return type_size(t->subtype);
+            break;
+        case TYPE_VOID:
+            return 0;
+            break;
+    }
+    return 0;
+}

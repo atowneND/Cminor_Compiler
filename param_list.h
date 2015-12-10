@@ -21,5 +21,7 @@ void param_list_print_error( struct param_list *a );
 void param_list_print( struct param_list *a );
 void param_list_resolve(struct param_list *p);
 void param_list_typecheck(const char *fname,struct expr *e_params,struct decl *d);
+void param_codegen_push(struct param_list *p, FILE *fd);
+void param_codegen_call(struct expr *e, struct symbol *s, FILE *fd);
 
 #endif

@@ -113,3 +113,29 @@ void param_list_typecheck(const char *fname,struct expr *e_params,struct decl *d
     }
     //sym->type->params->next->type->kind
 }
+
+void param_codegen_push(struct param_list *p, FILE *fd){
+    if (!p){
+        return;
+    }
+    my_registers_t param_reg = register_alloc(ARGUMENT);
+    fprintf(fd,"    pushq %s # save argument on the stack\n",register_name(param_reg));
+    param_codegen_push(p->next, fd);
+}
+
+void param_codegen_call(struct expr *e, struct symbol *s, FILE *fd){
+    if (!e){
+        return;
+    }
+    // allocate an argument register
+    my_registers_t param_reg = register_alloc(ARGUMENT);
+
+    // recurse to allocate all registers
+    param_codegen_call(e->next,s,fd);
+
+    // move parameter values to param registers
+    expr_codegen(e,fd);
+    fprintf(fd,"    mov %s, %s\n",register_name(e->reg),register_name(param_reg));
+    register_free(e->reg);
+    e->reg = param_reg;
+}

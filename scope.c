@@ -1,5 +1,6 @@
 #include "hash_table.h"
 #include "type.h"
+#include "reg.h"
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -116,7 +117,12 @@ struct symbol *scope_lookup_local(const char *name){
     return sym;
 }
 
-struct symbol *symbol_create(symbol_t kind, struct type *type, char *name, void *value){
+struct symbol *symbol_create(
+        symbol_t kind,
+        struct type *type,
+        char *name,
+        void *value
+){
     struct symbol *sym = malloc(sizeof(struct symbol));
     int symbol_number = hash_table_size(head_hash_table_node->current_hash_table);
     sym->which = symbol_number - param_ctr;
@@ -131,48 +137,57 @@ struct symbol *symbol_create(symbol_t kind, struct type *type, char *name, void 
 char *symbol_code(struct symbol *s, FILE *fd){
     // this needs work
     // TODO symbol_code - EVERYTHING BREAKS
+    if (!s) return "";
     char *str = malloc(sizeof(char)*256);
-    switch (s->type->kind){
-        case TYPE_BOOLEAN:
-            // definitely broken
-            if (s->expr->literal_value == 0){
-                strcpy(str,"false");
-            } else if (s->expr->literal_value == 1){
-                strcpy(str,"true");
-            } else {
-                fprintf(stderr,"Improper boolean literal value\n");
-            }
-            break;
-        case TYPE_CHARACTER:
-            // definitely broken - make it like string
-            sprintf(str,"%c",s->expr->literal_value);
-            break;
-        case TYPE_INTEGER:
-            // should kind of work
-            sprintf(str,"%s",register_name(s->expr->reg));
-            break;
-        case TYPE_STRING:
-            // should kind of work
-            fprintf(fd,".LC%i:\n",string_ctr);
-            fprintf(fd,"    .string %s\n",s->expr->string_literal);
-            fprintf(fd,".text\n");
-            sprintf(str,"$.LC%i",string_ctr);
-            string_ctr += 1;
-            break;
-        case TYPE_ARRAY:
-            // should kind of work
-            fprintf(stderr,"Arrays not supported: cannot print array literal\n");
-            strcpy(str,"");
-            break;
-        case TYPE_FUNCTION:
-            // who knows
-            strcpy(str,"%rax");
-            break;
-        case TYPE_VOID:
-            // who knows
-            fprintf(stderr,"VOID: scope.c:159 nothing should be moved\n");
-            strcpy(str,"0");
-            break;
+    if (s->kind == SYMBOL_PARAM){
+        int offset = 8*(s->which + 1);
+        fprintf(fd,"#offset = %i\n",offset);
+        sprintf(str,"-%i(%%rbp)",offset);
+        //fprintf(fd,"mov %s, -%i(%%rbp)",register_name(e->reg),sizeof(arg0))
+        //fprintf(fd,"mov -%i(%%rbp), %s",register_name(e->reg),sizeof(arg0))
+    } else {
+        switch (s->type->kind){
+            case TYPE_BOOLEAN:
+                // definitely broken
+                if (s->expr->literal_value == 0){
+                    strcpy(str,"false");
+                } else if (s->expr->literal_value == 1){
+                    strcpy(str,"true");
+                } else {
+                    fprintf(stderr,"Improper boolean literal value\n");
+                }
+                break;
+            case TYPE_CHARACTER:
+                // definitely broken - make it like string
+                sprintf(str,"%c",s->expr->literal_value);
+                break;
+            case TYPE_INTEGER:
+                // should kind of work
+                sprintf(str,"%s",register_name(s->expr->reg));
+                break;
+            case TYPE_STRING:
+                // should kind of work
+                fprintf(fd,".LC%i:\n",string_ctr);
+                fprintf(fd,"    .string %s\n",s->expr->string_literal);
+                fprintf(fd,".text\n");
+                sprintf(str,"$.LC%i",string_ctr);
+                string_ctr += 1;
+                break;
+            case TYPE_ARRAY:
+                // should kind of work
+                fprintf(stderr,"Arrays not supported: cannot print array literal\n");
+                strcpy(str,"");
+                break;
+            case TYPE_FUNCTION:
+                // who knows
+//                strcpy(str,"%rax");
+                break;
+            case TYPE_VOID:
+                // who knows
+                fprintf(stderr,"VOID: scope.c:159 nothing should be moved\n");
+                strcpy(str,"0");
+                break;
+        }
     }
     return str;
 }
