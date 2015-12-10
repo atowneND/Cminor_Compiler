@@ -149,11 +149,7 @@ char *symbol_code(struct symbol *s, FILE *fd){
             break;
         case TYPE_INTEGER:
             // should kind of work
-            if (s->expr->kind == EXPR_INTEGER_LITERAL){
-                sprintf(str,"$%i",s->expr->literal_value);
-            } else {
-                sprintf(str,"%s",register_name(s->expr->reg));
-            }
+            sprintf(str,"%s",register_name(s->expr->reg));
             break;
         case TYPE_STRING:
             // should kind of work

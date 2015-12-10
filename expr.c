@@ -935,10 +935,10 @@ void expr_codegen(struct expr *e, FILE *fd){
             fprintf(fd,"    sub %s, %s\n",register_name(e->right->reg),register_name(e->left->reg));
 
             // update ast
-            e->reg = e->right->reg;
+            e->reg = e->left->reg;
 
             // cleanup
-            register_free(e->left->reg);
+            register_free(e->right->reg);
             break;
         case EXPR_MUL:
             // recurse
@@ -951,10 +951,10 @@ void expr_codegen(struct expr *e, FILE *fd){
             fprintf(fd,"    mov %%rax, %s\n",register_name(e->right->reg)); // store result in right register
             
             // update ast
-            register_free(e->left->reg);
+            e->reg = e->right->reg;
 
             // cleanup
-            e->reg = e->right->reg;
+            register_free(e->left->reg);
             break;
         case EXPR_DIV:
             // recurse
@@ -974,51 +974,226 @@ void expr_codegen(struct expr *e, FILE *fd){
             register_free(e->left->reg);
             break;
         case EXPR_INCREMENT:
+            // recurse
+            expr_codegen(e->left,fd);
+            expr_codegen(e->right,fd);
+
+            // print to assembly file
+            const char *left_reg = register_name(e->left->reg);
+            fprintf(fd,"    add $1, %s\n",left_reg);
+            fprintf(fd,"    mov %s, %s\n",left_reg,symbol_code(e->left->symbol,fd));
+
+            // update ast
+            e->reg = e->left->reg;
+
+            // cleanup
+            register_free(e->left->reg);
             break;
         case EXPR_DECREMENT:
+            // recurse
+            expr_codegen(e->left,fd);
+            expr_codegen(e->right,fd);
+
+            // print to assembly file
+
+            // update ast
+
+            // cleanup
             break;
         case EXPR_NOT:
+            // recurse
+            expr_codegen(e->left,fd);
+            expr_codegen(e->right,fd);
+
+            // print to assembly file
+
+            // update ast
+
+            // cleanup
             break;
         case EXPR_POWER:
+            // recurse
+            expr_codegen(e->left,fd);
+            expr_codegen(e->right,fd);
+
+            // print to assembly file
+
+            // update ast
+
+            // cleanup
             break;
         case EXPR_MODULO:
+            // recurse
+            expr_codegen(e->left,fd);
+            expr_codegen(e->right,fd);
+
+            // print to assembly file
+
+            // update ast
+
+            // cleanup
             break;
         case EXPR_LESS_THAN:
+            // recurse
+            expr_codegen(e->left,fd);
+            expr_codegen(e->right,fd);
+
+            // print to assembly file
+
+            // update ast
+
+            // cleanup
             break;
         case EXPR_GREATER_THAN:
+            // recurse
+            expr_codegen(e->left,fd);
+            expr_codegen(e->right,fd);
+
+            // print to assembly file
+
+            // update ast
+
+            // cleanup
             break;
         case EXPR_LESS_THAN_OR_EQUAL:
+            // recurse
+            expr_codegen(e->left,fd);
+            expr_codegen(e->right,fd);
+
+            // print to assembly file
+
+            // update ast
+
+            // cleanup
             break;
         case EXPR_GREATER_THAN_OR_EQUAL:
+            // recurse
+            expr_codegen(e->left,fd);
+            expr_codegen(e->right,fd);
+
+            // print to assembly file
+
+            // update ast
+
+            // cleanup
             break;
         case EXPR_EQUIVALENCE_COMPARISON:
+            // recurse
+            expr_codegen(e->left,fd);
+            expr_codegen(e->right,fd);
+
+            // print to assembly file
+
+            // update ast
+
+            // cleanup
             break;
         case EXPR_NONEQUIVALENCE_COMPARISON:
+            // recurse
+            expr_codegen(e->left,fd);
+            expr_codegen(e->right,fd);
+
+            // print to assembly file
+
+            // update ast
+
+            // cleanup
             break;
         case EXPR_AND:
+            // recurse
+            expr_codegen(e->left,fd);
+            expr_codegen(e->right,fd);
+
+            // print to assembly file
+
+            // update ast
+
+            // cleanup
             break;
         case EXPR_OR:
+            // recurse
+            expr_codegen(e->left,fd);
+            expr_codegen(e->right,fd);
+
+            // print to assembly file
+
+            // update ast
+
+            // cleanup
             break;
         case EXPR_ASSIGNMENT:
+            // recurse
+            expr_codegen(e->left,fd);
+            expr_codegen(e->right,fd);
+
+            // print to assembly file
+
+            // update ast
+
+            // cleanup
             break;
         case EXPR_BOOLEAN_LITERAL:
+            // recurse
+            expr_codegen(e->left,fd);
+            expr_codegen(e->right,fd);
+
+            // print to assembly file
+
+            // update ast
+
+            // cleanup
             break;
         case EXPR_INTEGER_LITERAL:
             e->reg = register_alloc();
             fprintf(fd,"    mov $%d, %s\n",e->literal_value, register_name(e->reg));
             break;
         case EXPR_CHARACTER_LITERAL:
+            // recurse
+            expr_codegen(e->left,fd);
+            expr_codegen(e->right,fd);
+
+            // print to assembly file
+
+            // update ast
+
+            // cleanup
             break;
         case EXPR_STRING_LITERAL:
+            // recurse
+            expr_codegen(e->left,fd);
+            expr_codegen(e->right,fd);
+
+            // print to assembly file
+
+            // update ast
+
+            // cleanup
             break;
         case EXPR_IDENTIFIER:
             e->reg = register_alloc();
-            fprintf(fd,"#HERE\n");
             fprintf(fd,"    mov %s, %s\n",symbol_code(e->symbol,fd), register_name(e->reg));
             break;
         case EXPR_PARENTHESES:
+            // recurse
+            expr_codegen(e->left,fd);
+            expr_codegen(e->right,fd);
+
+            // print to assembly file
+
+            // update ast
+
+            // cleanup
             break;
         case EXPR_FUNCTION_CALL:
+            // recurse
+            expr_codegen(e->left,fd);
+            expr_codegen(e->right,fd);
+
+            // print to assembly file
+
+            // update ast
+
+            // cleanup
             break;
         case EXPR_ARRAY_INDEX:
             break;
