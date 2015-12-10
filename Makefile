@@ -1,8 +1,13 @@
+CMINOR_EXEC=bar
 OBJECT_FILES=token.o decl.o expr.o type.o stmt.o param_list.o scope.o hash_table.o reg.o
 
-# The top level rule indicates how to link everything together into calc
+all: $(CMINOR_EXEC) cminor
+	gcc $(CMINOR_EXEC).s -o $(CMINOR_EXEC)
 
-all: main.o scanner.o parser.tab.o $(OBJECT_FILES)
+$(CMINOR_EXEC): $(CMINOR_EXEC).cminor cminor
+	./cminor -codegen $(CMINOR_EXEC).cminor $(CMINOR_EXEC).s
+	
+cminor: main.o scanner.o parser.tab.o $(OBJECT_FILES)
 	gcc -g main.o scanner.o parser.tab.o $(OBJECT_FILES) -o cminor -lm -lfl
 
 # This pattern indicates that any .o file depends
