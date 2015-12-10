@@ -3,6 +3,7 @@
 #include "scope.h"
 #include "param_list.h"
 #include <stdlib.h>
+#include <string.h>
 
 extern int indent;
 extern int error_counter;
@@ -979,15 +980,11 @@ void expr_codegen(struct expr *e, FILE *fd){
             expr_codegen(e->right,fd);
 
             // print to assembly file
-            const char *left_reg = register_name(e->left->reg);
-            fprintf(fd,"    add $1, %s\n",left_reg);
-            fprintf(fd,"    mov %s, %s\n",left_reg,symbol_code(e->left->symbol,fd));
+            fprintf(fd,"    add $1, %s\n",register_name(e->left->reg));
+            fprintf(fd,"    mov %s, %s\n",register_name(e->left->reg),symbol_code(e->left->symbol,fd));
 
             // update ast
             e->reg = e->left->reg;
-
-            // cleanup
-            register_free(e->left->reg);
             break;
         case EXPR_DECREMENT:
             // recurse
@@ -995,10 +992,11 @@ void expr_codegen(struct expr *e, FILE *fd){
             expr_codegen(e->right,fd);
 
             // print to assembly file
+            fprintf(fd,"    sub $1, %s\n",register_name(e->left->reg));
+            fprintf(fd,"    mov %s, %s\n",register_name(e->left->reg),symbol_code(e->left->symbol,fd));
 
             // update ast
-
-            // cleanup
+            e->reg = e->left->reg;
             break;
         case EXPR_NOT:
             // recurse
