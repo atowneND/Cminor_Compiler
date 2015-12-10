@@ -344,6 +344,7 @@ void stmt_codegen(struct stmt *s, FILE *fd){
             break;
         case STMT_RETURN:
             expr_codegen(s->init_expr,fd); // puts reduced expression in %rax
+            fprintf(fd,"    # RETURN VALUE\n");
             fprintf(fd,"    mov %s, %%rax\n",register_name(s->init_expr->reg));
             print_postamble(fd);
             break;

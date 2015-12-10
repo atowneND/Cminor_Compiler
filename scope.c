@@ -9,6 +9,8 @@ extern int local_ctr;
 extern int param_ctr;
 struct type;
 
+int string_ctr = 0;
+
 struct hash_table_node{
     struct hash_table *current_hash_table;
     struct hash_table_node *next_hash_table;
@@ -25,6 +27,7 @@ struct symbol {
 	int which;
 	struct type *type;
 	char *name;
+	struct expr *expr;
 	struct hash_table_node *function_hash_table;
 };
 
@@ -113,19 +116,68 @@ struct symbol *scope_lookup_local(const char *name){
     return sym;
 }
 
-struct symbol *symbol_create(symbol_t kind, struct type *type, char *name){
+struct symbol *symbol_create(symbol_t kind, struct type *type, char *name, void *value){
     struct symbol *sym = malloc(sizeof(struct symbol));
     int symbol_number = hash_table_size(head_hash_table_node->current_hash_table);
     sym->which = symbol_number - param_ctr;
     sym->kind = kind;
     sym->type = type;
     sym->name = name;
+    sym->expr = value;
 
     return sym;
 }
 
-char *symbol_code(struct symbol *s){
+char *symbol_code(struct symbol *s, FILE *fd){
     // this needs work
-    // TODO symbol_code
-    return s->name;
+    // TODO symbol_code - EVERYTHING BREAKS
+    char *str = malloc(sizeof(char)*256);
+    switch (s->type->kind){
+        case TYPE_BOOLEAN:
+            // definitely broken
+            if (s->expr->literal_value == 0){
+                strcpy(str,"false");
+            } else if (s->expr->literal_value == 1){
+                strcpy(str,"true");
+            } else {
+                fprintf(stderr,"Improper boolean literal value\n");
+            }
+            break;
+        case TYPE_CHARACTER:
+            // definitely broken - make it like string
+            sprintf(str,"%c",s->expr->literal_value);
+            break;
+        case TYPE_INTEGER:
+            // should kind of work
+            if (s->expr->kind == EXPR_INTEGER_LITERAL){
+                sprintf(str,"$%i",s->expr->literal_value);
+            } else {
+                sprintf(str,"%s",register_name(s->expr->reg));
+            }
+            break;
+        case TYPE_STRING:
+            // should kind of work
+            fprintf(fd,".LC%i:\n",string_ctr);
+            fprintf(fd,"    .string %s\n",s->expr->string_literal);
+            fprintf(fd,".text\n");
+            sprintf(str,"$.LC%i",string_ctr);
+            string_ctr += 1;
+            break;
+        case TYPE_ARRAY:
+            // should kind of work
+            fprintf(stderr,"Arrays not supported: cannot print array literal\n");
+            strcpy(str,"");
+            break;
+        case TYPE_FUNCTION:
+            // who knows
+            fprintf(stderr,"Function call: scope.c:155 should be called, not moved\n");
+            strcpy(str,"");
+            break;
+        case TYPE_VOID:
+            // who knows
+            fprintf(stderr,"VOID: scope.c:159 nothing should be moved\n");
+            strcpy(str,"0");
+            break;
+    }
+    return str;
 }

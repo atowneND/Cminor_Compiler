@@ -61,7 +61,7 @@ void param_list_resolve(struct param_list *p){
     if (p == NULL) {
         return;
     }
-    struct symbol *sym = symbol_create(SYMBOL_PARAM, p->type, p->name);
+    struct symbol *sym = symbol_create(SYMBOL_PARAM, p->type, p->name, 0 );
     if (scope_lookup_local(p->name) != NULL) {
         fprintf(stderr,"No redeclarations allowed: %s\n",p->name);
         return;

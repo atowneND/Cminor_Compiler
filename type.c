@@ -166,4 +166,5 @@ const char *type_codegen(FILE *fd,struct type *t){
             return "quad";
             break;
     }
+    return "";
 }

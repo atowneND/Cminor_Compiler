@@ -938,8 +938,8 @@ void expr_codegen(struct expr *e, FILE *fd){
         case EXPR_DIV:
             expr_codegen(e->left,fd);
             expr_codegen(e->right,fd);
-            fprintf(fd,"    mov %s, %%rax\n",register_name(e->left->reg));
-            fprintf(fd,"    idiv %s\n",register_name(e->right->reg)); // implicitly multiply by %rax, leaves result in %rax
+            fprintf(fd,"    movq %s, %%rax\n",register_name(e->left->reg));
+            fprintf(fd,"    divq %s\n",register_name(e->right->reg)); // implicitly multiply by %rax, leaves result in %rax
             fprintf(fd,"    mov %%rax, %s\n",register_name(e->right->reg)); // store result in right register
             register_free(e->left->reg);
             e->reg = e->right->reg;
@@ -984,7 +984,8 @@ void expr_codegen(struct expr *e, FILE *fd){
             break;
         case EXPR_IDENTIFIER:
             e->reg = register_alloc();
-            fprintf(fd,"    mov %s, %s\n",symbol_code(e->symbol), register_name(e->reg));
+            fprintf(fd,"#HERE\n");
+            fprintf(fd,"    mov %s, %s\n",symbol_code(e->symbol,fd), register_name(e->reg));
             break;
         case EXPR_PARENTHESES:
             break;

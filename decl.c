@@ -75,7 +75,30 @@ void decl_resolve( struct decl *d ){
     }else{
         kind = SYMBOL_LOCAL;
     }
-    struct symbol *sym = symbol_create(kind, d->type, d->name);
+    struct symbol *sym = malloc(sizeof(struct symbol));
+    switch (d->type->kind){
+        case TYPE_BOOLEAN:
+            sym = symbol_create(kind, d->type, d->name, d->value);
+            break;
+        case TYPE_CHARACTER:
+            sym = symbol_create(kind, d->type, d->name, d->value);
+            break;
+        case TYPE_INTEGER:
+            sym = symbol_create(kind, d->type, d->name, d->value);
+            break;
+        case TYPE_STRING:
+            sym = symbol_create(kind, d->type, d->name, d->value);
+            break;
+        case TYPE_ARRAY:
+            sym = symbol_create(kind, d->type, d->name, d->value);
+            break;
+        case TYPE_FUNCTION:
+            sym = symbol_create(kind, d->type, d->name, 0);
+            break;
+        case TYPE_VOID:
+            sym = symbol_create(kind, d->type, d->name, 0);
+            break;
+    }
     d->symbol = sym;
     // no redeclarations
     if (scope_lookup_local(d->name) != NULL) {
@@ -163,7 +186,6 @@ void decl_codegen(struct decl *d, FILE *fd){
     if (!d) return;
     symbol_t scope = d->symbol->kind;
     if (scope==SYMBOL_GLOBAL){
-        printf("global: %s\n",d->name);
         if ((d->value == NULL) && (d->code == NULL)){
             // no assignment 
             fprintf(fd,".data\n");
@@ -179,11 +201,12 @@ void decl_codegen(struct decl *d, FILE *fd){
             print_postamble(fd);
         }
     }else{ // SYMBOL_PARAM or SYMBOL_LOCAL
-        printf("local: %s\n",d->name);
         if ((d->value == NULL) && (d->code == NULL)){
-            printf("no assignment\n");
+            // no assignment 
+            // no code: done in preamble
         } else {
-            printf("assignment\n");
+            // assignment 
+            expr_codegen(d->value,fd);
         }
     }
 

@@ -13,6 +13,7 @@ struct symbol {
 	int which;
 	struct type *type;
 	char *name;
+	struct expr *value;
 	struct hash_table_node *function_hash_table;
 };
 
@@ -25,8 +26,8 @@ struct symbol *scope_lookup_function(const char *name, struct hash_table_node *h
 struct symbol *scope_lookup_local(const char *name);
 
 void sym_table_print(struct hash_table *h);
-struct symbol *symbol_create(symbol_t kind, struct type *type, char *name);
+struct symbol *symbol_create(symbol_t kind, struct type *type, char *name, void *value);
 
-char *symbol_code(struct symbol *s);
+char *symbol_code(struct symbol *s,FILE *fd);
 
 #endif
