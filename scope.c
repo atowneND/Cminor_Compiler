@@ -141,7 +141,6 @@ char *symbol_code(struct symbol *s, FILE *fd){
     char *str = malloc(sizeof(char)*256);
     if (s->kind == SYMBOL_PARAM){
         int offset = 8*(s->which + 1);
-        fprintf(fd,"#offset = %i\n",offset);
         sprintf(str,"-%i(%%rbp)",offset);
         //fprintf(fd,"mov %s, -%i(%%rbp)",register_name(e->reg),sizeof(arg0))
         //fprintf(fd,"mov -%i(%%rbp), %s",register_name(e->reg),sizeof(arg0))

@@ -1177,6 +1177,7 @@ void expr_codegen(struct expr *e, FILE *fd){
             // print to assembly file
 
             // update ast
+            e->reg = e->left->reg;
 
             // cleanup
             break;
@@ -1186,15 +1187,12 @@ void expr_codegen(struct expr *e, FILE *fd){
             // print to assembly file
             param_codegen_call(e->right, e->left->symbol, fd);
             fprintf(fd,"    call %s\n",e->left->name);
-            register_free_type(ARGUMENT);
 
-            // add parameters
-            //param_codegen(e->right,fd);
+            // cleanup
+            register_free_type(ARGUMENT);
 
             // update ast
             e->reg = e->left->reg;
-
-            // cleanup
             break;
         case EXPR_ARRAY_INDEX:
             break;
