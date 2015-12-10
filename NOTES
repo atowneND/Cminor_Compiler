@@ -122,3 +122,6 @@ split local
                                   .text LEA %s, %E
         MOV %E, -?(%rbp)
 -----------------------------------------------
+
+notes on adding:
+e->left->symbol->value->literal_value

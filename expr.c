@@ -913,36 +913,65 @@ void expr_codegen(struct expr *e, FILE *fd){
     // TODO finish the other cases
     switch (e->kind){
         case EXPR_ADD:
+            // recurse
             expr_codegen(e->left,fd);
             expr_codegen(e->right,fd);
+
+            // print to assembly file
             fprintf(fd,"    add %s, %s\n",register_name(e->left->reg),register_name(e->right->reg));
+
+            // update AST
             e->reg = e->right->reg;
+
+            // cleanup
             register_free(e->left->reg);
             break;
         case EXPR_SUB:
+            // recurse
             expr_codegen(e->left,fd);
             expr_codegen(e->right,fd);
+
+            // print to assembly file
             fprintf(fd,"    sub %s, %s\n",register_name(e->right->reg),register_name(e->left->reg));
+
+            // update ast
             e->reg = e->right->reg;
+
+            // cleanup
             register_free(e->left->reg);
             break;
         case EXPR_MUL:
+            // recurse
             expr_codegen(e->left,fd);
             expr_codegen(e->right,fd);
+
+            // print to assembly file
             fprintf(fd,"    mov %s, %%rax\n",register_name(e->left->reg));
             fprintf(fd,"    imul %s\n",register_name(e->right->reg)); // implicitly multiply by %rax, leaves result in %rax
             fprintf(fd,"    mov %%rax, %s\n",register_name(e->right->reg)); // store result in right register
+            
+            // update ast
             register_free(e->left->reg);
+
+            // cleanup
             e->reg = e->right->reg;
             break;
         case EXPR_DIV:
+            // recurse
             expr_codegen(e->left,fd);
             expr_codegen(e->right,fd);
+
+            // print to assembly file
             fprintf(fd,"    movq %s, %%rax\n",register_name(e->left->reg));
+            fprintf(fd,"    cltd\n"); // could have to be cdq0
             fprintf(fd,"    divq %s\n",register_name(e->right->reg)); // implicitly multiply by %rax, leaves result in %rax
             fprintf(fd,"    mov %%rax, %s\n",register_name(e->right->reg)); // store result in right register
-            register_free(e->left->reg);
+
+            // update ast
             e->reg = e->right->reg;
+
+            // cleanup
+            register_free(e->left->reg);
             break;
         case EXPR_INCREMENT:
             break;
