@@ -1,0 +1,8 @@
+main: function integer () = {
+    x: integer = 1;
+    y: integer = 4;
+    z: integer = x + y;
+    a: integer = z * 3;
+    b: integer = a / 5;
+    return b; // should return 3
+}

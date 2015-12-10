@@ -1,0 +1,6 @@
+main: function integer () = {
+    x: integer = 1;
+    y: integer = x++;
+    y = y++;
+    return y--; // should return 2
+}
