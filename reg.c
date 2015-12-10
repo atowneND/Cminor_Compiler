@@ -67,10 +67,55 @@ void init_registers(void){
     for (i=0;i<=MAX_REG;i++){
         r_table[i].reg_name = i;
         r_table[i].reg_used = 0;
-        if ((i==1)||(i>=10)){
-            r_table[i].scratch = 1;
-        } else {
-            r_table[i].scratch = 0;
+        switch (r_table[i].reg_name){
+            case RAX_REG:
+                r_table[i].reg_type = RESULT;
+                break;
+            case RBX_REG:
+                r_table[i].reg_type = SCRATCH;
+                break;
+            case RCX_REG:
+                r_table[i].reg_type = ARGUMENT;
+                break;
+            case RDX_REG:
+                r_table[i].reg_type = ARGUMENT;
+                break;
+            case RSI_REG:
+                r_table[i].reg_type = ARGUMENT;
+                break;
+            case RDI_REG:
+                r_table[i].reg_type = ARGUMENT;
+                break;
+            case RBP_REG:
+                r_table[i].reg_type = BASE_POINTER;
+                break;
+            case RSP_REG:
+                r_table[i].reg_type = STACK_POINTER;
+                break;
+            case R8_REG:
+                r_table[i].reg_type = ARGUMENT;
+                break;
+            case R9_REG:
+                r_table[i].reg_type = ARGUMENT;
+                break;
+            case R10_REG:
+                r_table[i].reg_type = SCRATCH;
+                break;
+            case R11_REG:
+                r_table[i].reg_type = SCRATCH;
+                break;
+            case R12_REG:
+                r_table[i].reg_type = SCRATCH;
+                break;
+            case R13_REG:
+                r_table[i].reg_type = SCRATCH;
+                break;
+            case R14_REG:
+                r_table[i].reg_type = SCRATCH;
+                break;
+            case R15_REG:
+                r_table[i].reg_type = SCRATCH;
+                break;
         }
     }
 }
@@ -79,7 +124,7 @@ int register_alloc(void){
     int i,done;
     done = 0;
     for (i=0;i<=MAX_REG;i++){
-        if (r_table[i].scratch){ // only check scratch registers
+        if (r_table[i].reg_type == SCRATCH){ // only check scratch registers
             if (!r_table[i].reg_used){
                 r_table[i].reg_used = 1;
                 done = 1;

@@ -3,10 +3,10 @@
 typedef enum{
     RAX_REG,
     RBX_REG,
-    RCX_REG,
-    RDX_REG,
-    RSI_REG,
     RDI_REG,
+    RSI_REG,
+    RDX_REG,
+    RCX_REG,
     RBP_REG,
     RSP_REG,
     R8_REG,
@@ -19,10 +19,18 @@ typedef enum{
     R15_REG
 } my_registers_t;
 
+typedef enum{
+    SCRATCH,
+    ARGUMENT,
+    BASE_POINTER,
+    STACK_POINTER,
+    RESULT
+} reg_type_t;
+
 struct reg_status {
     my_registers_t reg_name;
     int reg_used;
-    int scratch;
+    reg_type_t reg_type;
 };
 
 const char *register_name(int r);
