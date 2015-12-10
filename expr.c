@@ -1181,13 +1181,17 @@ void expr_codegen(struct expr *e, FILE *fd){
             // cleanup
             break;
         case EXPR_FUNCTION_CALL:
+            // evaluated after expr_ident
+
+            // print to assembly file
+            fprintf(fd,"    call %s\n",e->left->name);
+
             // recurse
             expr_codegen(e->left,fd);
             expr_codegen(e->right,fd);
 
-            // print to assembly file
-
             // update ast
+            e->reg = e->left->reg;
 
             // cleanup
             break;

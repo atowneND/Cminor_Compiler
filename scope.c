@@ -166,7 +166,6 @@ char *symbol_code(struct symbol *s, FILE *fd){
             break;
         case TYPE_FUNCTION:
             // who knows
-            fprintf(fd,"    call %s\n",s->name);
             strcpy(str,"%rax");
             break;
         case TYPE_VOID:
