@@ -1,11 +1,10 @@
-main: function boolean () = {
-    x: boolean;
-    if (2==1) {
-        x = true;
-    } else {
-        x = false;
+main: function integer () = {
+    x: integer;
+    y: integer;
+    for (x=0;x<4;x++){
+        y = x;
     }
-    return x;
+    return y;
 }
 
 ////////////////////////////////////////////////
