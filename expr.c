@@ -1300,9 +1300,11 @@ void expr_codegen(struct expr *e, FILE *fd){
             string_counter += 1;
             break;
         case EXPR_IDENTIFIER:
-            e->reg = register_alloc(SCRATCH);
-            fprintf(fd,"    mov %s, %s\n",symbol_code(e->symbol,fd), register_name(e->reg));
-            if (e->symbol->value != NULL) e->symbol->value->reg = e->reg;
+            if (e->reg <= 0) e->reg = register_alloc(SCRATCH);
+            if (e->symbol->value != NULL) {
+                fprintf(fd,"    mov %s, %s\n",symbol_code(e->symbol,fd), register_name(e->reg));
+                e->symbol->value->reg = e->reg;
+            }
             break;
         case EXPR_PARENTHESES:
             // recurse
