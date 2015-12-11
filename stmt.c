@@ -362,8 +362,7 @@ void stmt_codegen(struct stmt *s, FILE *fd){
                 }
                 e = e->next;
             }
-            // determine type
-            // switch case and print
+            register_free_type(ARGUMENT);
             break;
         case STMT_RETURN:
             expr_codegen(s->init_expr,fd); // puts reduced expression in %rax
