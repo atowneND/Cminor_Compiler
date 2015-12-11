@@ -1212,7 +1212,7 @@ void expr_codegen(struct expr *e, FILE *fd){
 
             // print to assembly file
             fprintf(fd,"    cmpq %s, %s\n",register_name(e->left->reg),register_name(e->right->reg));
-            fprintf(fd,"    je cond%i\n",condition_counter);
+            fprintf(fd,"    jne cond%i\n",condition_counter);
             fprintf(fd,"# not equal\n");
             fprintf(fd,"    mov $0, %s\n",register_name(e->right->reg));
             fprintf(fd,"    jmp done%i\n",done_counter);
