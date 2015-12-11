@@ -1,10 +1,5 @@
-main: function integer () = {
-    x: integer;
-    y: integer;
-    for (x=0;x<4;x++){
-        y = x;
-    }
-    return y;
+main: function void () = {
+    print 3;
 }
 
 ////////////////////////////////////////////////
