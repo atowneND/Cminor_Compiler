@@ -1,0 +1,15 @@
+b: function integer (x:integer,y:integer)= {
+    return x ^(y);
+}
+
+main: function char () = {
+// DONE
+//    return false;
+//    return 10%4;
+    s: char = 'h';
+    return s;
+
+// still working
+    //return b(3,4);
+    // should return 81
+}
