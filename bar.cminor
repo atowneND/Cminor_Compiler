@@ -1,5 +1,8 @@
+b: function integer () = {
+    return 4;
+}
 main: function void () = {
-    print "hi\n","hello";
+    print "hello\n",b(),"hi";
 }
 
 ////////////////////////////////////////////////
