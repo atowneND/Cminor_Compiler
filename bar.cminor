@@ -1,6 +1,10 @@
-main: function integer () = {
-    x: integer;
-    x=5;
+main: function boolean () = {
+    x: boolean;
+    if (true) {
+        x = true;
+    } else {
+        x = false;
+    }
     return x;
 }
 
