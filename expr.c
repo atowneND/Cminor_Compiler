@@ -8,6 +8,8 @@
 extern int indent;
 extern int error_counter;
 extern int string_counter;
+int condition_counter = 0;
+int done_counter = 0;
 
 struct expr * expr_create(
         expr_t kind,
@@ -1045,10 +1047,28 @@ void expr_codegen(struct expr *e, FILE *fd){
             expr_codegen(e->right,fd);
 
             // print to assembly file
+            fprintf(fd,"    cmpq %s, %s\n",register_name(e->right->reg),register_name(e->left->reg));
+            fprintf(fd,"    jl cond%i\n",condition_counter);
+            fprintf(fd,"# greater than or equal\n");
+            fprintf(fd,"    mov $0, %s\n",register_name(e->right->reg));
+            //fprintf(fd,"    jmp done\n");
+            fprintf(fd,"    jmp done%i\n",done_counter);
+            //fprintf(fd,"done:\n");
+            fprintf(fd,"# less than\n");
+            fprintf(fd,"cond%i:\n",condition_counter);
+            fprintf(fd,"    mov $1, %s\n",register_name(e->right->reg));
+            //fprintf(fd,"    jmp done\n");
+            fprintf(fd,"    jmp done%i\n",done_counter);
+            fprintf(fd,"done%i:\n",done_counter);
+            condition_counter += 1;
+            done_counter += 1;
 
             // update ast
+            e->reg = e->right->reg;
 
             // cleanup
+            register_free(e->left->reg);
+            e->left->reg = -1;
             break;
         case EXPR_GREATER_THAN:
             // recurse
@@ -1056,10 +1076,28 @@ void expr_codegen(struct expr *e, FILE *fd){
             expr_codegen(e->right,fd);
 
             // print to assembly file
+            fprintf(fd,"    cmpq %s, %s\n",register_name(e->right->reg),register_name(e->left->reg));
+            fprintf(fd,"    jg cond%i\n",condition_counter);
+            fprintf(fd,"# less than or equal\n");
+            fprintf(fd,"    mov $0, %s\n",register_name(e->right->reg));
+            //fprintf(fd,"    jmp done\n");
+            fprintf(fd,"    jmp done%i\n",done_counter);
+            //fprintf(fd,"done:\n");
+            fprintf(fd,"# greater than\n");
+            fprintf(fd,"cond%i:\n",condition_counter);
+            fprintf(fd,"    mov $1, %s\n",register_name(e->right->reg));
+            //fprintf(fd,"    jmp done\n");
+            fprintf(fd,"    jmp done%i\n",done_counter);
+            fprintf(fd,"done%i:\n",done_counter);
+            condition_counter += 1;
+            done_counter += 1;
 
             // update ast
+            e->reg = e->right->reg;
 
             // cleanup
+            register_free(e->left->reg);
+            e->left->reg = -1;
             break;
         case EXPR_LESS_THAN_OR_EQUAL:
             // recurse
@@ -1067,10 +1105,28 @@ void expr_codegen(struct expr *e, FILE *fd){
             expr_codegen(e->right,fd);
 
             // print to assembly file
+            fprintf(fd,"    cmpq %s, %s\n",register_name(e->right->reg),register_name(e->left->reg));
+            fprintf(fd,"    jle cond%i\n",condition_counter);
+            fprintf(fd,"# greater than\n");
+            fprintf(fd,"    mov $0, %s\n",register_name(e->right->reg));
+            //fprintf(fd,"    jmp done\n");
+            fprintf(fd,"    jmp done%i\n",done_counter);
+            //fprintf(fd,"done:\n");
+            fprintf(fd,"# less than or equal\n");
+            fprintf(fd,"cond%i:\n",condition_counter);
+            fprintf(fd,"    mov $1, %s\n",register_name(e->right->reg));
+            //fprintf(fd,"    jmp done\n");
+            fprintf(fd,"    jmp done%i\n",done_counter);
+            fprintf(fd,"done%i:\n",done_counter);
+            condition_counter += 1;
+            done_counter += 1;
 
             // update ast
+            e->reg = e->right->reg;
 
             // cleanup
+            register_free(e->left->reg);
+            e->left->reg = -1;
             break;
         case EXPR_GREATER_THAN_OR_EQUAL:
             // recurse
@@ -1078,10 +1134,28 @@ void expr_codegen(struct expr *e, FILE *fd){
             expr_codegen(e->right,fd);
 
             // print to assembly file
+            fprintf(fd,"    cmpq %s, %s\n",register_name(e->right->reg),register_name(e->left->reg));
+            fprintf(fd,"    jge cond%i\n",condition_counter);
+            fprintf(fd,"# less than\n");
+            fprintf(fd,"    mov $0, %s\n",register_name(e->right->reg));
+            //fprintf(fd,"    jmp done\n");
+            fprintf(fd,"    jmp done%i\n",done_counter);
+            //fprintf(fd,"done:\n");
+            fprintf(fd,"# greater than or equal\n");
+            fprintf(fd,"cond%i:\n",condition_counter);
+            fprintf(fd,"    mov $1, %s\n",register_name(e->right->reg));
+            //fprintf(fd,"    jmp done\n");
+            fprintf(fd,"    jmp done%i\n",done_counter);
+            fprintf(fd,"done%i:\n",done_counter);
+            condition_counter += 1;
+            done_counter += 1;
 
             // update ast
+            e->reg = e->right->reg;
 
             // cleanup
+            register_free(e->left->reg);
+            e->left->reg = -1;
             break;
         case EXPR_EQUIVALENCE_COMPARISON:
             // recurse

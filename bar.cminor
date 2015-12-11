@@ -1,17 +1,17 @@
-b: function integer (x:integer,y:integer)= {
-    return x ^(y);
-}
+//b: function integer (x:integer,y:integer)= {
+//    return x ^(y);
+//}
 
-a: function boolean () = {
-    return true;
-}
+//a: function boolean () = {
+//    return true;
+//}
 main: function boolean () = {
 // DONE
 //    return false;
 //    return 10%4;
 //    s: char = 'h';
 
-    return !a();
+    return 1>=2;
 
 // still working
     //return b(3,4);
