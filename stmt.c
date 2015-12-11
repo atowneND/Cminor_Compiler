@@ -360,6 +360,20 @@ void stmt_codegen(struct stmt *s, FILE *fd){
                         arg_reg = register_alloc(ARGUMENT);
                         fprintf(fd,"    mov %s, %s\n",register_name(e->reg),register_name(arg_reg));
                         fprintf(fd,"    pushq %s # save argument on the stack\n",register_name(arg_reg));
+                        switch (e->type->subtype->kind){
+                            case TYPE_BOOLEAN:
+                                fprintf(fd,"    call print_boolean\n");
+                                break;
+                            case TYPE_CHARACTER:
+                                fprintf(fd,"    call print_character\n");
+                                break;
+                            case TYPE_INTEGER:
+                                fprintf(fd,"    call print_integer\n");
+                                break;
+                            case TYPE_STRING:
+                                fprintf(fd,"    call print_string\n");
+                                break;
+                        }
                         register_free(arg_reg);
                         break;
                     case TYPE_VOID:
