@@ -4,5 +4,5 @@ b: function integer (x:integer,y:integer)= {
 
 main: function integer () = {
     a:integer=5;
-    return b(a,3);
+    return b(a,3); // should return 8
 }

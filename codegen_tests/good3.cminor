@@ -1,0 +1,10 @@
+b: function integer (x:integer,y:integer)= {
+    return x * (y + 1);
+}
+
+main: function integer () = {
+    x: integer = 2;
+    x = 3;
+    return b(x,4);
+    // should return 15
+}

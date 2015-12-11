@@ -926,6 +926,7 @@ void expr_codegen(struct expr *e, FILE *fd){
 
             // cleanup
             register_free(e->left->reg);
+            e->left->reg = -1;
             break;
         case EXPR_SUB:
             // recurse
@@ -940,6 +941,7 @@ void expr_codegen(struct expr *e, FILE *fd){
 
             // cleanup
             register_free(e->right->reg);
+            e->right->reg = -1;
             break;
         case EXPR_MUL:
             // recurse
@@ -956,6 +958,7 @@ void expr_codegen(struct expr *e, FILE *fd){
 
             // cleanup
             register_free(e->left->reg);
+            e->left->reg = -1;
             break;
         case EXPR_DIV:
             // recurse
@@ -973,11 +976,12 @@ void expr_codegen(struct expr *e, FILE *fd){
 
             // cleanup
             register_free(e->left->reg);
+            e->left->reg = -1;
             break;
         case EXPR_INCREMENT:
             // recurse
             expr_codegen(e->left,fd);
-            expr_codegen(e->right,fd);
+            //expr_codegen(e->right,fd);
 
             // print to assembly file
             fprintf(fd,"    add $1, %s\n",register_name(e->left->reg));
@@ -988,7 +992,7 @@ void expr_codegen(struct expr *e, FILE *fd){
         case EXPR_DECREMENT:
             // recurse
             expr_codegen(e->left,fd);
-            expr_codegen(e->right,fd);
+            //expr_codegen(e->right,fd);
 
             // print to assembly file
             fprintf(fd,"    sub $1, %s\n",register_name(e->left->reg));
@@ -1123,10 +1127,14 @@ void expr_codegen(struct expr *e, FILE *fd){
             expr_codegen(e->right,fd);
 
             // print to assembly file
+            fprintf(fd,"    mov %s, %s\n",register_name(e->right->reg),register_name(e->left->reg));
 
             // update ast
+            e->reg = e->left->reg;
 
             // cleanup
+            register_free(e->right->reg);
+            e->right->reg = -1;
             break;
         case EXPR_BOOLEAN_LITERAL:
             // recurse
@@ -1168,18 +1176,18 @@ void expr_codegen(struct expr *e, FILE *fd){
         case EXPR_IDENTIFIER:
             e->reg = register_alloc(SCRATCH);
             fprintf(fd,"    mov %s, %s\n",symbol_code(e->symbol,fd), register_name(e->reg));
+            if (e->symbol->value != NULL) {
+                e->symbol->value->reg = e->reg;
+            }
             break;
         case EXPR_PARENTHESES:
             // recurse
             expr_codegen(e->left,fd);
             expr_codegen(e->right,fd);
 
-            // print to assembly file
-
+            // no code for assembly file necessary
             // update ast
             e->reg = e->left->reg;
-
-            // cleanup
             break;
         case EXPR_FUNCTION_CALL:
             // evaluated after expr_ident
@@ -1189,7 +1197,7 @@ void expr_codegen(struct expr *e, FILE *fd){
             fprintf(fd,"    call %s\n",e->left->name);
 
             // cleanup
-            register_free_type(ARGUMENT);
+            //register_free_type(ARGUMENT);
 
             // update ast
             e->reg = e->left->reg;

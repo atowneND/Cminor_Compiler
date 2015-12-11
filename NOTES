@@ -1,3 +1,7 @@
+should identifiers produce any code? - YES see tests 0,1,2
+r11 is also not getting freed in expr_codegen
+track down free reg's in expr_codegen
+
 SHOULD BOOLEAN BE QUAD OR STRING ALSO FUNCTIONS
 - [ ] checking for global assignments to be constant
 

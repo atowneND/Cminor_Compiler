@@ -283,7 +283,6 @@ void stmt_codegen(struct stmt *s, FILE *fd){
             break;
         case STMT_EXPR:
             expr_codegen(s->init_expr,fd);
-            register_free(s->init_expr->reg);
             break;
         case STMT_IF_ELSE:
             expr_codegen(s->init_expr,fd);

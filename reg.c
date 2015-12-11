@@ -58,7 +58,7 @@ const char *register_name(int r){
             return "%r15";
             break;
         default:
-            return 0;
+            return "";
             break;
     }
 }
