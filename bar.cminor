@@ -1,20 +1,21 @@
-//b: function integer (x:integer,y:integer)= {
-//    return x ^(y);
+main: function integer () = {
+    x: integer = 1;
+    if (true){
+        x = 1;
+    } else {
+        x = 0;
+    }
+    return x;
+}
+
+////////////////////////////////////////////////
+//b: function integer (x:integer, y:integer) = {
+//    return x^y;
 //}
-
-a: function boolean () = {
-    return true;
-}
-main: function boolean() = {
-// DONE
-//    return false;
-//    return 10%4;
-//    s: char = 'h';
-
-    s: string = "hi";
-    return s=="hi";
-
-// still working
-    //return b(3,4);
-    // should return 81
-}
+//
+//main: function integer () = {
+//    x: integer = 10;
+//    x = x%4;
+////    return 4 == (x^2);
+//    return x;
+//}

@@ -1,0 +1,8 @@
+b: function integer (x:integer) = {
+    return x;
+}
+
+main: function boolean () = {
+    y: integer = 2;
+    return b(y) == 2;
+}

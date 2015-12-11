@@ -7,6 +7,7 @@
 
 extern int indent;
 extern int error_counter;
+extern int condition_counter;
 
 struct stmt * stmt_create(
         stmt_kind_t kind,
@@ -286,13 +287,19 @@ void stmt_codegen(struct stmt *s, FILE *fd){
             break;
         case STMT_IF_ELSE:
             expr_codegen(s->init_expr,fd);
-            // cmp %E, $1
-            // JE L1
+            fprintf(fd,"    cmpq $1, %s\n",register_name(s->init_expr->reg));
+            fprintf(fd,"    je cond%i\n",condition_counter);
             stmt_codegen(s->body,fd);
-            // JMP L2
-            // L1: 
+            fprintf(fd,"    jmp cond%i\n",condition_counter+1);
+
+            fprintf(fd,"# if (true)\n");
+            fprintf(fd,"cond%i:\n",condition_counter);
             stmt_codegen(s->else_body,fd);
-            // L2:
+
+            fprintf(fd,"# false or continue\n");
+            fprintf(fd,"cond%i:\n",condition_counter+1);
+
+            condition_counter += 2;
             break;
         case STMT_FOR:
             expr_codegen(s->init_expr,fd); // evaluate first expression in for parens

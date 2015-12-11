@@ -1040,6 +1040,7 @@ void expr_codegen(struct expr *e, FILE *fd){
             fprintf(fd,"done%i:\n",done_counter);
             fprintf(fd,"    mov %%rax, %s\n",register_name(e->right->reg)); // store result in right register
             condition_counter += 1;
+            done_counter += 1;
 
             // update ast
             e->reg = e->right->reg;
