@@ -1017,7 +1017,29 @@ void expr_codegen(struct expr *e, FILE *fd){
             expr_codegen(e->left,fd);
             expr_codegen(e->right,fd);
 
-            // print to assembly file
+            reg_type_t ctr = register_alloc(SCRATCH);
+
+            // print to assembly file: x^y
+            // check if y is zero or less (all fractions round to zero)
+            fprintf(fd,"    cmpq $0, %s\n",register_name(e->right->reg));
+            fprintf(fd,"    mov $0, %%rax\n");
+            fprintf(fd,"    jle done%i\n",done_counter);
+
+            // y!=0 -> initially load x
+            fprintf(fd,"    mov %s, %%rax\n",register_name(e->left->reg));
+            fprintf(fd,"    mov $1, %s\n",register_name(ctr));
+
+            // generate loop
+            fprintf(fd,"loop%i:\n",condition_counter);
+            fprintf(fd,"    imul %s\n",register_name(e->left->reg)); // implicitly multiply by %rax, leaves result in %rax
+            fprintf(fd,"    add $1, %s\n",register_name(ctr));
+            fprintf(fd,"    cmpq %s, %s\n",register_name(ctr),register_name(e->right->reg));
+            fprintf(fd,"    je done%i\n",done_counter);
+            fprintf(fd,"    jmp loop%i\n",condition_counter);
+
+            fprintf(fd,"done%i:\n",done_counter);
+            fprintf(fd,"    mov %%rax, %s\n",register_name(e->right->reg)); // store result in right register
+            condition_counter += 1;
 
             // update ast
 
