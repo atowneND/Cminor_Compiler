@@ -145,9 +145,9 @@ char *symbol_code(struct symbol *s, FILE *fd){
             case TYPE_BOOLEAN:
                 // definitely broken
                 if (s->expr->literal_value == 0){
-                    strcpy(str,"false");
+                    strcpy(str,"$0");
                 } else if (s->expr->literal_value == 1){
-                    strcpy(str,"true");
+                    strcpy(str,"$1");
                 } else {
                     fprintf(stderr,"Improper boolean literal value\n");
                 }
