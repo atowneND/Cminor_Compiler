@@ -326,6 +326,7 @@ void stmt_codegen(struct stmt *s, FILE *fd){
                         fprintf(fd,"    mov %s, %s\n",register_name(e->reg),register_name(arg_reg));
                         fprintf(fd,"    pushq %s # save argument on the stack\n",register_name(arg_reg));
                         fprintf(fd,"    call print_boolean\n");
+                        register_free(arg_reg);
                         break;
                     case TYPE_CHARACTER:
                         expr_codegen(e,fd);
@@ -333,6 +334,7 @@ void stmt_codegen(struct stmt *s, FILE *fd){
                         fprintf(fd,"    mov %s, %s\n",register_name(e->reg),register_name(arg_reg));
                         fprintf(fd,"    pushq %s # save argument on the stack\n",register_name(arg_reg));
                         fprintf(fd,"    call print_character\n");
+                        register_free(arg_reg);
                         break;
                     case TYPE_INTEGER:
                         expr_codegen(e,fd);
@@ -340,6 +342,7 @@ void stmt_codegen(struct stmt *s, FILE *fd){
                         fprintf(fd,"    mov %s, %s\n",register_name(e->reg),register_name(arg_reg));
                         fprintf(fd,"    pushq %s # save argument on the stack\n",register_name(arg_reg));
                         fprintf(fd,"    call print_integer\n");
+                        register_free(arg_reg);
                         break;
                     case TYPE_STRING:
                         expr_codegen(e,fd);
@@ -347,6 +350,7 @@ void stmt_codegen(struct stmt *s, FILE *fd){
                         fprintf(fd,"    mov %s, %s\n",register_name(e->reg),register_name(arg_reg));
                         fprintf(fd,"    pushq %s # save argument on the stack\n",register_name(arg_reg));
                         fprintf(fd,"    call print_string\n");
+                        register_free(arg_reg);
                         break;
                     case TYPE_ARRAY:
                         fprintf(stderr,"arrays are not supported\n");
@@ -356,13 +360,13 @@ void stmt_codegen(struct stmt *s, FILE *fd){
                         arg_reg = register_alloc(ARGUMENT);
                         fprintf(fd,"    mov %s, %s\n",register_name(e->reg),register_name(arg_reg));
                         fprintf(fd,"    pushq %s # save argument on the stack\n",register_name(arg_reg));
+                        register_free(arg_reg);
                         break;
                     case TYPE_VOID:
                         break;
                 }
                 e = e->next;
             }
-            register_free_type(ARGUMENT);
             break;
         case STMT_RETURN:
             expr_codegen(s->init_expr,fd); // puts reduced expression in %rax
@@ -379,7 +383,7 @@ void stmt_codegen(struct stmt *s, FILE *fd){
 
 void print_preamble(FILE *fd, struct decl *d){
     fprintf(fd,"    # PREAMBLE\n");
-    
+
     // set base and stack pointers
     fprintf(fd,"    pushq %%rbp # save the base pointer\n");
     fprintf(fd,"    mov %%rsp, %%rbp # set a new base pointer\n");

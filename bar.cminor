@@ -1,6 +1,5 @@
 main: function void () = {
-    print "casdf";
-    print "casdf";
+    print "hi","hello";
 }
 
 ////////////////////////////////////////////////
