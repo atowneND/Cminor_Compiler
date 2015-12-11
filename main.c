@@ -26,9 +26,8 @@ int fooctr = 0;
 int indent = 0;
 int error_counter = 0;
 int scope_ctr = 0;
-int global_ctr = 0;
-int local_ctr = 0;
 int param_ctr = 0;
+int string_counter = 0;
 
 int main(int argc, char *argv[]){
     // check input

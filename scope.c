@@ -5,12 +5,10 @@
 #include <stdlib.h>
 #include <stdio.h>
 extern int scope_ctr;
-extern int global_ctr;
-extern int local_ctr;
 extern int param_ctr;
+extern int string_counter;
 struct type;
 
-int string_ctr = 0;
 
 struct hash_table_node{
     struct hash_table *current_hash_table;
@@ -157,20 +155,17 @@ char *symbol_code(struct symbol *s, FILE *fd){
                 }
                 break;
             case TYPE_CHARACTER:
-                // definitely broken - make it like string
-                sprintf(str,"%c",s->expr->literal_value);
+                // should work
+                sprintf(str,"$%i",s->expr->literal_value);
                 break;
             case TYPE_INTEGER:
                 // should kind of work
                 sprintf(str,"%s",register_name(s->expr->reg));
                 break;
             case TYPE_STRING:
-                // should kind of work
-                fprintf(fd,".LC%i:\n",string_ctr);
-                fprintf(fd,"    .string %s\n",s->expr->string_literal);
-                fprintf(fd,".text\n");
-                sprintf(str,"$.LC%i",string_ctr);
-                string_ctr += 1;
+                // TODO cannot test until print works
+                fprintf(fd,"    lea STR%i, %s\n",string_counter-1,register_name(s->expr->reg));
+                sprintf(str,"%s",register_name(s->expr->reg));
                 break;
             case TYPE_ARRAY:
                 // should kind of work

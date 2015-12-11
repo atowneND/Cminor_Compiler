@@ -7,6 +7,7 @@
 
 extern int indent;
 extern int error_counter;
+extern int string_counter;
 
 struct expr * expr_create(
         expr_t kind,
@@ -981,7 +982,6 @@ void expr_codegen(struct expr *e, FILE *fd){
         case EXPR_INCREMENT:
             // recurse
             expr_codegen(e->left,fd);
-            //expr_codegen(e->right,fd);
 
             // print to assembly file
             fprintf(fd,"    add $1, %s\n",register_name(e->left->reg));
@@ -992,7 +992,6 @@ void expr_codegen(struct expr *e, FILE *fd){
         case EXPR_DECREMENT:
             // recurse
             expr_codegen(e->left,fd);
-            //expr_codegen(e->right,fd);
 
             // print to assembly file
             fprintf(fd,"    sub $1, %s\n",register_name(e->left->reg));
@@ -1028,10 +1027,17 @@ void expr_codegen(struct expr *e, FILE *fd){
             expr_codegen(e->right,fd);
 
             // print to assembly file
+            fprintf(fd,"    movq %s, %%rax\n",register_name(e->left->reg));
+            fprintf(fd,"    cltd\n"); // could have to be cdq0
+            fprintf(fd,"    divq %s\n",register_name(e->right->reg)); // implicitly multiply by %rax, leaves result in %rax
+            fprintf(fd,"    mov %%rdx, %s\n",register_name(e->right->reg)); // store result in right register
 
             // update ast
+            e->reg = e->right->reg;
 
             // cleanup
+            register_free(e->left->reg);
+            e->left->reg = -1;
             break;
         case EXPR_LESS_THAN:
             // recurse
@@ -1137,41 +1143,28 @@ void expr_codegen(struct expr *e, FILE *fd){
             e->right->reg = -1;
             break;
         case EXPR_BOOLEAN_LITERAL:
-            // recurse
-            expr_codegen(e->left,fd);
-            expr_codegen(e->right,fd);
-
-            // print to assembly file
-
-            // update ast
-
-            // cleanup
+            e->reg = register_alloc(SCRATCH);
+            fprintf(fd,"    mov $%i, %s\n",e->literal_value, register_name(e->reg));
             break;
         case EXPR_INTEGER_LITERAL:
             e->reg = register_alloc(SCRATCH);
             fprintf(fd,"    mov $%d, %s\n",e->literal_value, register_name(e->reg));
             break;
         case EXPR_CHARACTER_LITERAL:
-            // recurse
-            expr_codegen(e->left,fd);
-            expr_codegen(e->right,fd);
-
-            // print to assembly file
-
-            // update ast
-
-            // cleanup
+            e->reg = register_alloc(SCRATCH);
+            fprintf(fd,"    mov $%d, %s\n",e->literal_value, register_name(e->reg));
             break;
         case EXPR_STRING_LITERAL:
-            // recurse
-            expr_codegen(e->left,fd);
-            expr_codegen(e->right,fd);
+            e->reg = register_alloc(SCRATCH);
 
             // print to assembly file
-
-            // update ast
+            fprintf(fd,".data\n    STR%i:\n",string_counter);
+            fprintf(fd,"    .string %s\n",e->string_literal);
+            fprintf(fd,".text\n");
+            fprintf(fd,"    lea STR%i, %s\n",string_counter,register_name(e->reg));
 
             // cleanup
+            string_counter += 1;
             break;
         case EXPR_IDENTIFIER:
             e->reg = register_alloc(SCRATCH);
