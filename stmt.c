@@ -321,7 +321,11 @@ void stmt_codegen(struct stmt *s, FILE *fd){
             while (e != NULL) {
                 switch (e->type->kind){
                     case TYPE_BOOLEAN:
-                        // call print_boolean(int b);
+                        expr_codegen(e,fd);
+                        arg_reg = register_alloc(ARGUMENT);
+                        fprintf(fd,"    mov %s, %s\n",register_name(e->reg),register_name(arg_reg));
+                        fprintf(fd,"    pushq %s # save argument on the stack\n",register_name(arg_reg));
+                        fprintf(fd,"    call print_boolean\n");
                         break;
                     case TYPE_CHARACTER:
                         expr_codegen(e,fd);
@@ -352,7 +356,6 @@ void stmt_codegen(struct stmt *s, FILE *fd){
                         arg_reg = register_alloc(ARGUMENT);
                         fprintf(fd,"    mov %s, %s\n",register_name(e->reg),register_name(arg_reg));
                         fprintf(fd,"    pushq %s # save argument on the stack\n",register_name(arg_reg));
-                        fprintf(fd,"    call print_string\n");
                         break;
                     case TYPE_VOID:
                         break;
