@@ -1021,8 +1021,8 @@ void expr_codegen(struct expr *e, FILE *fd){
 
             // print to assembly file: x^y
             // check if y is zero or less (all fractions round to zero)
-            fprintf(fd,"    cmpq $0, %s\n",register_name(e->right->reg));
             fprintf(fd,"    mov $0, %%rax\n");
+            fprintf(fd,"    cmpq $0, %s\n",register_name(e->right->reg));
             fprintf(fd,"    jle done%i\n",done_counter);
 
             // y!=0 -> initially load x
@@ -1034,7 +1034,7 @@ void expr_codegen(struct expr *e, FILE *fd){
             fprintf(fd,"    imul %s\n",register_name(e->left->reg)); // implicitly multiply by %rax, leaves result in %rax
             fprintf(fd,"    add $1, %s\n",register_name(ctr));
             fprintf(fd,"    cmpq %s, %s\n",register_name(ctr),register_name(e->right->reg));
-            fprintf(fd,"    je done%i\n",done_counter);
+            fprintf(fd,"    jge done%i\n",done_counter);
             fprintf(fd,"    jmp loop%i\n",condition_counter);
 
             fprintf(fd,"done%i:\n",done_counter);
@@ -1055,7 +1055,8 @@ void expr_codegen(struct expr *e, FILE *fd){
             expr_codegen(e->right,fd);
 
             // print to assembly file
-            fprintf(fd,"    movq %s, %%rax\n",register_name(e->left->reg));
+            fprintf(fd,"    movq %s, %%rax\n",register_name(e->right->reg));
+            fprintf(fd,"    movq $0, %%rdx\n");
             fprintf(fd,"    cltd\n"); // could have to be cdq0
             fprintf(fd,"    divq %s\n",register_name(e->right->reg)); // implicitly multiply by %rax, leaves result in %rax
             fprintf(fd,"    mov %%rdx, %s\n",register_name(e->right->reg)); // store result in right register
@@ -1291,10 +1292,10 @@ void expr_codegen(struct expr *e, FILE *fd){
             e->reg = register_alloc(SCRATCH);
 
             // print to assembly file
-            fprintf(fd,".data\n    STR%i:\n",string_counter);
+            fprintf(fd,".data\n    .STR%i:\n",string_counter);
             fprintf(fd,"    .string %s\n",e->string_literal);
             fprintf(fd,".text\n");
-            fprintf(fd,"    lea STR%i, %s\n",string_counter,register_name(e->reg));
+            fprintf(fd,"    mov $.STR%i, %s\n",string_counter,register_name(e->reg));
 
             // cleanup
             string_counter += 1;
