@@ -317,37 +317,44 @@ void stmt_codegen(struct stmt *s, FILE *fd){
             break;
         case STMT_PRINT:
             e = s->init_expr;
+            reg_type_t arg_reg;
             while (e != NULL) {
                 switch (e->type->kind){
                     case TYPE_BOOLEAN:
                         // call print_boolean(int b);
                         break;
                     case TYPE_CHARACTER:
-                        // call print_character(char c);
+                        expr_codegen(e,fd);
+                        arg_reg = register_alloc(ARGUMENT);
+                        fprintf(fd,"    mov %s, %s\n",register_name(e->reg),register_name(arg_reg));
+                        fprintf(fd,"    pushq %s # save argument on the stack\n",register_name(arg_reg));
+                        fprintf(fd,"    call print_character\n");
                         break;
                     case TYPE_INTEGER:
                         expr_codegen(e,fd);
-                        reg_type_t arg_reg = register_alloc(ARGUMENT);
+                        arg_reg = register_alloc(ARGUMENT);
                         fprintf(fd,"    mov %s, %s\n",register_name(e->reg),register_name(arg_reg));
                         fprintf(fd,"    pushq %s # save argument on the stack\n",register_name(arg_reg));
                         fprintf(fd,"    call print_integer\n");
-                        // call print_integer(int x);
                         break;
                     case TYPE_STRING:
-                        // call print_string(const char *s);
+                        expr_codegen(e,fd);
+                        arg_reg = register_alloc(ARGUMENT);
+                        fprintf(fd,"    mov %s, %s\n",register_name(e->reg),register_name(arg_reg));
+                        fprintf(fd,"    pushq %s # save argument on the stack\n",register_name(arg_reg));
+                        fprintf(fd,"    call print_string\n");
                         break;
                     case TYPE_ARRAY:
                         fprintf(stderr,"arrays are not supported\n");
                         break;
                     case TYPE_FUNCTION:
-                        // fprintf(fd,".data\n");
-                        // preamble
-                        // call function
-                        // need to include parameter list
-                        // postamble
+                        expr_codegen(e,fd);
+                        arg_reg = register_alloc(ARGUMENT);
+                        fprintf(fd,"    mov %s, %s\n",register_name(e->reg),register_name(arg_reg));
+                        fprintf(fd,"    pushq %s # save argument on the stack\n",register_name(arg_reg));
+                        fprintf(fd,"    call print_string\n");
                         break;
                     case TYPE_VOID:
-                        // wtf do you do with a void?
                         break;
                 }
                 e = e->next;
