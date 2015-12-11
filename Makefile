@@ -7,7 +7,7 @@ all: $(CMINOR_EXEC) cminor
 
 # generate executable
 $(CMINOR_EXEC): $(CMINOR_EXEC).o $(CMINOR_OBJECT_FILES)
-	gcc $< -o $@ $(LFLAGS)
+	gcc $< -o $@ $(LFLAGS) $(CMINOR_OBJECT_FILES)
 
 # compile assembly into .o
 $(CMINOR_EXEC).o: $(CMINOR_EXEC).s
