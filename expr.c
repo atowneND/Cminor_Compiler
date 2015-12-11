@@ -1235,10 +1235,14 @@ void expr_codegen(struct expr *e, FILE *fd){
             expr_codegen(e->right,fd);
 
             // print to assembly file
+            fprintf(fd,"    and %s, %s\n",register_name(e->left->reg),register_name(e->right->reg));
 
             // update ast
+            e->reg = e->right->reg;
 
             // cleanup
+            register_free(e->left->reg);
+            e->left->reg = -1;
             break;
         case EXPR_OR:
             // recurse
@@ -1246,10 +1250,14 @@ void expr_codegen(struct expr *e, FILE *fd){
             expr_codegen(e->right,fd);
 
             // print to assembly file
+            fprintf(fd,"    or %s, %s\n",register_name(e->left->reg),register_name(e->right->reg));
 
             // update ast
+            e->reg = e->right->reg;
 
             // cleanup
+            register_free(e->left->reg);
+            e->left->reg = -1;
             break;
         case EXPR_ASSIGNMENT:
             // recurse
@@ -1293,9 +1301,7 @@ void expr_codegen(struct expr *e, FILE *fd){
         case EXPR_IDENTIFIER:
             e->reg = register_alloc(SCRATCH);
             fprintf(fd,"    mov %s, %s\n",symbol_code(e->symbol,fd), register_name(e->reg));
-            if (e->symbol->value != NULL) {
-                e->symbol->value->reg = e->reg;
-            }
+            if (e->symbol->value != NULL) e->symbol->value->reg = e->reg;
             break;
         case EXPR_PARENTHESES:
             // recurse
