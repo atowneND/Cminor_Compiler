@@ -1,0 +1,4 @@
+main: function char () = {
+    s: char = 'a';
+    return s;
+}

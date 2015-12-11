@@ -1001,14 +1001,14 @@ void expr_codegen(struct expr *e, FILE *fd){
             break;
         case EXPR_NOT:
             // recurse
-            expr_codegen(e->left,fd);
             expr_codegen(e->right,fd);
 
             // print to assembly file
+            fprintf(fd,"    not %s\n",register_name(e->right->reg));
+            fprintf(fd,"    and $0x1, %s\n",register_name(e->right->reg));
 
             // update ast
-
-            // cleanup
+            e->reg = e->right->reg;
             break;
         case EXPR_POWER:
             // recurse
@@ -1190,7 +1190,7 @@ void expr_codegen(struct expr *e, FILE *fd){
             fprintf(fd,"    call %s\n",e->left->name);
 
             // cleanup
-            //register_free_type(ARGUMENT);
+            register_free_type(ARGUMENT);
 
             // update ast
             e->reg = e->left->reg;

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-expected_results=(3,2,8,15)
+expected_results=(3,2,8,15,97,1)
 for i in $(seq 0 3); do 
     echo $i:
     ./cminor -codegen good$i.cminor good$i.s
