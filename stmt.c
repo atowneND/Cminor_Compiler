@@ -327,7 +327,9 @@ void stmt_codegen(struct stmt *s, FILE *fd){
                         break;
                     case TYPE_INTEGER:
                         expr_codegen(e,fd);
-                        fprintf(fd,"    pushq %s # save argument on the stack\n",register_name(e->reg));
+                        reg_type_t arg_reg = register_alloc(ARGUMENT);
+                        fprintf(fd,"    mov %s, %s\n",register_name(e->reg),register_name(arg_reg));
+                        fprintf(fd,"    pushq %s # save argument on the stack\n",register_name(arg_reg));
                         fprintf(fd,"    call print_integer\n");
                         // call print_integer(int x);
                         break;
