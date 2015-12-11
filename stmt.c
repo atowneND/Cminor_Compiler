@@ -287,19 +287,20 @@ void stmt_codegen(struct stmt *s, FILE *fd){
             break;
         case STMT_IF_ELSE:
             expr_codegen(s->init_expr,fd);
+            fprintf(fd,"# IF STATEMENT\n");
             fprintf(fd,"    cmpq $1, %s\n",register_name(s->init_expr->reg));
             fprintf(fd,"    je cond%i\n",condition_counter);
-            stmt_codegen(s->body,fd);
-            fprintf(fd,"    jmp cond%i\n",condition_counter+1);
+            stmt_codegen(s->else_body,fd);
+            fprintf(fd,"    jmp done%i\n",condition_counter);
 
             fprintf(fd,"# if (true)\n");
             fprintf(fd,"cond%i:\n",condition_counter);
-            stmt_codegen(s->else_body,fd);
+            stmt_codegen(s->body,fd);
 
             fprintf(fd,"# false or continue\n");
-            fprintf(fd,"cond%i:\n",condition_counter+1);
+            fprintf(fd,"done%i:\n",condition_counter);
 
-            condition_counter += 2;
+            condition_counter += 1;
             break;
         case STMT_FOR:
             expr_codegen(s->init_expr,fd); // evaluate first expression in for parens
