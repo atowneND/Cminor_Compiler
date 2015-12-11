@@ -373,6 +373,8 @@ void stmt_codegen(struct stmt *s, FILE *fd){
                             case TYPE_STRING:
                                 fprintf(fd,"    call print_string\n");
                                 break;
+                            //case TYPE_FUNCTION:
+                            //    print_function
                         }
                         register_free(arg_reg);
                         break;

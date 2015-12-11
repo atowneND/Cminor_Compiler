@@ -1,8 +1,6 @@
-b: function integer () = {
-    return 4;
-}
-main: function void () = {
-    print "hello\n",b(),"hi";
+main: function boolean () = {
+    x: boolean = "hi"=="hi";
+    return x;
 }
 
 ////////////////////////////////////////////////
