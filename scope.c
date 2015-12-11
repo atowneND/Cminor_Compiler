@@ -143,14 +143,8 @@ char *symbol_code(struct symbol *s, FILE *fd){
     } else {
         switch (s->type->kind){
             case TYPE_BOOLEAN:
-                // definitely broken
-                if (s->expr->literal_value == 0){
-                    strcpy(str,"$0");
-                } else if (s->expr->literal_value == 1){
-                    strcpy(str,"$1");
-                } else {
-                    fprintf(stderr,"Improper boolean literal value\n");
-                }
+                // maybe not so broken?
+                sprintf(str,"%s",register_name(s->expr->reg));
                 break;
             case TYPE_CHARACTER:
                 // should work
